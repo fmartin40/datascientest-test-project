@@ -1,0 +1,3148 @@
+{
+    "object": "search_hits",
+    "has_more": true,
+    "count": 10000,
+    "hits": [
+      {
+        "object": "search_hit",
+        "hit": {
+          "object": "job_search_hit",
+          "id": "bd345d35-45d8-48bc-84e5-aeed22c43fde",
+          "legacy_id": 15170370,
+          "title": "Data Engineer",
+          "short_title": "data-engineer-950ad7",
+          "apply_type": "external",
+          "company": {
+            "name": "Arcadia",
+            "short_name": "arcadia",
+            "logo": "https://assets.themuse.com/uploaded/companies/15000037/small_logo.png",
+            "legacy_id": 15000037,
+            "perks_and_benefits": [
+              {
+                "name": "Hybrid Work Opportunities",
+                "code": "hybrid_work_opportunities"
+              },
+              {
+                "name": "Work Visa Sponsorship",
+                "code": "work_visa_sponsorship"
+              },
+              {
+                "name": "Family Support Resources",
+                "code": "family_support_resources"
+              },
+              {
+                "name": "Pet Insurance",
+                "code": "pet_insurance"
+              },
+              {
+                "name": "Health Insurance",
+                "code": "health_insurance"
+              },
+              {
+                "name": "Dental Insurance",
+                "code": "dental_insurance"
+              },
+              {
+                "name": "Vision Insurance",
+                "code": "vision_insurance"
+              },
+              {
+                "name": "FSA",
+                "code": "fsa"
+              },
+              {
+                "name": "HSA",
+                "code": "hsa"
+              },
+              {
+                "name": "HSA With Employer Contribution",
+                "code": "hsa_with_employer_contribution"
+              },
+              {
+                "name": "Life Insurance",
+                "code": "life_insurance"
+              },
+              {
+                "name": "Short-Term Disability",
+                "code": "short_term_disability"
+              },
+              {
+                "name": "Long-Term Disability",
+                "code": "long_term_disability"
+              },
+              {
+                "name": "Fitness Subsidies",
+                "code": "fitness_subsidies"
+              },
+              {
+                "name": "Paid Vacation",
+                "code": "paid_vacation"
+              },
+              {
+                "name": "Unlimited Paid Time Off",
+                "code": "unlimited_vacation"
+              },
+              {
+                "name": "Paid Holidays",
+                "code": "paid_holidays"
+              },
+              {
+                "name": "Personal/Sick Days",
+                "code": "personal_sick_days"
+              },
+              {
+                "name": "Leave of Absence",
+                "code": "leave_of_absence"
+              },
+              {
+                "name": "401(K) With Company Matching",
+                "code": "401k_with_matching"
+              },
+              {
+                "name": "Promote From Within",
+                "code": "promote_from_within"
+              },
+              {
+                "name": "Access to Online Courses",
+                "code": "access_to_online_courses"
+              },
+              {
+                "name": "Lunch and Learns",
+                "code": "lunch_and_learns"
+              },
+              {
+                "name": "Flexible Work Hours",
+                "code": "flexible_work_hours"
+              },
+              {
+                "name": "Remote Work Opportunities",
+                "code": "remote_work_opportunities"
+              },
+              {
+                "name": "Casual Dress",
+                "code": "casual_dress"
+              },
+              {
+                "name": "Pet-friendly Office",
+                "code": "pet_friendly"
+              },
+              {
+                "name": "Snacks",
+                "code": "snacks"
+              },
+              {
+                "name": "Diversity, Equity, and Inclusion Program",
+                "code": "diversity_and_inclusion_program"
+              },
+              {
+                "name": "Company Outings",
+                "code": "company_outings"
+              },
+              {
+                "name": "Mental Health Benefits",
+                "code": "mental_health_benefits"
+              },
+              {
+                "name": "Employee Resource Groups (ERG)",
+                "code": "employer_resources_groups"
+              },
+              {
+                "name": "Non-Birth Parent or Paternity Leave",
+                "code": "paternity_leave"
+              },
+              {
+                "name": "401(K)",
+                "code": "401k"
+              },
+              {
+                "name": "Performance Bonus",
+                "code": "performance_bonus"
+              },
+              {
+                "name": "Adoption Leave",
+                "code": "adoption_leave"
+              },
+              {
+                "name": "Commuter Benefits Program",
+                "code": "commuter_benefits_program"
+              },
+              {
+                "name": "Fertility Benefits",
+                "code": "fertility_benefits"
+              },
+              {
+                "name": "Birth Parent or Maternity Leave",
+                "code": "maternity_leave"
+              }
+            ],
+            "leadership_attributes": [
+              {
+                "name": "Diversity, Equity, and Inclusion Program",
+                "code": "diversity_and_inclusion_program"
+              },
+              {
+                "name": "Employee Resource Groups (ERG)",
+                "code": "employer_resources_groups"
+              }
+            ],
+            "package": "Premium",
+            "client_tier": null
+          },
+          "employment_types": [],
+          "categories": [
+            {
+              "name": "Data and Analytics",
+              "code": "data_analytics"
+            }
+          ],
+          "levels": [
+            {
+              "name": "senior",
+              "code": "senior"
+            }
+          ],
+          "locations": [],
+          "remote_work_location_type": "virtual",
+          "posted_at": 1718201808
+        },
+        "score": 92.48381,
+        "cursor": "92.48381,1718201808000,bd345d35-45d8-48bc-84e5-aeed22c43fde"
+      },
+      {
+        "object": "search_hit",
+        "hit": {
+          "object": "job_search_hit",
+          "id": "bd22fc4b-7c06-46ee-8c3a-dfe9914eb271",
+          "legacy_id": 16596266,
+          "title": "Data Engineer",
+          "short_title": "data-engineer-e67071",
+          "apply_type": "external",
+          "company": {
+            "name": "Atlassian",
+            "short_name": "atlassian",
+            "logo": "https://assets.themuse.com/uploaded/companies/741/small_logo.png",
+            "legacy_id": 741,
+            "perks_and_benefits": [
+              {
+                "name": "Founder led",
+                "code": "founder_led"
+              },
+              {
+                "name": "Health Insurance",
+                "code": "health_insurance"
+              },
+              {
+                "name": "Dental Insurance",
+                "code": "dental_insurance"
+              },
+              {
+                "name": "Vision Insurance",
+                "code": "vision_insurance"
+              },
+              {
+                "name": "Life Insurance",
+                "code": "life_insurance"
+              },
+              {
+                "name": "Short-Term Disability",
+                "code": "short_term_disability"
+              },
+              {
+                "name": "Long-Term Disability",
+                "code": "long_term_disability"
+              },
+              {
+                "name": "FSA",
+                "code": "fsa"
+              },
+              {
+                "name": "HSA With Employer Contribution",
+                "code": "hsa_with_employer_contribution"
+              },
+              {
+                "name": "Fitness Subsidies",
+                "code": "fitness_subsidies"
+              },
+              {
+                "name": "Flexible Work Hours",
+                "code": "flexible_work_hours"
+              },
+              {
+                "name": "Remote Work Opportunities",
+                "code": "remote_work_opportunities"
+              },
+              {
+                "name": "Access to Online Courses",
+                "code": "access_to_online_courses"
+              },
+              {
+                "name": "Paid Vacation",
+                "code": "paid_vacation"
+              },
+              {
+                "name": "Unlimited Paid Time Off",
+                "code": "unlimited_vacation"
+              },
+              {
+                "name": "Paid Holidays",
+                "code": "paid_holidays"
+              },
+              {
+                "name": "Personal/Sick Days",
+                "code": "personal_sick_days"
+              },
+              {
+                "name": "401(K) With Company Matching",
+                "code": "401k_with_matching"
+              },
+              {
+                "name": "Company Equity",
+                "code": "company_equity"
+              },
+              {
+                "name": "Performance Bonus",
+                "code": "performance_bonus"
+              },
+              {
+                "name": "Mental Health Benefits",
+                "code": "mental_health_benefits"
+              },
+              {
+                "name": "Volunteer Time Off",
+                "code": "volunteer_time_off"
+              },
+              {
+                "name": "Hybrid Work Opportunities",
+                "code": "hybrid_work_opportunities"
+              },
+              {
+                "name": "Work-From-Home Stipend",
+                "code": "work_from_home_stipend"
+              },
+              {
+                "name": "Holiday Events",
+                "code": "holiday_events"
+              },
+              {
+                "name": "Employee Resource Groups (ERG)",
+                "code": "employer_resources_groups"
+              },
+              {
+                "name": "Internship Program",
+                "code": "fellowship_program"
+              },
+              {
+                "name": "Leadership Training Program",
+                "code": "leadership_training"
+              },
+              {
+                "name": "On-Site Gym",
+                "code": "on_site_gym"
+              },
+              {
+                "name": "Adoption Leave",
+                "code": "adoption_leave"
+              },
+              {
+                "name": "Casual Dress",
+                "code": "casual_dress"
+              },
+              {
+                "name": "Pet-friendly Office",
+                "code": "pet_friendly"
+              },
+              {
+                "name": "Happy Hours",
+                "code": "happy_hours"
+              },
+              {
+                "name": "Snacks",
+                "code": "snacks"
+              },
+              {
+                "name": "Some Meals Provided",
+                "code": "some_meals_provided"
+              },
+              {
+                "name": "Diversity, Equity, and Inclusion Program",
+                "code": "diversity_and_inclusion_program"
+              },
+              {
+                "name": "Tuition Reimbursement",
+                "code": "tuition_reimbursement"
+              },
+              {
+                "name": "Learning and Development Stipend",
+                "code": "learning_and_development_stipend"
+              },
+              {
+                "name": "Promote From Within",
+                "code": "promote_from_within"
+              },
+              {
+                "name": "Birth Parent or Maternity Leave",
+                "code": "maternity_leave"
+              },
+              {
+                "name": "Non-Birth Parent or Paternity Leave",
+                "code": "paternity_leave"
+              },
+              {
+                "name": "Relocation Assistance",
+                "code": "relocation_assistance"
+              },
+              {
+                "name": "Fertility Benefits",
+                "code": "fertility_benefits"
+              },
+              {
+                "name": "Adoption Assistance Program",
+                "code": "adoption_assistance"
+              },
+              {
+                "name": "On-Site Cafeteria",
+                "code": "on_site_cafeteria"
+              },
+              {
+                "name": "Family Support Resources",
+                "code": "family_support_resources"
+              },
+              {
+                "name": "Sabbatical",
+                "code": "sabbatical"
+              },
+              {
+                "name": "Leave of Absence",
+                "code": "leave_of_absence"
+              },
+              {
+                "name": "Financial Counseling",
+                "code": "financial_counseling"
+              },
+              {
+                "name": "HSA",
+                "code": "hsa"
+              }
+            ],
+            "leadership_attributes": [
+              {
+                "name": "Founder led",
+                "code": "founder_led"
+              },
+              {
+                "name": "Employee Resource Groups (ERG)",
+                "code": "employer_resources_groups"
+              },
+              {
+                "name": "Diversity, Equity, and Inclusion Program",
+                "code": "diversity_and_inclusion_program"
+              }
+            ],
+            "package": "Advanced",
+            "client_tier": null
+          },
+          "employment_types": [
+            {
+              "name": "full_time",
+              "code": "full_time"
+            }
+          ],
+          "categories": [
+            {
+              "name": "Data and Analytics",
+              "code": "data_analytics"
+            }
+          ],
+          "levels": [
+            {
+              "name": "mid",
+              "code": "mid"
+            }
+          ],
+          "locations": [],
+          "remote_work_location_type": "virtual",
+          "posted_at": 1727915038
+        },
+        "score": 92.154,
+        "cursor": "92.154,1727915038000,bd22fc4b-7c06-46ee-8c3a-dfe9914eb271"
+      },
+      {
+        "object": "search_hit",
+        "hit": {
+          "object": "job_search_hit",
+          "id": "1d5c7933-ebfe-4f5a-aa7c-c4ac76da24ca",
+          "legacy_id": 16487058,
+          "title": "Data Engineer",
+          "short_title": "data-engineer-d8bdf7",
+          "apply_type": "external",
+          "company": {
+            "name": "Leidos",
+            "short_name": "leidos",
+            "logo": "https://assets.themuse.com/uploaded/companies/15000275/small_logo.png",
+            "legacy_id": 15000275,
+            "perks_and_benefits": [
+              {
+                "name": "Health Insurance",
+                "code": "health_insurance"
+              },
+              {
+                "name": "Health Reimbursement Account",
+                "code": "health_reimbursement_account"
+              },
+              {
+                "name": "Dental Insurance",
+                "code": "dental_insurance"
+              },
+              {
+                "name": "Vision Insurance",
+                "code": "vision_insurance"
+              },
+              {
+                "name": "Life Insurance",
+                "code": "life_insurance"
+              },
+              {
+                "name": "Short-Term Disability",
+                "code": "short_term_disability"
+              },
+              {
+                "name": "Long-Term Disability",
+                "code": "long_term_disability"
+              },
+              {
+                "name": "FSA",
+                "code": "fsa"
+              },
+              {
+                "name": "HSA",
+                "code": "hsa"
+              },
+              {
+                "name": "Flexible Work Hours",
+                "code": "flexible_work_hours"
+              },
+              {
+                "name": "Remote Work Opportunities",
+                "code": "remote_work_opportunities"
+              },
+              {
+                "name": "Company Outings",
+                "code": "company_outings"
+              },
+              {
+                "name": "Tuition Reimbursement",
+                "code": "tuition_reimbursement"
+              },
+              {
+                "name": "Promote From Within",
+                "code": "promote_from_within"
+              },
+              {
+                "name": "Mentor Program",
+                "code": "mentor_program"
+              },
+              {
+                "name": "Access to Online Courses",
+                "code": "access_to_online_courses"
+              },
+              {
+                "name": "Lunch and Learns",
+                "code": "lunch_and_learns"
+              },
+              {
+                "name": "Paid Vacation",
+                "code": "paid_vacation"
+              },
+              {
+                "name": "Paid Holidays",
+                "code": "paid_holidays"
+              },
+              {
+                "name": "Personal/Sick Days",
+                "code": "personal_sick_days"
+              },
+              {
+                "name": "Birth Parent or Maternity Leave",
+                "code": "maternity_leave"
+              },
+              {
+                "name": "401(K) With Company Matching",
+                "code": "401k_with_matching"
+              },
+              {
+                "name": "Stock Purchase Program",
+                "code": "stock_purchase_program"
+              },
+              {
+                "name": "Performance Bonus",
+                "code": "performance_bonus"
+              },
+              {
+                "name": "Relocation Assistance",
+                "code": "relocation_assistance"
+              },
+              {
+                "name": "Pet Insurance",
+                "code": "pet_insurance"
+              },
+              {
+                "name": "Mental Health Benefits",
+                "code": "mental_health_benefits"
+              },
+              {
+                "name": "Fertility Benefits",
+                "code": "fertility_benefits"
+              },
+              {
+                "name": "Adoption Assistance Program",
+                "code": "adoption_assistance"
+              },
+              {
+                "name": "Family Support Resources",
+                "code": "family_support_resources"
+              },
+              {
+                "name": "Volunteer Time Off",
+                "code": "volunteer_time_off"
+              },
+              {
+                "name": "Financial Counseling",
+                "code": "financial_counseling"
+              },
+              {
+                "name": "Profit Sharing",
+                "code": "profit_sharing"
+              },
+              {
+                "name": "Hybrid Work Opportunities",
+                "code": "hybrid_work_opportunities"
+              },
+              {
+                "name": "On-Site Cafeteria",
+                "code": "on_site_cafeteria"
+              },
+              {
+                "name": "Holiday Events",
+                "code": "holiday_events"
+              },
+              {
+                "name": "Internship Program",
+                "code": "fellowship_program"
+              },
+              {
+                "name": "Leadership Training Program",
+                "code": "leadership_training"
+              }
+            ],
+            "leadership_attributes": [],
+            "package": "Basic",
+            "client_tier": null
+          },
+          "employment_types": [
+            {
+              "name": "full_time",
+              "code": "full_time"
+            }
+          ],
+          "categories": [
+            {
+              "name": "Data and Analytics",
+              "code": "data_analytics"
+            }
+          ],
+          "levels": [
+            {
+              "name": "mid",
+              "code": "mid"
+            }
+          ],
+          "locations": [],
+          "remote_work_location_type": "virtual",
+          "posted_at": 1727280846
+        },
+        "score": 92.13942,
+        "cursor": "92.13942,1727280846000,1d5c7933-ebfe-4f5a-aa7c-c4ac76da24ca"
+      },
+      {
+        "object": "search_hit",
+        "hit": {
+          "object": "job_search_hit",
+          "id": "02ce7182-bbe9-45b3-8e12-b485ed308c09",
+          "legacy_id": 16427281,
+          "title": "Data Engineer",
+          "short_title": "data-engineer",
+          "apply_type": "external",
+          "company": {
+            "name": "Constellation Brands",
+            "short_name": "constellationbrands",
+            "logo": "https://assets.themuse.com/uploaded/companies/15000270/small_logo.png",
+            "legacy_id": 15000270,
+            "perks_and_benefits": [],
+            "leadership_attributes": [],
+            "package": "Provisional",
+            "client_tier": null
+          },
+          "employment_types": [
+            {
+              "name": "full_time",
+              "code": "full_time"
+            }
+          ],
+          "categories": [
+            {
+              "name": "Data and Analytics",
+              "code": "data_analytics"
+            }
+          ],
+          "levels": [
+            {
+              "name": "senior",
+              "code": "senior"
+            }
+          ],
+          "locations": [],
+          "remote_work_location_type": "virtual",
+          "posted_at": 1727109629
+        },
+        "score": 91.96112,
+        "cursor": "91.96112,1727109629000,02ce7182-bbe9-45b3-8e12-b485ed308c09"
+      },
+      {
+        "object": "search_hit",
+        "hit": {
+          "object": "job_search_hit",
+          "id": "2f06a4ce-6992-4de1-8b9a-3359ad458e45",
+          "legacy_id": 16220584,
+          "title": "Data Engineer",
+          "short_title": "data-engineer-85af17",
+          "apply_type": "external",
+          "company": {
+            "name": "Appfire",
+            "short_name": "appfire",
+            "logo": "https://assets.themuse.com/uploaded/companies/15000095/small_logo.png",
+            "legacy_id": 15000095,
+            "perks_and_benefits": [
+              {
+                "name": "Health Insurance",
+                "code": "health_insurance"
+              },
+              {
+                "name": "Dental Insurance",
+                "code": "dental_insurance"
+              },
+              {
+                "name": "Vision Insurance",
+                "code": "vision_insurance"
+              },
+              {
+                "name": "Life Insurance",
+                "code": "life_insurance"
+              },
+              {
+                "name": "Short-Term Disability",
+                "code": "short_term_disability"
+              },
+              {
+                "name": "Long-Term Disability",
+                "code": "long_term_disability"
+              },
+              {
+                "name": "FSA",
+                "code": "fsa"
+              },
+              {
+                "name": "Leadership Training Program",
+                "code": "leadership_training"
+              },
+              {
+                "name": "Associate or Rotational Training Program",
+                "code": "associate_training"
+              },
+              {
+                "name": "Flexible Work Hours",
+                "code": "flexible_work_hours"
+              },
+              {
+                "name": "Remote Work Opportunities",
+                "code": "remote_work_opportunities"
+              },
+              {
+                "name": "Casual Dress",
+                "code": "casual_dress"
+              },
+              {
+                "name": "Snacks",
+                "code": "snacks"
+              },
+              {
+                "name": "Company Outings",
+                "code": "company_outings"
+              },
+              {
+                "name": "Promote From Within",
+                "code": "promote_from_within"
+              },
+              {
+                "name": "Access to Online Courses",
+                "code": "access_to_online_courses"
+              },
+              {
+                "name": "Unlimited Paid Time Off",
+                "code": "unlimited_vacation"
+              },
+              {
+                "name": "Paid Holidays",
+                "code": "paid_holidays"
+              },
+              {
+                "name": "401(K)",
+                "code": "401k"
+              },
+              {
+                "name": "Company Equity",
+                "code": "company_equity"
+              },
+              {
+                "name": "Hybrid Work Opportunities",
+                "code": "hybrid_work_opportunities"
+              },
+              {
+                "name": "Holiday Events",
+                "code": "holiday_events"
+              },
+              {
+                "name": "Founder led",
+                "code": "founder_led"
+              }
+            ],
+            "leadership_attributes": [
+              {
+                "name": "Founder led",
+                "code": "founder_led"
+              }
+            ],
+            "package": "Premium",
+            "client_tier": null
+          },
+          "employment_types": [
+            {
+              "name": "full_time",
+              "code": "full_time"
+            }
+          ],
+          "categories": [
+            {
+              "name": "Data and Analytics",
+              "code": "data_analytics"
+            }
+          ],
+          "levels": [
+            {
+              "name": "mid",
+              "code": "mid"
+            }
+          ],
+          "locations": [],
+          "remote_work_location_type": "virtual",
+          "posted_at": 1726551876
+        },
+        "score": 91.360794,
+        "cursor": "91.360794,1726551876000,2f06a4ce-6992-4de1-8b9a-3359ad458e45"
+      },
+      {
+        "object": "search_hit",
+        "hit": {
+          "object": "job_search_hit",
+          "id": "2778e321-1d6d-4f8f-80c2-d8b1f1ff8fcf",
+          "legacy_id": 16594305,
+          "title": "Data Engineer",
+          "short_title": "data-engineer-0b1092",
+          "apply_type": "external",
+          "company": {
+            "name": "Coinbase",
+            "short_name": "coinbase",
+            "logo": "https://assets.themuse.com/uploaded/companies/15000075/small_logo.png",
+            "legacy_id": 15000075,
+            "perks_and_benefits": [
+              {
+                "name": "Health Insurance",
+                "code": "health_insurance"
+              },
+              {
+                "name": "Dental Insurance",
+                "code": "dental_insurance"
+              },
+              {
+                "name": "Vision Insurance",
+                "code": "vision_insurance"
+              },
+              {
+                "name": "FSA",
+                "code": "fsa"
+              },
+              {
+                "name": "FSA With Employer Contribution",
+                "code": "fsa_with_employer_contribution"
+              },
+              {
+                "name": "HSA",
+                "code": "hsa"
+              },
+              {
+                "name": "HSA With Employer Contribution",
+                "code": "hsa_with_employer_contribution"
+              },
+              {
+                "name": "Life Insurance",
+                "code": "life_insurance"
+              },
+              {
+                "name": "Short-Term Disability",
+                "code": "short_term_disability"
+              },
+              {
+                "name": "Long-Term Disability",
+                "code": "long_term_disability"
+              },
+              {
+                "name": "Fitness Subsidies",
+                "code": "fitness_subsidies"
+              },
+              {
+                "name": "Paid Vacation",
+                "code": "paid_vacation"
+              },
+              {
+                "name": "Unlimited Paid Time Off",
+                "code": "unlimited_vacation"
+              },
+              {
+                "name": "Paid Holidays",
+                "code": "paid_holidays"
+              },
+              {
+                "name": "Personal/Sick Days",
+                "code": "personal_sick_days"
+              },
+              {
+                "name": "Birth Parent or Maternity Leave",
+                "code": "maternity_leave"
+              },
+              {
+                "name": "Non-Birth Parent or Paternity Leave",
+                "code": "paternity_leave"
+              },
+              {
+                "name": "401(K) With Company Matching",
+                "code": "401k_with_matching"
+              },
+              {
+                "name": "Company Equity",
+                "code": "company_equity"
+              },
+              {
+                "name": "Learning and Development Stipend",
+                "code": "learning_and_development_stipend"
+              },
+              {
+                "name": "Promote From Within",
+                "code": "promote_from_within"
+              },
+              {
+                "name": "Mentor Program",
+                "code": "mentor_program"
+              },
+              {
+                "name": "Access to Online Courses",
+                "code": "access_to_online_courses"
+              },
+              {
+                "name": "Lunch and Learns",
+                "code": "lunch_and_learns"
+              },
+              {
+                "name": "Flexible Work Hours",
+                "code": "flexible_work_hours"
+              },
+              {
+                "name": "Remote Work Opportunities",
+                "code": "remote_work_opportunities"
+              },
+              {
+                "name": "Commuter Benefits Program",
+                "code": "commuter_benefits_program"
+              },
+              {
+                "name": "Casual Dress",
+                "code": "casual_dress"
+              },
+              {
+                "name": "Snacks",
+                "code": "snacks"
+              },
+              {
+                "name": "Diversity, Equity, and Inclusion Program",
+                "code": "diversity_and_inclusion_program"
+              },
+              {
+                "name": "Company Outings",
+                "code": "company_outings"
+              },
+              {
+                "name": "Founder led",
+                "code": "founder_led"
+              }
+            ],
+            "leadership_attributes": [
+              {
+                "name": "Founder led",
+                "code": "founder_led"
+              },
+              {
+                "name": "Diversity, Equity, and Inclusion Program",
+                "code": "diversity_and_inclusion_program"
+              }
+            ],
+            "package": "Professional",
+            "client_tier": null
+          },
+          "employment_types": [],
+          "categories": [
+            {
+              "name": "Data and Analytics",
+              "code": "data_analytics"
+            }
+          ],
+          "levels": [
+            {
+              "name": "mid",
+              "code": "mid"
+            }
+          ],
+          "locations": [],
+          "remote_work_location_type": "virtual",
+          "posted_at": 1729640319
+        },
+        "score": 91.26056,
+        "cursor": "91.26056,1729640319000,2778e321-1d6d-4f8f-80c2-d8b1f1ff8fcf"
+      },
+      {
+        "object": "search_hit",
+        "hit": {
+          "object": "job_search_hit",
+          "id": "825a60b5-a8cd-4d8c-8b81-5d35e0db6452",
+          "legacy_id": 16753929,
+          "title": "Data Engineer",
+          "short_title": "data-engineer-f6b05a",
+          "apply_type": "external",
+          "company": {
+            "name": "Kyndryl",
+            "short_name": "kyndryl",
+            "logo": "https://assets.themuse.com/uploaded/companies/15000490/small_logo.png",
+            "legacy_id": 15000490,
+            "perks_and_benefits": [
+              {
+                "name": "Remote Work Opportunities",
+                "code": "remote_work_opportunities"
+              },
+              {
+                "name": "Paid Vacation",
+                "code": "paid_vacation"
+              },
+              {
+                "name": "Health Insurance",
+                "code": "health_insurance"
+              },
+              {
+                "name": "Paid Holidays",
+                "code": "paid_holidays"
+              },
+              {
+                "name": "Personal/Sick Days",
+                "code": "personal_sick_days"
+              },
+              {
+                "name": "Vision Insurance",
+                "code": "vision_insurance"
+              },
+              {
+                "name": "Life Insurance",
+                "code": "life_insurance"
+              },
+              {
+                "name": "Dental Insurance",
+                "code": "dental_insurance"
+              },
+              {
+                "name": "Health Reimbursement Account",
+                "code": "health_reimbursement_account"
+              },
+              {
+                "name": "Flexible Work Hours",
+                "code": "flexible_work_hours"
+              },
+              {
+                "name": "Mental Health Benefits",
+                "code": "mental_health_benefits"
+              },
+              {
+                "name": "Volunteer Time Off",
+                "code": "volunteer_time_off"
+              },
+              {
+                "name": "Mentor Program",
+                "code": "mentor_program"
+              },
+              {
+                "name": "Access to Online Courses",
+                "code": "access_to_online_courses"
+              },
+              {
+                "name": "Lunch and Learns",
+                "code": "lunch_and_learns"
+              },
+              {
+                "name": "Birth Parent or Maternity Leave",
+                "code": "maternity_leave"
+              }
+            ],
+            "leadership_attributes": [],
+            "package": "Professional",
+            "client_tier": null
+          },
+          "employment_types": [
+            {
+              "name": "full_time",
+              "code": "full_time"
+            }
+          ],
+          "categories": [],
+          "levels": [
+            {
+              "name": "mid",
+              "code": "mid"
+            }
+          ],
+          "locations": [
+            {
+              "address": "Madrid, Spain",
+              "latitude": 40.416775,
+              "longitude": -3.7037902,
+              "locality": null,
+              "region": null,
+              "country": null
+            }
+          ],
+          "remote_work_location_type": "virtual",
+          "posted_at": 1729078579
+        },
+        "score": 90.610725,
+        "cursor": "90.610725,1729078579000,825a60b5-a8cd-4d8c-8b81-5d35e0db6452"
+      },
+      {
+        "object": "search_hit",
+        "hit": {
+          "object": "job_search_hit",
+          "id": "ee27dc7c-927d-4a8d-a282-a1b446fe0943",
+          "legacy_id": 7650238,
+          "title": "Data Engineer, Specialist",
+          "short_title": "data-engineer-specialist",
+          "apply_type": "external",
+          "company": {
+            "name": "Nationwide Insurance",
+            "short_name": "nationwideinsurance",
+            "logo": "https://assets.themuse.com/uploaded/companies/12356/small_logo.png",
+            "legacy_id": 12356,
+            "perks_and_benefits": [],
+            "leadership_attributes": [],
+            "package": "Basic",
+            "client_tier": null
+          },
+          "employment_types": [],
+          "categories": [
+            {
+              "name": "Data and Analytics",
+              "code": "data_analytics"
+            }
+          ],
+          "levels": [
+            {
+              "name": "mid",
+              "code": "mid"
+            }
+          ],
+          "locations": [],
+          "remote_work_location_type": "virtual",
+          "posted_at": 1639522950
+        },
+        "score": 89.17539,
+        "cursor": "89.17539,1639522950000,ee27dc7c-927d-4a8d-a282-a1b446fe0943"
+      },
+      {
+        "object": "search_hit",
+        "hit": {
+          "object": "job_search_hit",
+          "id": "2bcda39f-7c8c-4185-a3e8-e53ed4c68956",
+          "legacy_id": 12486940,
+          "title": "Data Engineer, Product Analytics",
+          "short_title": "data-engineer-product-analytics-e65281",
+          "apply_type": "external",
+          "company": {
+            "name": "Meta",
+            "short_name": "meta",
+            "logo": "https://assets.themuse.com/uploaded/companies/659/small_logo.png",
+            "legacy_id": 659,
+            "perks_and_benefits": [
+              {
+                "name": "Health Insurance",
+                "code": "health_insurance"
+              },
+              {
+                "name": "Health Reimbursement Account",
+                "code": "health_reimbursement_account"
+              },
+              {
+                "name": "Dental Insurance",
+                "code": "dental_insurance"
+              },
+              {
+                "name": "Vision Insurance",
+                "code": "vision_insurance"
+              },
+              {
+                "name": "Life Insurance",
+                "code": "life_insurance"
+              },
+              {
+                "name": "Short-Term Disability",
+                "code": "short_term_disability"
+              },
+              {
+                "name": "Long-Term Disability",
+                "code": "long_term_disability"
+              },
+              {
+                "name": "FSA",
+                "code": "fsa"
+              },
+              {
+                "name": "FSA With Employer Contribution",
+                "code": "fsa_with_employer_contribution"
+              },
+              {
+                "name": "HSA",
+                "code": "hsa"
+              },
+              {
+                "name": "HSA With Employer Contribution",
+                "code": "hsa_with_employer_contribution"
+              },
+              {
+                "name": "Fitness Subsidies",
+                "code": "fitness_subsidies"
+              },
+              {
+                "name": "On-Site Gym",
+                "code": "on_site_gym"
+              },
+              {
+                "name": "Paid Vacation",
+                "code": "paid_vacation"
+              },
+              {
+                "name": "Unlimited Paid Time Off",
+                "code": "unlimited_vacation"
+              },
+              {
+                "name": "Paid Holidays",
+                "code": "paid_holidays"
+              },
+              {
+                "name": "Personal/Sick Days",
+                "code": "personal_sick_days"
+              },
+              {
+                "name": "Birth Parent or Maternity Leave",
+                "code": "maternity_leave"
+              },
+              {
+                "name": "Non-Birth Parent or Paternity Leave",
+                "code": "paternity_leave"
+              },
+              {
+                "name": "Sabbatical",
+                "code": "sabbatical"
+              },
+              {
+                "name": "Leave of Absence",
+                "code": "leave_of_absence"
+              },
+              {
+                "name": "401(K)",
+                "code": "401k"
+              },
+              {
+                "name": "401(K) With Company Matching",
+                "code": "401k_with_matching"
+              },
+              {
+                "name": "Pension",
+                "code": "pension"
+              },
+              {
+                "name": "Company Equity",
+                "code": "company_equity"
+              },
+              {
+                "name": "Performance Bonus",
+                "code": "performance_bonus"
+              },
+              {
+                "name": "Relocation Assistance",
+                "code": "relocation_assistance"
+              },
+              {
+                "name": "Learning and Development Stipend",
+                "code": "learning_and_development_stipend"
+              },
+              {
+                "name": "Promote From Within",
+                "code": "promote_from_within"
+              },
+              {
+                "name": "Mentor Program",
+                "code": "mentor_program"
+              },
+              {
+                "name": "Shadowing Opportunities",
+                "code": "shadowing_opportunities"
+              },
+              {
+                "name": "Access to Online Courses",
+                "code": "access_to_online_courses"
+              },
+              {
+                "name": "Lunch and Learns",
+                "code": "lunch_and_learns"
+              },
+              {
+                "name": "Flexible Work Hours",
+                "code": "flexible_work_hours"
+              },
+              {
+                "name": "Remote Work Opportunities",
+                "code": "remote_work_opportunities"
+              },
+              {
+                "name": "Commuter Benefits Program",
+                "code": "commuter_benefits_program"
+              },
+              {
+                "name": "Casual Dress",
+                "code": "casual_dress"
+              },
+              {
+                "name": "Happy Hours",
+                "code": "happy_hours"
+              },
+              {
+                "name": "Snacks",
+                "code": "snacks"
+              },
+              {
+                "name": "Some Meals Provided",
+                "code": "some_meals_provided"
+              },
+              {
+                "name": "Diversity, Equity, and Inclusion Program",
+                "code": "diversity_and_inclusion_program"
+              },
+              {
+                "name": "Company Outings",
+                "code": "company_outings"
+              },
+              {
+                "name": "Employee Resource Groups (ERG)",
+                "code": "employer_resources_groups"
+              },
+              {
+                "name": "Internship Program",
+                "code": "fellowship_program"
+              },
+              {
+                "name": "Founder led",
+                "code": "founder_led"
+              },
+              {
+                "name": "Mental Health Benefits",
+                "code": "mental_health_benefits"
+              },
+              {
+                "name": "Fertility Benefits",
+                "code": "fertility_benefits"
+              },
+              {
+                "name": "Adoption Assistance Program",
+                "code": "adoption_assistance"
+              },
+              {
+                "name": "Family Support Resources",
+                "code": "family_support_resources"
+              },
+              {
+                "name": "Financial Counseling",
+                "code": "financial_counseling"
+              },
+              {
+                "name": "Hybrid Work Opportunities",
+                "code": "hybrid_work_opportunities"
+              },
+              {
+                "name": "On-Site Cafeteria",
+                "code": "on_site_cafeteria"
+              },
+              {
+                "name": "Holiday Events",
+                "code": "holiday_events"
+              }
+            ],
+            "leadership_attributes": [
+              {
+                "name": "Diversity, Equity, and Inclusion Program",
+                "code": "diversity_and_inclusion_program"
+              },
+              {
+                "name": "Employee Resource Groups (ERG)",
+                "code": "employer_resources_groups"
+              },
+              {
+                "name": "Founder led",
+                "code": "founder_led"
+              }
+            ],
+            "package": "Advanced",
+            "client_tier": null
+          },
+          "employment_types": [
+            {
+              "name": "none",
+              "code": "none"
+            }
+          ],
+          "categories": [
+            {
+              "name": "Data and Analytics",
+              "code": "data_analytics"
+            }
+          ],
+          "levels": [
+            {
+              "name": "mid",
+              "code": "mid"
+            }
+          ],
+          "locations": [],
+          "remote_work_location_type": "virtual",
+          "posted_at": 1727097687
+        },
+        "score": 86.307014,
+        "cursor": "86.307014,1727097687000,2bcda39f-7c8c-4185-a3e8-e53ed4c68956"
+      },
+      {
+        "object": "search_hit",
+        "hit": {
+          "object": "job_search_hit",
+          "id": "1ec844bf-2197-4cce-be17-4dbc2bf24e5c",
+          "legacy_id": 16803645,
+          "title": "Senior Data Engineer",
+          "short_title": "senior-data-engineer-8a3f16",
+          "apply_type": "external",
+          "company": {
+            "name": "Zendesk",
+            "short_name": "zendesk",
+            "logo": "https://assets.themuse.com/uploaded/companies/15000146/small_logo.png",
+            "legacy_id": 15000146,
+            "perks_and_benefits": [],
+            "leadership_attributes": [],
+            "package": "Provisional",
+            "client_tier": null
+          },
+          "employment_types": [
+            {
+              "name": "none",
+              "code": "none"
+            }
+          ],
+          "categories": [],
+          "levels": [
+            {
+              "name": "senior",
+              "code": "senior"
+            }
+          ],
+          "locations": [],
+          "remote_work_location_type": "virtual",
+          "posted_at": 1729553913
+        },
+        "score": 86.001434,
+        "cursor": "86.001434,1729553913000,1ec844bf-2197-4cce-be17-4dbc2bf24e5c"
+      },
+      {
+        "object": "search_hit",
+        "hit": {
+          "object": "job_search_hit",
+          "id": "44329b3a-db62-4969-a23a-562c2a289299",
+          "legacy_id": 13670264,
+          "title": "Data Engineer - Costa Rica",
+          "short_title": "data-engineer-costa-rica-188171",
+          "apply_type": "external",
+          "company": {
+            "name": "World Wide Technology",
+            "short_name": "worldwidetechnology",
+            "logo": "https://assets.themuse.com/uploaded/companies/15000248/small_logo.png",
+            "legacy_id": 15000248,
+            "perks_and_benefits": [],
+            "leadership_attributes": [],
+            "package": "Provisional",
+            "client_tier": null
+          },
+          "employment_types": [
+            {
+              "name": "none",
+              "code": "none"
+            }
+          ],
+          "categories": [
+            {
+              "name": "Data and Analytics",
+              "code": "data_analytics"
+            }
+          ],
+          "levels": [
+            {
+              "name": "mid",
+              "code": "mid"
+            }
+          ],
+          "locations": [],
+          "remote_work_location_type": "virtual",
+          "posted_at": 1727084536
+        },
+        "score": 85.960526,
+        "cursor": "85.960526,1727084536000,44329b3a-db62-4969-a23a-562c2a289299"
+      },
+      {
+        "object": "search_hit",
+        "hit": {
+          "object": "job_search_hit",
+          "id": "dfbfbfb4-e53c-467f-9491-eb042d229371",
+          "legacy_id": 16803327,
+          "title": "Sr. Data Engineer",
+          "short_title": "sr-data-engineer-752c15",
+          "apply_type": "external",
+          "company": {
+            "name": "hims & hers",
+            "short_name": "himshers",
+            "logo": "https://assets.themuse.com/uploaded/companies/15000217/small_logo.png",
+            "legacy_id": 15000217,
+            "perks_and_benefits": [],
+            "leadership_attributes": [],
+            "package": "Provisional",
+            "client_tier": null
+          },
+          "employment_types": [],
+          "categories": [],
+          "levels": [
+            {
+              "name": "senior",
+              "code": "senior"
+            }
+          ],
+          "locations": [],
+          "remote_work_location_type": "virtual",
+          "posted_at": 1729553524
+        },
+        "score": 85.911224,
+        "cursor": "85.911224,1729553524000,dfbfbfb4-e53c-467f-9491-eb042d229371"
+      },
+      {
+        "object": "search_hit",
+        "hit": {
+          "object": "job_search_hit",
+          "id": "b03a1751-f42f-4bef-a4df-282013273062",
+          "legacy_id": 16503511,
+          "title": "Senior Data Engineer",
+          "short_title": "senior-data-engineer",
+          "apply_type": "external",
+          "company": {
+            "name": "Arcadia",
+            "short_name": "arcadia",
+            "logo": "https://assets.themuse.com/uploaded/companies/15000037/small_logo.png",
+            "legacy_id": 15000037,
+            "perks_and_benefits": [
+              {
+                "name": "Hybrid Work Opportunities",
+                "code": "hybrid_work_opportunities"
+              },
+              {
+                "name": "Work Visa Sponsorship",
+                "code": "work_visa_sponsorship"
+              },
+              {
+                "name": "Family Support Resources",
+                "code": "family_support_resources"
+              },
+              {
+                "name": "Pet Insurance",
+                "code": "pet_insurance"
+              },
+              {
+                "name": "Health Insurance",
+                "code": "health_insurance"
+              },
+              {
+                "name": "Dental Insurance",
+                "code": "dental_insurance"
+              },
+              {
+                "name": "Vision Insurance",
+                "code": "vision_insurance"
+              },
+              {
+                "name": "FSA",
+                "code": "fsa"
+              },
+              {
+                "name": "HSA",
+                "code": "hsa"
+              },
+              {
+                "name": "HSA With Employer Contribution",
+                "code": "hsa_with_employer_contribution"
+              },
+              {
+                "name": "Life Insurance",
+                "code": "life_insurance"
+              },
+              {
+                "name": "Short-Term Disability",
+                "code": "short_term_disability"
+              },
+              {
+                "name": "Long-Term Disability",
+                "code": "long_term_disability"
+              },
+              {
+                "name": "Fitness Subsidies",
+                "code": "fitness_subsidies"
+              },
+              {
+                "name": "Paid Vacation",
+                "code": "paid_vacation"
+              },
+              {
+                "name": "Unlimited Paid Time Off",
+                "code": "unlimited_vacation"
+              },
+              {
+                "name": "Paid Holidays",
+                "code": "paid_holidays"
+              },
+              {
+                "name": "Personal/Sick Days",
+                "code": "personal_sick_days"
+              },
+              {
+                "name": "Leave of Absence",
+                "code": "leave_of_absence"
+              },
+              {
+                "name": "401(K) With Company Matching",
+                "code": "401k_with_matching"
+              },
+              {
+                "name": "Promote From Within",
+                "code": "promote_from_within"
+              },
+              {
+                "name": "Access to Online Courses",
+                "code": "access_to_online_courses"
+              },
+              {
+                "name": "Lunch and Learns",
+                "code": "lunch_and_learns"
+              },
+              {
+                "name": "Flexible Work Hours",
+                "code": "flexible_work_hours"
+              },
+              {
+                "name": "Remote Work Opportunities",
+                "code": "remote_work_opportunities"
+              },
+              {
+                "name": "Casual Dress",
+                "code": "casual_dress"
+              },
+              {
+                "name": "Pet-friendly Office",
+                "code": "pet_friendly"
+              },
+              {
+                "name": "Snacks",
+                "code": "snacks"
+              },
+              {
+                "name": "Diversity, Equity, and Inclusion Program",
+                "code": "diversity_and_inclusion_program"
+              },
+              {
+                "name": "Company Outings",
+                "code": "company_outings"
+              },
+              {
+                "name": "Mental Health Benefits",
+                "code": "mental_health_benefits"
+              },
+              {
+                "name": "Employee Resource Groups (ERG)",
+                "code": "employer_resources_groups"
+              },
+              {
+                "name": "Non-Birth Parent or Paternity Leave",
+                "code": "paternity_leave"
+              },
+              {
+                "name": "401(K)",
+                "code": "401k"
+              },
+              {
+                "name": "Performance Bonus",
+                "code": "performance_bonus"
+              },
+              {
+                "name": "Adoption Leave",
+                "code": "adoption_leave"
+              },
+              {
+                "name": "Commuter Benefits Program",
+                "code": "commuter_benefits_program"
+              },
+              {
+                "name": "Fertility Benefits",
+                "code": "fertility_benefits"
+              },
+              {
+                "name": "Birth Parent or Maternity Leave",
+                "code": "maternity_leave"
+              }
+            ],
+            "leadership_attributes": [
+              {
+                "name": "Diversity, Equity, and Inclusion Program",
+                "code": "diversity_and_inclusion_program"
+              },
+              {
+                "name": "Employee Resource Groups (ERG)",
+                "code": "employer_resources_groups"
+              }
+            ],
+            "package": "Premium",
+            "client_tier": null
+          },
+          "employment_types": [],
+          "categories": [
+            {
+              "name": "Data and Analytics",
+              "code": "data_analytics"
+            }
+          ],
+          "levels": [
+            {
+              "name": "senior",
+              "code": "senior"
+            }
+          ],
+          "locations": [],
+          "remote_work_location_type": "virtual",
+          "posted_at": 1727383007
+        },
+        "score": 89.52867,
+        "cursor": "89.52867,1727383007000,b03a1751-f42f-4bef-a4df-282013273062"
+      },
+      {
+        "object": "search_hit",
+        "hit": {
+          "object": "job_search_hit",
+          "id": "40fcfc7b-67e6-4e0f-a22f-9ebd360b8af7",
+          "legacy_id": 16586822,
+          "title": "Senior Data Engineer",
+          "short_title": "senior-data-engineer-ab5f89",
+          "apply_type": "external",
+          "company": {
+            "name": "Atlassian",
+            "short_name": "atlassian",
+            "logo": "https://assets.themuse.com/uploaded/companies/741/small_logo.png",
+            "legacy_id": 741,
+            "perks_and_benefits": [
+              {
+                "name": "Founder led",
+                "code": "founder_led"
+              },
+              {
+                "name": "Health Insurance",
+                "code": "health_insurance"
+              },
+              {
+                "name": "Dental Insurance",
+                "code": "dental_insurance"
+              },
+              {
+                "name": "Vision Insurance",
+                "code": "vision_insurance"
+              },
+              {
+                "name": "Life Insurance",
+                "code": "life_insurance"
+              },
+              {
+                "name": "Short-Term Disability",
+                "code": "short_term_disability"
+              },
+              {
+                "name": "Long-Term Disability",
+                "code": "long_term_disability"
+              },
+              {
+                "name": "FSA",
+                "code": "fsa"
+              },
+              {
+                "name": "HSA With Employer Contribution",
+                "code": "hsa_with_employer_contribution"
+              },
+              {
+                "name": "Fitness Subsidies",
+                "code": "fitness_subsidies"
+              },
+              {
+                "name": "Flexible Work Hours",
+                "code": "flexible_work_hours"
+              },
+              {
+                "name": "Remote Work Opportunities",
+                "code": "remote_work_opportunities"
+              },
+              {
+                "name": "Access to Online Courses",
+                "code": "access_to_online_courses"
+              },
+              {
+                "name": "Paid Vacation",
+                "code": "paid_vacation"
+              },
+              {
+                "name": "Unlimited Paid Time Off",
+                "code": "unlimited_vacation"
+              },
+              {
+                "name": "Paid Holidays",
+                "code": "paid_holidays"
+              },
+              {
+                "name": "Personal/Sick Days",
+                "code": "personal_sick_days"
+              },
+              {
+                "name": "401(K) With Company Matching",
+                "code": "401k_with_matching"
+              },
+              {
+                "name": "Company Equity",
+                "code": "company_equity"
+              },
+              {
+                "name": "Performance Bonus",
+                "code": "performance_bonus"
+              },
+              {
+                "name": "Mental Health Benefits",
+                "code": "mental_health_benefits"
+              },
+              {
+                "name": "Volunteer Time Off",
+                "code": "volunteer_time_off"
+              },
+              {
+                "name": "Hybrid Work Opportunities",
+                "code": "hybrid_work_opportunities"
+              },
+              {
+                "name": "Work-From-Home Stipend",
+                "code": "work_from_home_stipend"
+              },
+              {
+                "name": "Holiday Events",
+                "code": "holiday_events"
+              },
+              {
+                "name": "Employee Resource Groups (ERG)",
+                "code": "employer_resources_groups"
+              },
+              {
+                "name": "Internship Program",
+                "code": "fellowship_program"
+              },
+              {
+                "name": "Leadership Training Program",
+                "code": "leadership_training"
+              },
+              {
+                "name": "On-Site Gym",
+                "code": "on_site_gym"
+              },
+              {
+                "name": "Adoption Leave",
+                "code": "adoption_leave"
+              },
+              {
+                "name": "Casual Dress",
+                "code": "casual_dress"
+              },
+              {
+                "name": "Pet-friendly Office",
+                "code": "pet_friendly"
+              },
+              {
+                "name": "Happy Hours",
+                "code": "happy_hours"
+              },
+              {
+                "name": "Snacks",
+                "code": "snacks"
+              },
+              {
+                "name": "Some Meals Provided",
+                "code": "some_meals_provided"
+              },
+              {
+                "name": "Diversity, Equity, and Inclusion Program",
+                "code": "diversity_and_inclusion_program"
+              },
+              {
+                "name": "Tuition Reimbursement",
+                "code": "tuition_reimbursement"
+              },
+              {
+                "name": "Learning and Development Stipend",
+                "code": "learning_and_development_stipend"
+              },
+              {
+                "name": "Promote From Within",
+                "code": "promote_from_within"
+              },
+              {
+                "name": "Birth Parent or Maternity Leave",
+                "code": "maternity_leave"
+              },
+              {
+                "name": "Non-Birth Parent or Paternity Leave",
+                "code": "paternity_leave"
+              },
+              {
+                "name": "Relocation Assistance",
+                "code": "relocation_assistance"
+              },
+              {
+                "name": "Fertility Benefits",
+                "code": "fertility_benefits"
+              },
+              {
+                "name": "Adoption Assistance Program",
+                "code": "adoption_assistance"
+              },
+              {
+                "name": "On-Site Cafeteria",
+                "code": "on_site_cafeteria"
+              },
+              {
+                "name": "Family Support Resources",
+                "code": "family_support_resources"
+              },
+              {
+                "name": "Sabbatical",
+                "code": "sabbatical"
+              },
+              {
+                "name": "Leave of Absence",
+                "code": "leave_of_absence"
+              },
+              {
+                "name": "Financial Counseling",
+                "code": "financial_counseling"
+              },
+              {
+                "name": "HSA",
+                "code": "hsa"
+              }
+            ],
+            "leadership_attributes": [
+              {
+                "name": "Founder led",
+                "code": "founder_led"
+              },
+              {
+                "name": "Employee Resource Groups (ERG)",
+                "code": "employer_resources_groups"
+              },
+              {
+                "name": "Diversity, Equity, and Inclusion Program",
+                "code": "diversity_and_inclusion_program"
+              }
+            ],
+            "package": "Advanced",
+            "client_tier": null
+          },
+          "employment_types": [
+            {
+              "name": "full_time",
+              "code": "full_time"
+            }
+          ],
+          "categories": [
+            {
+              "name": "Data and Analytics",
+              "code": "data_analytics"
+            }
+          ],
+          "levels": [
+            {
+              "name": "senior",
+              "code": "senior"
+            }
+          ],
+          "locations": [
+            {
+              "address": "Bangalore, India",
+              "latitude": 12.971599,
+              "longitude": 77.59457,
+              "locality": null,
+              "region": null,
+              "country": null
+            }
+          ],
+          "remote_work_location_type": "virtual",
+          "posted_at": 1727828602
+        },
+        "score": 89.37367,
+        "cursor": "89.37367,1727828602000,40fcfc7b-67e6-4e0f-a22f-9ebd360b8af7"
+      },
+      {
+        "object": "search_hit",
+        "hit": {
+          "object": "job_search_hit",
+          "id": "168ad355-3615-43dd-b50e-d511046032ce",
+          "legacy_id": 16503914,
+          "title": "Data Engineer",
+          "short_title": "data-engineer",
+          "apply_type": "external",
+          "company": {
+            "name": "Appfire",
+            "short_name": "appfire",
+            "logo": "https://assets.themuse.com/uploaded/companies/15000095/small_logo.png",
+            "legacy_id": 15000095,
+            "perks_and_benefits": [
+              {
+                "name": "Health Insurance",
+                "code": "health_insurance"
+              },
+              {
+                "name": "Dental Insurance",
+                "code": "dental_insurance"
+              },
+              {
+                "name": "Vision Insurance",
+                "code": "vision_insurance"
+              },
+              {
+                "name": "Life Insurance",
+                "code": "life_insurance"
+              },
+              {
+                "name": "Short-Term Disability",
+                "code": "short_term_disability"
+              },
+              {
+                "name": "Long-Term Disability",
+                "code": "long_term_disability"
+              },
+              {
+                "name": "FSA",
+                "code": "fsa"
+              },
+              {
+                "name": "Leadership Training Program",
+                "code": "leadership_training"
+              },
+              {
+                "name": "Associate or Rotational Training Program",
+                "code": "associate_training"
+              },
+              {
+                "name": "Flexible Work Hours",
+                "code": "flexible_work_hours"
+              },
+              {
+                "name": "Remote Work Opportunities",
+                "code": "remote_work_opportunities"
+              },
+              {
+                "name": "Casual Dress",
+                "code": "casual_dress"
+              },
+              {
+                "name": "Snacks",
+                "code": "snacks"
+              },
+              {
+                "name": "Company Outings",
+                "code": "company_outings"
+              },
+              {
+                "name": "Promote From Within",
+                "code": "promote_from_within"
+              },
+              {
+                "name": "Access to Online Courses",
+                "code": "access_to_online_courses"
+              },
+              {
+                "name": "Unlimited Paid Time Off",
+                "code": "unlimited_vacation"
+              },
+              {
+                "name": "Paid Holidays",
+                "code": "paid_holidays"
+              },
+              {
+                "name": "401(K)",
+                "code": "401k"
+              },
+              {
+                "name": "Company Equity",
+                "code": "company_equity"
+              },
+              {
+                "name": "Hybrid Work Opportunities",
+                "code": "hybrid_work_opportunities"
+              },
+              {
+                "name": "Holiday Events",
+                "code": "holiday_events"
+              },
+              {
+                "name": "Founder led",
+                "code": "founder_led"
+              }
+            ],
+            "leadership_attributes": [
+              {
+                "name": "Founder led",
+                "code": "founder_led"
+              }
+            ],
+            "package": "Premium",
+            "client_tier": null
+          },
+          "employment_types": [
+            {
+              "name": "none",
+              "code": "none"
+            }
+          ],
+          "categories": [
+            {
+              "name": "Data and Analytics",
+              "code": "data_analytics"
+            }
+          ],
+          "levels": [
+            {
+              "name": "mid",
+              "code": "mid"
+            }
+          ],
+          "locations": [],
+          "remote_work_location_type": "virtual",
+          "posted_at": 1727394007
+        },
+        "score": 91.35495,
+        "cursor": "91.35495,1727394007000,168ad355-3615-43dd-b50e-d511046032ce"
+      },
+      {
+        "object": "search_hit",
+        "hit": {
+          "object": "job_search_hit",
+          "id": "39240056-7289-4617-88a1-65abc3857f50",
+          "legacy_id": 16578613,
+          "title": "Azure Data Engineer",
+          "short_title": "azure-data-engineer-845873",
+          "apply_type": "external",
+          "company": {
+            "name": "Kyndryl",
+            "short_name": "kyndryl",
+            "logo": "https://assets.themuse.com/uploaded/companies/15000490/small_logo.png",
+            "legacy_id": 15000490,
+            "perks_and_benefits": [
+              {
+                "name": "Remote Work Opportunities",
+                "code": "remote_work_opportunities"
+              },
+              {
+                "name": "Paid Vacation",
+                "code": "paid_vacation"
+              },
+              {
+                "name": "Health Insurance",
+                "code": "health_insurance"
+              },
+              {
+                "name": "Paid Holidays",
+                "code": "paid_holidays"
+              },
+              {
+                "name": "Personal/Sick Days",
+                "code": "personal_sick_days"
+              },
+              {
+                "name": "Vision Insurance",
+                "code": "vision_insurance"
+              },
+              {
+                "name": "Life Insurance",
+                "code": "life_insurance"
+              },
+              {
+                "name": "Dental Insurance",
+                "code": "dental_insurance"
+              },
+              {
+                "name": "Health Reimbursement Account",
+                "code": "health_reimbursement_account"
+              },
+              {
+                "name": "Flexible Work Hours",
+                "code": "flexible_work_hours"
+              },
+              {
+                "name": "Mental Health Benefits",
+                "code": "mental_health_benefits"
+              },
+              {
+                "name": "Volunteer Time Off",
+                "code": "volunteer_time_off"
+              },
+              {
+                "name": "Mentor Program",
+                "code": "mentor_program"
+              },
+              {
+                "name": "Access to Online Courses",
+                "code": "access_to_online_courses"
+              },
+              {
+                "name": "Lunch and Learns",
+                "code": "lunch_and_learns"
+              },
+              {
+                "name": "Birth Parent or Maternity Leave",
+                "code": "maternity_leave"
+              }
+            ],
+            "leadership_attributes": [],
+            "package": "Professional",
+            "client_tier": null
+          },
+          "employment_types": [
+            {
+              "name": "full_time",
+              "code": "full_time"
+            }
+          ],
+          "categories": [
+            {
+              "name": "Data and Analytics",
+              "code": "data_analytics"
+            }
+          ],
+          "levels": [
+            {
+              "name": "senior",
+              "code": "senior"
+            }
+          ],
+          "locations": [
+            {
+              "address": "Bangalore, India",
+              "latitude": 12.971599,
+              "longitude": 77.59457,
+              "locality": null,
+              "region": null,
+              "country": null
+            },
+            {
+              "address": "Greater Noida, India",
+              "latitude": 28.49615,
+              "longitude": 77.53601,
+              "locality": null,
+              "region": null,
+              "country": null
+            }
+          ],
+          "remote_work_location_type": "virtual",
+          "posted_at": 1727782592
+        },
+        "score": 88.28754,
+        "cursor": "88.28754,1727782592000,39240056-7289-4617-88a1-65abc3857f50"
+      },
+      {
+        "object": "search_hit",
+        "hit": {
+          "object": "job_search_hit",
+          "id": "e20b6ce5-5327-4eea-8c9f-f51fdc8f8721",
+          "legacy_id": 7982301,
+          "title": "Consultant, Analytics Data Engineer",
+          "short_title": "consultant-analytics-data-engineer",
+          "apply_type": "external",
+          "company": {
+            "name": "Nationwide Insurance",
+            "short_name": "nationwideinsurance",
+            "logo": "https://assets.themuse.com/uploaded/companies/12356/small_logo.png",
+            "legacy_id": 12356,
+            "perks_and_benefits": [],
+            "leadership_attributes": [],
+            "package": "Basic",
+            "client_tier": null
+          },
+          "employment_types": [],
+          "categories": [
+            {
+              "name": "Data and Analytics",
+              "code": "data_analytics"
+            }
+          ],
+          "levels": [
+            {
+              "name": "mid",
+              "code": "mid"
+            }
+          ],
+          "locations": [],
+          "remote_work_location_type": "virtual",
+          "posted_at": 1643324581
+        },
+        "score": 86.6918,
+        "cursor": "86.6918,1643324581000,e20b6ce5-5327-4eea-8c9f-f51fdc8f8721"
+      },
+      {
+        "object": "search_hit",
+        "hit": {
+          "object": "job_search_hit",
+          "id": "42830980-99ee-453c-bbd4-9f2c09158066",
+          "legacy_id": 13135438,
+          "title": "Data Engineer, Product Analytics",
+          "short_title": "data-engineer-product-analytics-7b1a22",
+          "apply_type": "external",
+          "company": {
+            "name": "Meta",
+            "short_name": "meta",
+            "logo": "https://assets.themuse.com/uploaded/companies/659/small_logo.png",
+            "legacy_id": 659,
+            "perks_and_benefits": [
+              {
+                "name": "Health Insurance",
+                "code": "health_insurance"
+              },
+              {
+                "name": "Health Reimbursement Account",
+                "code": "health_reimbursement_account"
+              },
+              {
+                "name": "Dental Insurance",
+                "code": "dental_insurance"
+              },
+              {
+                "name": "Vision Insurance",
+                "code": "vision_insurance"
+              },
+              {
+                "name": "Life Insurance",
+                "code": "life_insurance"
+              },
+              {
+                "name": "Short-Term Disability",
+                "code": "short_term_disability"
+              },
+              {
+                "name": "Long-Term Disability",
+                "code": "long_term_disability"
+              },
+              {
+                "name": "FSA",
+                "code": "fsa"
+              },
+              {
+                "name": "FSA With Employer Contribution",
+                "code": "fsa_with_employer_contribution"
+              },
+              {
+                "name": "HSA",
+                "code": "hsa"
+              },
+              {
+                "name": "HSA With Employer Contribution",
+                "code": "hsa_with_employer_contribution"
+              },
+              {
+                "name": "Fitness Subsidies",
+                "code": "fitness_subsidies"
+              },
+              {
+                "name": "On-Site Gym",
+                "code": "on_site_gym"
+              },
+              {
+                "name": "Paid Vacation",
+                "code": "paid_vacation"
+              },
+              {
+                "name": "Unlimited Paid Time Off",
+                "code": "unlimited_vacation"
+              },
+              {
+                "name": "Paid Holidays",
+                "code": "paid_holidays"
+              },
+              {
+                "name": "Personal/Sick Days",
+                "code": "personal_sick_days"
+              },
+              {
+                "name": "Birth Parent or Maternity Leave",
+                "code": "maternity_leave"
+              },
+              {
+                "name": "Non-Birth Parent or Paternity Leave",
+                "code": "paternity_leave"
+              },
+              {
+                "name": "Sabbatical",
+                "code": "sabbatical"
+              },
+              {
+                "name": "Leave of Absence",
+                "code": "leave_of_absence"
+              },
+              {
+                "name": "401(K)",
+                "code": "401k"
+              },
+              {
+                "name": "401(K) With Company Matching",
+                "code": "401k_with_matching"
+              },
+              {
+                "name": "Pension",
+                "code": "pension"
+              },
+              {
+                "name": "Company Equity",
+                "code": "company_equity"
+              },
+              {
+                "name": "Performance Bonus",
+                "code": "performance_bonus"
+              },
+              {
+                "name": "Relocation Assistance",
+                "code": "relocation_assistance"
+              },
+              {
+                "name": "Learning and Development Stipend",
+                "code": "learning_and_development_stipend"
+              },
+              {
+                "name": "Promote From Within",
+                "code": "promote_from_within"
+              },
+              {
+                "name": "Mentor Program",
+                "code": "mentor_program"
+              },
+              {
+                "name": "Shadowing Opportunities",
+                "code": "shadowing_opportunities"
+              },
+              {
+                "name": "Access to Online Courses",
+                "code": "access_to_online_courses"
+              },
+              {
+                "name": "Lunch and Learns",
+                "code": "lunch_and_learns"
+              },
+              {
+                "name": "Flexible Work Hours",
+                "code": "flexible_work_hours"
+              },
+              {
+                "name": "Remote Work Opportunities",
+                "code": "remote_work_opportunities"
+              },
+              {
+                "name": "Commuter Benefits Program",
+                "code": "commuter_benefits_program"
+              },
+              {
+                "name": "Casual Dress",
+                "code": "casual_dress"
+              },
+              {
+                "name": "Happy Hours",
+                "code": "happy_hours"
+              },
+              {
+                "name": "Snacks",
+                "code": "snacks"
+              },
+              {
+                "name": "Some Meals Provided",
+                "code": "some_meals_provided"
+              },
+              {
+                "name": "Diversity, Equity, and Inclusion Program",
+                "code": "diversity_and_inclusion_program"
+              },
+              {
+                "name": "Company Outings",
+                "code": "company_outings"
+              },
+              {
+                "name": "Employee Resource Groups (ERG)",
+                "code": "employer_resources_groups"
+              },
+              {
+                "name": "Internship Program",
+                "code": "fellowship_program"
+              },
+              {
+                "name": "Founder led",
+                "code": "founder_led"
+              },
+              {
+                "name": "Mental Health Benefits",
+                "code": "mental_health_benefits"
+              },
+              {
+                "name": "Fertility Benefits",
+                "code": "fertility_benefits"
+              },
+              {
+                "name": "Adoption Assistance Program",
+                "code": "adoption_assistance"
+              },
+              {
+                "name": "Family Support Resources",
+                "code": "family_support_resources"
+              },
+              {
+                "name": "Financial Counseling",
+                "code": "financial_counseling"
+              },
+              {
+                "name": "Hybrid Work Opportunities",
+                "code": "hybrid_work_opportunities"
+              },
+              {
+                "name": "On-Site Cafeteria",
+                "code": "on_site_cafeteria"
+              },
+              {
+                "name": "Holiday Events",
+                "code": "holiday_events"
+              }
+            ],
+            "leadership_attributes": [
+              {
+                "name": "Diversity, Equity, and Inclusion Program",
+                "code": "diversity_and_inclusion_program"
+              },
+              {
+                "name": "Employee Resource Groups (ERG)",
+                "code": "employer_resources_groups"
+              },
+              {
+                "name": "Founder led",
+                "code": "founder_led"
+              }
+            ],
+            "package": "Advanced",
+            "client_tier": null
+          },
+          "employment_types": [
+            {
+              "name": "none",
+              "code": "none"
+            }
+          ],
+          "categories": [
+            {
+              "name": "Data and Analytics",
+              "code": "data_analytics"
+            }
+          ],
+          "levels": [
+            {
+              "name": "mid",
+              "code": "mid"
+            }
+          ],
+          "locations": [],
+          "remote_work_location_type": "virtual",
+          "posted_at": 1728692850
+        },
+        "score": 85.93417,
+        "cursor": "85.93417,1728692850000,42830980-99ee-453c-bbd4-9f2c09158066"
+      },
+      {
+        "object": "search_hit",
+        "hit": {
+          "object": "job_search_hit",
+          "id": "3ab86d0a-21ce-40f8-bd28-309c2199d9eb",
+          "legacy_id": 16586820,
+          "title": "Principle Data Engineer",
+          "short_title": "principle-data-engineer-9b277a",
+          "apply_type": "external",
+          "company": {
+            "name": "Atlassian",
+            "short_name": "atlassian",
+            "logo": "https://assets.themuse.com/uploaded/companies/741/small_logo.png",
+            "legacy_id": 741,
+            "perks_and_benefits": [
+              {
+                "name": "Founder led",
+                "code": "founder_led"
+              },
+              {
+                "name": "Health Insurance",
+                "code": "health_insurance"
+              },
+              {
+                "name": "Dental Insurance",
+                "code": "dental_insurance"
+              },
+              {
+                "name": "Vision Insurance",
+                "code": "vision_insurance"
+              },
+              {
+                "name": "Life Insurance",
+                "code": "life_insurance"
+              },
+              {
+                "name": "Short-Term Disability",
+                "code": "short_term_disability"
+              },
+              {
+                "name": "Long-Term Disability",
+                "code": "long_term_disability"
+              },
+              {
+                "name": "FSA",
+                "code": "fsa"
+              },
+              {
+                "name": "HSA With Employer Contribution",
+                "code": "hsa_with_employer_contribution"
+              },
+              {
+                "name": "Fitness Subsidies",
+                "code": "fitness_subsidies"
+              },
+              {
+                "name": "Flexible Work Hours",
+                "code": "flexible_work_hours"
+              },
+              {
+                "name": "Remote Work Opportunities",
+                "code": "remote_work_opportunities"
+              },
+              {
+                "name": "Access to Online Courses",
+                "code": "access_to_online_courses"
+              },
+              {
+                "name": "Paid Vacation",
+                "code": "paid_vacation"
+              },
+              {
+                "name": "Unlimited Paid Time Off",
+                "code": "unlimited_vacation"
+              },
+              {
+                "name": "Paid Holidays",
+                "code": "paid_holidays"
+              },
+              {
+                "name": "Personal/Sick Days",
+                "code": "personal_sick_days"
+              },
+              {
+                "name": "401(K) With Company Matching",
+                "code": "401k_with_matching"
+              },
+              {
+                "name": "Company Equity",
+                "code": "company_equity"
+              },
+              {
+                "name": "Performance Bonus",
+                "code": "performance_bonus"
+              },
+              {
+                "name": "Mental Health Benefits",
+                "code": "mental_health_benefits"
+              },
+              {
+                "name": "Volunteer Time Off",
+                "code": "volunteer_time_off"
+              },
+              {
+                "name": "Hybrid Work Opportunities",
+                "code": "hybrid_work_opportunities"
+              },
+              {
+                "name": "Work-From-Home Stipend",
+                "code": "work_from_home_stipend"
+              },
+              {
+                "name": "Holiday Events",
+                "code": "holiday_events"
+              },
+              {
+                "name": "Employee Resource Groups (ERG)",
+                "code": "employer_resources_groups"
+              },
+              {
+                "name": "Internship Program",
+                "code": "fellowship_program"
+              },
+              {
+                "name": "Leadership Training Program",
+                "code": "leadership_training"
+              },
+              {
+                "name": "On-Site Gym",
+                "code": "on_site_gym"
+              },
+              {
+                "name": "Adoption Leave",
+                "code": "adoption_leave"
+              },
+              {
+                "name": "Casual Dress",
+                "code": "casual_dress"
+              },
+              {
+                "name": "Pet-friendly Office",
+                "code": "pet_friendly"
+              },
+              {
+                "name": "Happy Hours",
+                "code": "happy_hours"
+              },
+              {
+                "name": "Snacks",
+                "code": "snacks"
+              },
+              {
+                "name": "Some Meals Provided",
+                "code": "some_meals_provided"
+              },
+              {
+                "name": "Diversity, Equity, and Inclusion Program",
+                "code": "diversity_and_inclusion_program"
+              },
+              {
+                "name": "Tuition Reimbursement",
+                "code": "tuition_reimbursement"
+              },
+              {
+                "name": "Learning and Development Stipend",
+                "code": "learning_and_development_stipend"
+              },
+              {
+                "name": "Promote From Within",
+                "code": "promote_from_within"
+              },
+              {
+                "name": "Birth Parent or Maternity Leave",
+                "code": "maternity_leave"
+              },
+              {
+                "name": "Non-Birth Parent or Paternity Leave",
+                "code": "paternity_leave"
+              },
+              {
+                "name": "Relocation Assistance",
+                "code": "relocation_assistance"
+              },
+              {
+                "name": "Fertility Benefits",
+                "code": "fertility_benefits"
+              },
+              {
+                "name": "Adoption Assistance Program",
+                "code": "adoption_assistance"
+              },
+              {
+                "name": "On-Site Cafeteria",
+                "code": "on_site_cafeteria"
+              },
+              {
+                "name": "Family Support Resources",
+                "code": "family_support_resources"
+              },
+              {
+                "name": "Sabbatical",
+                "code": "sabbatical"
+              },
+              {
+                "name": "Leave of Absence",
+                "code": "leave_of_absence"
+              },
+              {
+                "name": "Financial Counseling",
+                "code": "financial_counseling"
+              },
+              {
+                "name": "HSA",
+                "code": "hsa"
+              }
+            ],
+            "leadership_attributes": [
+              {
+                "name": "Founder led",
+                "code": "founder_led"
+              },
+              {
+                "name": "Employee Resource Groups (ERG)",
+                "code": "employer_resources_groups"
+              },
+              {
+                "name": "Diversity, Equity, and Inclusion Program",
+                "code": "diversity_and_inclusion_program"
+              }
+            ],
+            "package": "Advanced",
+            "client_tier": null
+          },
+          "employment_types": [
+            {
+              "name": "full_time",
+              "code": "full_time"
+            }
+          ],
+          "categories": [
+            {
+              "name": "Data and Analytics",
+              "code": "data_analytics"
+            }
+          ],
+          "levels": [
+            {
+              "name": "senior",
+              "code": "senior"
+            }
+          ],
+          "locations": [
+            {
+              "address": "Bangalore, India",
+              "latitude": 12.971599,
+              "longitude": 77.59457,
+              "locality": null,
+              "region": null,
+              "country": null
+            }
+          ],
+          "remote_work_location_type": "virtual",
+          "posted_at": 1727828602
+        },
+        "score": 89.22984,
+        "cursor": "89.22984,1727828602000,3ab86d0a-21ce-40f8-bd28-309c2199d9eb"
+      },
+      {
+        "object": "search_hit",
+        "hit": {
+          "object": "job_search_hit",
+          "id": "1033e5e1-bc7b-4c20-8e6e-f81b931ca1da",
+          "legacy_id": 16404929,
+          "title": "Senior Data Engineer",
+          "short_title": "senior-data-engineer-725172",
+          "apply_type": "external",
+          "company": {
+            "name": "Atlassian",
+            "short_name": "atlassian",
+            "logo": "https://assets.themuse.com/uploaded/companies/741/small_logo.png",
+            "legacy_id": 741,
+            "perks_and_benefits": [
+              {
+                "name": "Founder led",
+                "code": "founder_led"
+              },
+              {
+                "name": "Health Insurance",
+                "code": "health_insurance"
+              },
+              {
+                "name": "Dental Insurance",
+                "code": "dental_insurance"
+              },
+              {
+                "name": "Vision Insurance",
+                "code": "vision_insurance"
+              },
+              {
+                "name": "Life Insurance",
+                "code": "life_insurance"
+              },
+              {
+                "name": "Short-Term Disability",
+                "code": "short_term_disability"
+              },
+              {
+                "name": "Long-Term Disability",
+                "code": "long_term_disability"
+              },
+              {
+                "name": "FSA",
+                "code": "fsa"
+              },
+              {
+                "name": "HSA With Employer Contribution",
+                "code": "hsa_with_employer_contribution"
+              },
+              {
+                "name": "Fitness Subsidies",
+                "code": "fitness_subsidies"
+              },
+              {
+                "name": "Flexible Work Hours",
+                "code": "flexible_work_hours"
+              },
+              {
+                "name": "Remote Work Opportunities",
+                "code": "remote_work_opportunities"
+              },
+              {
+                "name": "Access to Online Courses",
+                "code": "access_to_online_courses"
+              },
+              {
+                "name": "Paid Vacation",
+                "code": "paid_vacation"
+              },
+              {
+                "name": "Unlimited Paid Time Off",
+                "code": "unlimited_vacation"
+              },
+              {
+                "name": "Paid Holidays",
+                "code": "paid_holidays"
+              },
+              {
+                "name": "Personal/Sick Days",
+                "code": "personal_sick_days"
+              },
+              {
+                "name": "401(K) With Company Matching",
+                "code": "401k_with_matching"
+              },
+              {
+                "name": "Company Equity",
+                "code": "company_equity"
+              },
+              {
+                "name": "Performance Bonus",
+                "code": "performance_bonus"
+              },
+              {
+                "name": "Mental Health Benefits",
+                "code": "mental_health_benefits"
+              },
+              {
+                "name": "Volunteer Time Off",
+                "code": "volunteer_time_off"
+              },
+              {
+                "name": "Hybrid Work Opportunities",
+                "code": "hybrid_work_opportunities"
+              },
+              {
+                "name": "Work-From-Home Stipend",
+                "code": "work_from_home_stipend"
+              },
+              {
+                "name": "Holiday Events",
+                "code": "holiday_events"
+              },
+              {
+                "name": "Employee Resource Groups (ERG)",
+                "code": "employer_resources_groups"
+              },
+              {
+                "name": "Internship Program",
+                "code": "fellowship_program"
+              },
+              {
+                "name": "Leadership Training Program",
+                "code": "leadership_training"
+              },
+              {
+                "name": "On-Site Gym",
+                "code": "on_site_gym"
+              },
+              {
+                "name": "Adoption Leave",
+                "code": "adoption_leave"
+              },
+              {
+                "name": "Casual Dress",
+                "code": "casual_dress"
+              },
+              {
+                "name": "Pet-friendly Office",
+                "code": "pet_friendly"
+              },
+              {
+                "name": "Happy Hours",
+                "code": "happy_hours"
+              },
+              {
+                "name": "Snacks",
+                "code": "snacks"
+              },
+              {
+                "name": "Some Meals Provided",
+                "code": "some_meals_provided"
+              },
+              {
+                "name": "Diversity, Equity, and Inclusion Program",
+                "code": "diversity_and_inclusion_program"
+              },
+              {
+                "name": "Tuition Reimbursement",
+                "code": "tuition_reimbursement"
+              },
+              {
+                "name": "Learning and Development Stipend",
+                "code": "learning_and_development_stipend"
+              },
+              {
+                "name": "Promote From Within",
+                "code": "promote_from_within"
+              },
+              {
+                "name": "Birth Parent or Maternity Leave",
+                "code": "maternity_leave"
+              },
+              {
+                "name": "Non-Birth Parent or Paternity Leave",
+                "code": "paternity_leave"
+              },
+              {
+                "name": "Relocation Assistance",
+                "code": "relocation_assistance"
+              },
+              {
+                "name": "Fertility Benefits",
+                "code": "fertility_benefits"
+              },
+              {
+                "name": "Adoption Assistance Program",
+                "code": "adoption_assistance"
+              },
+              {
+                "name": "On-Site Cafeteria",
+                "code": "on_site_cafeteria"
+              },
+              {
+                "name": "Family Support Resources",
+                "code": "family_support_resources"
+              },
+              {
+                "name": "Sabbatical",
+                "code": "sabbatical"
+              },
+              {
+                "name": "Leave of Absence",
+                "code": "leave_of_absence"
+              },
+              {
+                "name": "Financial Counseling",
+                "code": "financial_counseling"
+              },
+              {
+                "name": "HSA",
+                "code": "hsa"
+              }
+            ],
+            "leadership_attributes": [
+              {
+                "name": "Founder led",
+                "code": "founder_led"
+              },
+              {
+                "name": "Employee Resource Groups (ERG)",
+                "code": "employer_resources_groups"
+              },
+              {
+                "name": "Diversity, Equity, and Inclusion Program",
+                "code": "diversity_and_inclusion_program"
+              }
+            ],
+            "package": "Advanced",
+            "client_tier": null
+          },
+          "employment_types": [
+            {
+              "name": "none",
+              "code": "none"
+            }
+          ],
+          "categories": [],
+          "levels": [
+            {
+              "name": "senior",
+              "code": "senior"
+            }
+          ],
+          "locations": [
+            {
+              "address": "Bangalore, India",
+              "latitude": 12.971599,
+              "longitude": 77.59457,
+              "locality": null,
+              "region": null,
+              "country": null
+            }
+          ],
+          "remote_work_location_type": "virtual",
+          "posted_at": 1727055309
+        },
+        "score": 86.037766,
+        "cursor": "86.037766,1727055309000,1033e5e1-bc7b-4c20-8e6e-f81b931ca1da"
+      }
+    ],
+    "ctsSearch": false
+  }
