@@ -34,9 +34,6 @@ datascientest-test-project/
 │
 └── .gitignore            # File to ignore unnecessary files for Git
 project_folder/
-│
-
-
 ```
 
 ### Details of Directories and Files
