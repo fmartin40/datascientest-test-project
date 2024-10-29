@@ -17,7 +17,10 @@ datascientest-test-project/
 │
 ├── src/                  # Source code of the application
 │   ├── __init__.py       # File to mark the folder as a Python package
-│   └── main.py           # Main file of the application
+│   ├── main.py           # Main file of the application
+│   ├── config.py         # Configuring and loading environment variables
+│   ├── auth.py           # Authentication functions (for access token)
+│   └── job_search.py     # Functions to interact with the Job Postings API
 │
 ├── tests/                # Folder for unit tests
 │   ├── __init__.py       # File to mark the folder as a package
@@ -27,7 +30,13 @@ datascientest-test-project/
 │
 ├── README.md             # Project documentation
 │
+├── .env                  # Environment file for credentials
+│
 └── .gitignore            # File to ignore unnecessary files for Git
+project_folder/
+│
+
+
 ```
 
 ### Details of Directories and Files
