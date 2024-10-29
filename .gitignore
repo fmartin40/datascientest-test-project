@@ -1,2 +1,11 @@
+# Python
+__pycache__/
+
 # Environnements virtuels
 env/
+
+# fichiers secrets
+*.env
+
+# fichiers de données
+data/
