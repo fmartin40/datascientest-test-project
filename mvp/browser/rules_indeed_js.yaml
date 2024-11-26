@@ -1,0 +1,4 @@
+js:
+    xpath: '//*[@id="mosaic-data"]'
+    type: Text
+    
