@@ -21,6 +21,7 @@ async def main():
        await p.scroll_down(200)
        await p   # wait for events to be processed
        await p.reload()
+       
        if p != page3:
            await p.close()
 

@@ -46,5 +46,5 @@ if __name__ == '__main__':
 
     rslt = asyncio.run(open_browser())
     jobs_ls: List = scrape_page(rslt)
-    jobs: List[JobUrl] = [JobUrl(**job) for job in jobs_ls['jobs']]
-    pprint(jobs)
+    # jobs: List[JobUrl] = [JobUrl(**job) for job in jobs_ls['jobs']]
+    pprint(jobs_ls)
