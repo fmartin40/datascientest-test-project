@@ -104,7 +104,7 @@ def fetch_offer_details(access_token, offer_id):
         offer_details = response.json()
 
         filename = f"{current_date}-{offer_id}.json"
-        filepath = os.path.join('data', filename)
+        filepath = os.path.join(data_dir, filename)
 
         with open(filepath, 'w', encoding='utf-8') as f:
             json.dump(offer_details, f, ensure_ascii=False, indent=4)
@@ -117,7 +117,8 @@ access_token = get_access_token()
 
 if access_token:
     params = {
-    "codeROME": "M1805",  # Le code ROME de 'data engineer'
+    # "codeROME": "M1805",  # Le code ROME de 'data engineer'
+    "motsCles": "data engineer",  
     "sort": "0",     # Tri par pertinence décroissante
     "departement": "75",  # Exemple : Paris (75)
     }
@@ -127,8 +128,13 @@ if access_token:
     # Afficher le nombre total d'offres
     print(f"Nombre total d'offres reçues : {len(all_offers)}")
     
+    data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'data')
+    os.makedirs(data_dir, exist_ok=True)
+
     filename = f"{current_date}-offres_d_emploi.json"
-    filepath = os.path.join('data', filename)
+    filepath = os.path.join(data_dir, filename)
+
+    print(filepath)
 
     if all_offers:
         with open(filepath, 'w', encoding='utf-8') as f:

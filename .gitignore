@@ -3,6 +3,7 @@ __pycache__/
 
 # Environnements virtuels
 env/
+venv/
 
 # fichiers secrets
 *.env
