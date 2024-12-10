@@ -16,6 +16,7 @@ class JobUrl:
     url: str 
     processed: bool = False
 
+
     def __post_init__(self):
         self.url = f"https://fr.indeed.com/{self.url}"
 
@@ -47,4 +48,5 @@ if __name__ == '__main__':
     rslt = asyncio.run(open_browser())
     jobs_ls: List = scrape_page(rslt)
     # jobs: List[JobUrl] = [JobUrl(**job) for job in jobs_ls['jobs']]
-    pprint(jobs_ls)
+    pprint(rslt)
+    
