@@ -1,7 +1,7 @@
 import asyncio
 from typing import List
 from app.domain.scrap.entites.jobs import JobSummary, JobDetailled
-from app.domain.scrap.interfaces.iscrape import IScrapeJob
+from app.domain.scrap.interfaces.iscrape_service import IScrapeJob
 from app.domain.scrap.usecase.scrape_jobs_summaries_usecase import (
     ScrapJobSummariesUseCase,
     ScrapJobsSummariesInputDto,

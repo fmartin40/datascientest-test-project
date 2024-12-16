@@ -1,7 +1,10 @@
 from dataclasses import dataclass
 
+from app.domain.scrap.interfaces.iscrape_service import IScrapeJob
 from app.domain.shared.abstract.usecase import IUseCase
 from app.domain.shared.abstract.presenter import Presenter
+from app.errors.errors import FetchApiException
+from app.infra.scrap.selectorlib.scrap_muse_service import ScrapMuseService
 
 
 @dataclass
@@ -22,6 +25,9 @@ class ScrapJobSummariesUseCase(IUseCase):
 
 	async def execute(self):
 		try:
-			print(self.input_dto)
+			scraper: IScrapeJob = ScrapMuseService()
+			return await scraper.scrap_jobs_summaries(self.input_dto.query)
+		except FetchApiException as exc:
+			raise exc
 		except Exception as exc:
 			raise Exception(exc)
