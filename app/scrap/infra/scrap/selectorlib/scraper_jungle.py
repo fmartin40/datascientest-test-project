@@ -2,13 +2,13 @@
 import re
 from typing import Dict, List
 from glom import glom
-from app.domain.scrap.entites.jobs import JobDetailled, JobSummary
-from app.domain.scrap.interfaces.iscrape_service import IScrapeJob
-from app.errors.errors import FetchApiException
-from app.infra.scrap.selectorlib.fetch import FetchUrl
+from app.scrap.entites.jobs import JobDetailled, JobSummary
+from app.scrap.interfaces.iscrape_service import IJobScraper
+from app.scrap.errors.errors import FetchApiException
+from app.scrap.infra.scrap.selectorlib.fetch import FetchUrl
 
 
-class ScrapMuseService(FetchUrl,IScrapeJob):
+class ScraperJungleService(FetchUrl,IJobScraper):
     def __init__(self):
         self.website_url:str = "https://www.themuse.com"
         self.job_summaries_url: str = "/api/search-renderer/jobs"
@@ -52,7 +52,7 @@ class ScrapMuseService(FetchUrl,IScrapeJob):
                 JobSummary(
                     job=job.get('job'),
                     url= f"{self.website_url}{self.job_detailled_url}/{job.get('company')}/{job.get('job')}",
-                    website="MUSE",
+                    website="JUNGLE",
                     processed = False
                 )
                 for job in job_list

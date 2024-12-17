@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from app.domain.scrap.entites.jobs import JobDetailled, JobSummary
+from app.scrap.entites.jobs import JobDetailled, JobSummary
 
-class IScrapeJob(ABC):
+class IJobScraper(ABC):
     
     @abstractmethod
     async def scrap_jobs_summaries(self, query: str, *args, **kwargs)->List[JobSummary]:

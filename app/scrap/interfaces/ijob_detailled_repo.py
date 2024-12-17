@@ -1,9 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import List
+from app.scrap.entites.jobs import JobSummary
 
-from app.domain.scrap.entites.jobs import JobSummary
-
-class IJobSummaryRepository(ABC):
+class IJobDetailledRepository(ABC):
     
     @abstractmethod
     async def create(self, job:JobSummary, *args, **kwargs):

@@ -1,6 +1,6 @@
 import aiohttp
 
-from app.errors.errors import FetchApiException
+from app.scrap.errors.errors import FetchApiException
 
 
 class FetchUrl:

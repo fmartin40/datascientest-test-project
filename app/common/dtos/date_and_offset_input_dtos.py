@@ -11,7 +11,7 @@ class ToDateDto:
 @dataclass
 class FromDateDto:
 	"""utilisé pour les requetes qui nécessitent une date"""
-	to_date: date
+	from_date: date
 
 
 @dataclass
