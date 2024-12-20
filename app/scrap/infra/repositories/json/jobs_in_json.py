@@ -17,6 +17,7 @@ class JobsInJsonRepo(IJobSummaryRepository):
         db_folder = current_file_path.parent / "fake_db"
         jobs_in_file = db_folder / "jobs_summaries.json"
         jobs_as_dict = [[asdict(job) for job in jobs]]
+        print(jobs_as_dict)
 
         with open(jobs_in_file, 'w+') as file:
             json.dump(jobs_as_dict, file, indent=4, ensure_ascii=False)

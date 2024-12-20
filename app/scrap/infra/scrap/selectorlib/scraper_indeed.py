@@ -14,7 +14,7 @@ class ScraperIndeedService(FetchUrl, IJobScraper):
     def __init__(self):
         self.website_url: str = "https://fr.indeed.com"
         self.job_summaries_url: str = "/jobs"
-        self.job_detailled_url: str = "/jobs"
+        # self.job_detailled_url: str = "/jobs"
 
     async def __build_url(self, query: str, cursor: str | None = None) -> Dict:
         query: str = re.sub(r"\s+", "+", query)

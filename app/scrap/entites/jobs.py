@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from datetime import date
 import re
 from typing import List
 
@@ -11,7 +12,9 @@ class JobSummary(Entity):
 	job: str
 	url: str 
 	website: str
+	# imported_on: date
 	processed: bool = False
+	
 	 	
 
 @dataclass 
