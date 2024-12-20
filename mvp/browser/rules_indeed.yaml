@@ -1,0 +1,15 @@
+jobs:
+    css: div.cardOutline
+    multiple: true
+    type: Text
+    children:
+        job_name:
+            css: h2.jobTitle
+            type: Text
+        url:
+            css: h2 > a
+            type: Link
+            
+        company: 
+            css: span.css-1h7lukg
+            type: Text

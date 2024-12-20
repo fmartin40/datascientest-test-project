@@ -1,0 +1,12 @@
+company_size:
+    css: '#main-content > aside.CompanyInformationModule_companyInformationModule__2M32l.undefined > ul > li:nth-child(1)'
+    type: Text
+
+company_domain:
+    css: '#main-content > aside.CompanyInformationModule_companyInformationModule__2M32l.undefined > ul > li:nth-child(2)'
+    type: Text
+
+contenu:
+    css: '#main-content > section.JobIndividualBody_jobBodyContainer__rQGA_ > article'
+    type: Text
+
