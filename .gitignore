@@ -7,6 +7,7 @@ venv/
 
 # fichiers secrets
 *.env
+*.venv
 
 # fichiers de données
 data/
