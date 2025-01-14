@@ -9,4 +9,5 @@ venv/
 *.env
 
 # fichiers de données
-data/
+job_market_data/
+data_pgadmin/
