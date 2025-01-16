@@ -45,3 +45,11 @@ CREATE TABLE IF NOT EXISTS "Agence" (
   "telephone" VARCHAR,
   "courriel" VARCHAR
 );
+
+CREATE TABLE IF NOT EXISTS "Contrat" (
+  "id" SERIAL PRIMARY KEY,
+  "typeContrat" VARCHAR,
+  "typeContratLibelle" VARCHAR,
+  "natureContrat" VARCHAR,
+  "alternance"  BOOLEAN
+);

@@ -9,3 +9,4 @@ venv/
 *.env
 
 # fichiers de données
+data/

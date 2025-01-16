@@ -1,9 +1,11 @@
 import requests
+import psycopg2
 import json
 import os
 
 from dotenv import load_dotenv
 from datetime import datetime
+from psycopg2 import sql
 
 # Charger les variables d'environnement depuis le fichier .env
 load_dotenv()
@@ -113,11 +115,95 @@ def fetch_offer_details(access_token, offer_id):
     except requests.exceptions.RequestException as e:
         print(f"Erreur lors de la récupération des détails de l'offre {offer_id} : {e}")
 
+def insert_or_get_id(cursor, table, data, unique_column):
+    """
+    Insère une entrée dans une table si elle n'existe pas et retourne son id.
+    :param cursor: Curseur PostgreSQL
+    :param table: Nom de la table
+    :param data: Dictionnaire contenant les données à insérer
+    :param unique_column: Colonne utilisée pour vérifier l'existence
+    :return: L'id de l'entrée (nouvelle ou existante)
+    """
+    query_check = sql.SQL("SELECT id FROM {table} WHERE {unique_column} = %s").format(
+        table=sql.Identifier(table),
+        unique_column=sql.Identifier(unique_column)
+    )
+    cursor.execute(query_check, (data[unique_column],))
+    result = cursor.fetchone()
+
+    if result:
+        return result[0]  # L'entrée existe, retourner l'id
+
+    # Insérer une nouvelle entrée
+    columns = data.keys()
+    query_insert = sql.SQL("INSERT INTO {table} ({columns}) VALUES ({values}) RETURNING id").format(
+        table=sql.Identifier(table),
+        columns=sql.SQL(", ").join(map(sql.Identifier, columns)),
+        values=sql.SQL(", ").join(sql.Placeholder() * len(columns))
+    )
+    cursor.execute(query_insert, tuple(data.values()))
+    return cursor.fetchone()[0]
+
+def insert_agence(cursor, type_contrat, type_contrat_libelle, nature_contrat, alternance):
+    if type_contrat is None:
+        return None
+
+    data = {
+        "typeContrat": type_contrat,
+        "typeContratLibelle": type_contrat_libelle,
+        "natureContrat": nature_contrat,
+        "alternance": alternance
+    }
+    return insert_or_get_id(cursor, "Contrat", data, "typeContrat")
+
+def insert_offers_to_db(offers):
+    try:
+        # Connexion à la base PostgreSQL
+        conn = psycopg2.connect(
+            dbname="job_market",
+            user="root",
+            password="root",
+            host="localhost",  # ou "pgdatabase" si vous exécutez le script dans un conteneur Docker
+            port="5432"
+        )
+        cursor = conn.cursor()
+
+        # Insérer les données dans la table
+        for offer in offers:
+            try:
+                contrat_id = insert_agence(cursor, offer.get("typeContrat"), offer.get("typeContratLibelle"), offer.get("natureContrat"), offer.get("alternance"))
+
+                insert_query = """
+                INSERT INTO "OffreEmploi" (
+                    "intitule", "description", "dateCreation", "contrat_id"
+                ) VALUES (
+                    %(intitule)s, %(description)s, %(dateCreation)s, %(contrat_id)s
+                )
+                """
+
+                cursor.execute(insert_query, {
+                    "intitule": offer.get("intitule"),
+                    "description": offer.get("description"),
+                    "dateCreation": offer.get("dateCreation"),
+                    "contrat_id": contrat_id,
+                })
+            except Exception as e:
+                print(f"Erreur d'insertion pour l'offre {offer.get('id')}: {e}")
+
+        # Commit les changements et fermer la connexion
+        conn.commit()
+        cursor.close()
+        conn.close()
+        print("Données insérées avec succès dans la base de données.")
+    except Exception as e:
+        print(f"Erreur lors de la connexion ou de l'insertion dans la base : {e}")
+
+
 access_token = get_access_token()
 
 if access_token:
     params = {
-    # "codeROME": "M1805",  # Le code ROME de 'data engineer'
+    "codeROME": "M1805",  # Le code ROME de 'data engineer'
     "motsCles": "data engineer",  
     "sort": "0",     # Tri par pertinence décroissante
     "departement": "75",  # Exemple : Paris (75)
@@ -137,9 +223,13 @@ if access_token:
     print(filepath)
 
     if all_offers:
+        # Sauvegarder dans un fichier JSON
         with open(filepath, 'w', encoding='utf-8') as f:
             json.dump(all_offers, f, ensure_ascii=False, indent=4)
         
+        # Insérer dans la base de données
+        insert_offers_to_db(all_offers)
+
         # Récupérer les détails pour les 5 premières offres
         for offer in all_offers[:5]:
             offer_id = offer.get('id')
