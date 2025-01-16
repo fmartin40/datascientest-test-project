@@ -1,7 +1,9 @@
 import os
 import json
+
 import requests
 import psycopg2
+
 from psycopg2 import sql
 from datetime import datetime
 from dotenv import load_dotenv
@@ -21,8 +23,8 @@ class FranceTravailAPI:
     def __init__(self):
         # Charger les variables d'environnement depuis le fichier .env
         load_dotenv()
-        self.client_id = os.getenv('CLIENT_ID')
-        self.client_secret = os.getenv('CLIENT_SECRET')
+        self.client_id = os.getenv('FRANCE_TRAVAIL_CLIENT_ID')
+        self.client_secret = os.getenv('FRANCE_TRAVAIL_CLIENT_SECRET')
 
         self.session = requests.Session()
         self.session.headers.update({'Content-Type': 'application/x-www-form-urlencoded'})
