@@ -1,29 +1,67 @@
-version: "3.0"
+version: '3.8'
 
 services:
   elasticsearch:
-    container_name: es-container
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.1.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.7.1 #${STACK_VERSION}
+    container_name: elasticsearch
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - ${ES_PORT}:9200
+    restart: always
     environment:
       - xpack.security.enabled=false
-      - "discovery.type=single-node"
-    networks:
-      - es-net
-    ports:
-      - 9200:9200
+      - discovery.type=single-node
+      - ELASTICSEARCH_USERNAME=admin
+      - ELASTICSEARCH_PASSWORD=MasterKeyData45 #${ELASTIC_PASSWORD}
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
 
   kibana:
-    container_name: kb-container
-    image: docker.elastic.co/kibana/kibana:8.1.2
-    environment:
-      - ELASTICSEARCH_HOSTS=http://es-container:9200
-    networks:
-      - es-net
     depends_on:
       - elasticsearch
+    image: docker.elastic.co/kibana/kibana:8.7.1 #${STACK_VERSION}
+    container_name: kibana
+    volumes:
+      - kibana-data:/usr/share/kibana/data
     ports:
-      - 5601:5601
+     - ${KIBANA_PORT}:5601
+    restart: always
+    environment:
+      - ELASTICSEARCH_USERNAME=admin
+      - ELASTICSEARCH_PASSWORD=MasterKeyData45 #${KIBANA_PASSWORD}
 
-networks:
-  es-net:
-    driver: bridge
+  db:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: jobmarket_v1
+      POSTGRES_USER: admin2128
+      POSTGRES_PASSWORD: MasterKeyData45
+    ports:
+      - "54320:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - db
+    
+volumes:
+  elasticsearch-data:
+    driver: local
+  kibana-data:
+    driver: local
+
