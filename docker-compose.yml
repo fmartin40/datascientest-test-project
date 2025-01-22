@@ -33,35 +33,38 @@ services:
       - ELASTICSEARCH_USERNAME=admin
       - ELASTICSEARCH_PASSWORD=MasterKeyData45 #${KIBANA_PASSWORD}
 
-  db:
-    image: postgres:16-alpine
-    restart: always
+  pgdatabase:
+    image: postgres:13
     environment:
-      POSTGRES_DB: jobmarket_v1
-      POSTGRES_USER: admin2128
-      POSTGRES_PASSWORD: MasterKeyData45
-    ports:
-      - "54320:5432"
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=job_market
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./init-scripts:/docker-entrypoint-initdb.d
+      - job_market_data:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
 
   pgadmin:
     image: dpage/pgadmin4
-    restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-    ports:
-      - "5050:80"
     volumes:
-      - pgadmin_data:/var/lib/pgadmin
-    depends_on:
-      - db
-    
+      - data_pgadmin:/var/lib/pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=root
+    ports:
+      - "8080:80"
+
 volumes:
+  job_market_data:
+  data_pgadmin:
   elasticsearch-data:
     driver: local
   kibana-data:
     driver: local
+
+networks:
+  es-net:
+    driver: bridge
+
 
