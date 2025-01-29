@@ -22,7 +22,7 @@ async def init_browser(playwright: Playwright) -> Browser:
     return await browser.launch(headless=False)
 
 async def init_context(browser: Browser, proxy: Dict, user_agent:str ) -> BrowserContext:
-    context = await browser.new_context(proxy=proxy,user_agent=user_agent)
+    context = await browser.new_context(user_agent=user_agent)
     await context.clear_cookies()
     return context
 
@@ -126,7 +126,7 @@ async def main() -> None:
         print("----------------- Browser", browser.browser_type)
         print("----------------- user_agent", user_agent)
         print("----------------- proxy", proxy)
-        page = await scrap_page(context=context, landing_page="https://fr.indeed.com/viewjob?jk=4c0c1abe44c8edea&from=jobsearch&xpse=SoDr67I369-9R6XXtB0LbzkdCdPP&xfps=53340f52-2958-4aa3-821e-646632567cfe&xkcb=SoAv67M362HCSzy2oR0GbzkdCdPP", delay=30)
+        page = await scrap_page(context=context, landing_page="https://fr.indeed.com/", delay=10)
     
         # await launch_loop(browser=browser, context=context, nb_pages = 3, delay = 5)
 
