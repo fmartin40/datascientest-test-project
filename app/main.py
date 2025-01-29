@@ -25,6 +25,6 @@ async def scrape_job_summaries(website: Website, query: str) -> List[JobSummary]
 
 if __name__ == "__main__":
     jobs: List[JobSummary] = asyncio.run(
-        scrape_job_summaries(Website.MUSE, "data engineer")
+        scrape_job_summaries(Website.INDEED, "data engineer")
     )
     print(jobs)
