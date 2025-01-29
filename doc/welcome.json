@@ -1,0 +1,42 @@
+{
+  "@context": "http://schema.org",
+  "@type": "JobPosting",
+  "datePosted": "2025-01-28T09:00:48Z",
+  "description": "<h2>Description de l&#39;entreprise</h2><p><strong>Talan </strong>est un groupe international de conseil en transformation et en innovation par la technologie, créé en 2002.</p><p>Nos consultantes et consultants partagent à travers le monde l’audace d’innover, le goût de l’excellence, et l’envie de relever les défis les plus complexes dans des secteurs variés tels que l’énergie, l’industrie, le transport, la finance, le secteur public.</p><p>Nos valeurs : <strong>engagement, respect, partage, esprit d’équipe et optimisme. </strong></p><p>Talan est une entreprise responsable, reconnue par ses collaborateurs et attachée à la diversité. Des aménagements peuvent être proposés si vous êtes en situation de handicap.</p><p>Retrouvez nos engagements RSE et nos actions en faveur de la diversité sur notre site talan.com.</p><p>Saisissez l’opportunité de vivre une aventure intrapreneuriale en rejoignant <strong>Talan à Bordeaux</strong>, agence à taille humaine de 75 consultants. Nous accompagnons les acteurs locaux sur les principaux secteurs de notre région (Banque-Assurance, Public, Aéronautique, Energie). Créée en 2019, l’agence, en plein développement, s’agrandit !</p><p>Le <strong>pôle Data</strong>, fort d’une quinzaine de consultants, accompagne ses clients à relever les défis majeurs de création de valeur de leurs organisations grâce à nos expertises conseils (data gouvernance, cadrage, acculturation,…) et technologiques (architecture, ingestion et transformation, restitution et analyse, IA,…).</p><p>🤝<strong>Notre promesse </strong> </p><ul><li>Esprit d’équipe, convivialité &amp; bonne humeur sont la base solide de l’épanouissement de nos collaborateurs</li></ul><ul><li>Un management de proximité où l’avis de chacun compte, et où vous êtes acteur de la vie du cabinet grâce à des projets internes</li></ul><h2>Description du poste</h2><p>En tant que Consultant(e) Data Engineer, vous êtes en mission chez nos clients ou en mode projet dans nos locaux. Vous êtes responsable de la conception, de la mise en œuvre et de la maintenance des pipelines de données en veillant à leur qualité et à leur fiabilité tout au long de leur cycle de vie.</p><p><strong>Vos principales missions </strong>:</p><ul><li>Contribuer à la conception et à la mise en des plateformes de données modernes</li><li>Industrialiser et optimiser des solutions techniques</li><li>Développer et maintenir des pipelines de données efficaces, du sourcing à la visualisation</li><li>Assurer la qualité et la sécurité des données tout au long de leur cycle de vie</li><li>Collaborer avec les équipes métier pour comprendre les besoins et fournir des solutions data adaptées</li><li>Évaluer et recommander des technologies émergentes pour améliorer les capacités de la plateforme data</li></ul><p>Dans l’<strong>environnement technique</strong> suivant (cette liste n’est pas exhaustive et surtout, elle indique les technos qui nous intéressent !) :</p><ul><li>Langage : Python, SQL</li><li>BDD : Relationnelles et non relationnelles</li><li>Environnement : Snowflake, DataBricks, Palantir, Fabric,…</li><li>Cloud : GCP Big Query, AWS Glue, et Azure Data Factory</li><li>OPS : Ansible, Git, Jenkins, Docker, Kubernetes ou encore Azure DevOps</li></ul><h2>Qualifications</h2><p>Titulaire d’une formation supérieure en informatique de niveau Bac+5, vous disposez d’une expérience significative d’au moins <strong>4 ans</strong> sur des <strong>projets de création ou de maintenance de plateforme de données. </strong></p><p>Vous avez une bonne compréhension des <strong>bases de données</strong> et de l&#39;<strong>architecture des données.</strong></p><p>A l’aise avec la relation client, vous êtes capable de comprendre le besoin client et de proposer des solutions adaptées.</p><p><strong>Vos qualités :</strong></p><ul><li>Vous n’hésitez pas à aller vers les autres et êtes capable de travailler en synergie avec les équipes, favorisant l&#39;intelligence collective pour atteindre des objectifs communs.</li><li>Vous êtes autonome dans la réalisation de vos missions et vous faites preuve d’adaptabilité, de curiosité, d’analyse et d’une bonne capacité à vous maintenir à l’état de l’art,</li><li>Votre rigueur dans la documentation et votre approche méthodique sont essentielles pour garantir la qualité et la précision de notre travail,</li><li>Vous avez envie d&#39;accompagner et de mentorer vos collègues, afin de les aider à développer leurs compétences et à atteindre leur plein potentiel.</li></ul><p>Si vous avez les compétences requises et que nos valeurs raisonnent en vous, vous êtes certainement la personne que nous recherchons ! </p><h2>Informations complémentaires</h2><p><strong>En nous rejoignant vous bénéficierez</strong> </p><ul><li>D’un parcours d’onboarding sur mesure avec votre parrain/marraine et votre manager </li><li>De formations et certifications spécifiques au métier de consultant </li><li>D’un cadre pour votre trajectoire de carrière, à dessiner avec votre manager  </li><li>D’une aventure intrapreneuriale et épanouissante </li></ul><p><strong>Nos avantages :</strong></p><ul><li>Locaux modernes proche de la Gare Saint-Jean à Bordeaux</li><li>Organisation hybride entre télétravail et présentiel; prime d’équipement télétravail de 100€</li><li>Proximité et convivialité cultivées à tous les niveaux de l’entreprise<ul><li>Labellisé Great Place to Work depuis 10 ans</li><li>Top 5 des entreprises où il fait bon travailler depuis 5 ans</li></ul></li><li>Offre de formation complète sur site et à distance</li><li>Mobilité en France et à l’étranger </li><li>Prime de vacances et primes de cooptation de 500 à 4 000€ </li><li>Actionnariat salarié </li><li>Top 1% des entreprises évaluées par Ecovadis dans le domaine social, environnemental et éthique </li><li>Retour de congé maternité possible aux 4/5ème sans perte de salaire pendant 6 mois </li><li>Permanence handicap (consultant dédié aux collaborateurs en situation de handicap et aux proches aidants), aménagements proposés si vous êtes en situation de handicap. </li></ul><p>Nous avons hâte de vous connaitre davantage et de vous présenter Talan plus en détails à travers un <strong>processus de recrutement</strong> rapide et fluide : </p><ol><li>Un premier échange de 30 à 45 min avec Quentin, recruteur, pour vous présenter le poste et comprendre votre projet professionnel,</li><li>Un entretien avec un manager de l’équipe,</li><li>Un dernier échange avec le responsable de pôle Data.</li></ol>",
+  "employmentType": "FULL_TIME",
+  "experienceRequirements": {
+    "@type": "OccupationalExperienceRequirements",
+    "monthsOfExperience": 48
+  },
+  "hiringOrganization": {
+    "@type": "Organization",
+    "name": "Talan",
+    "sameAs": "https://talan.com/",
+    "logo": "https://cdn-images.welcometothejungle.com/zvNOl9iq8Bygu9XC4LRgT6KIDQa3xDK-sMNVEyxH0qk/rs:auto:400::/q:85/czM6Ly93dHRqLXByb2R1Y3Rpb24vdXBsb2Fkcy9vcmdhbml6YXRpb24vbG9nby8yNzAzLzE1MjgzNi8zNTkwNjhlNC1iMGJlLTQyMzgtYjcyMi0zYzljMjQzYWFmOWYucG5n",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Paris",
+      "postalCode": "75116",
+      "streetAddress": "14, Rue Pergolèse",
+      "addressRegion": "Paris",
+      "addressCountry": "FR"
+    }
+  },
+  "industry": "IT / Digital, Transformation, Big Data",
+  "jobLocation": [
+    {
+      "@type": "Place",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Bordeaux",
+        "postalCode": "33800",
+        "streetAddress": "Quai de Paludate, 33800 Bordeaux, France",
+        "addressRegion": "Gironde",
+        "addressCountry": "FR"
+      }
+    }
+  ],
+  "qualifications": "",
+  "title": "Data Engineer – Confirmé/Senior (H/F)",
+  "validThrough": "2025-04-28T08:00:48.000Z"
+}

@@ -1,0 +1,48 @@
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "name": "Fil d'Ariane",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "name": "Accueil",
+            "item": "https://www.jobintree.com/",
+            "position": 1
+        },
+        {
+            "@type": "ListItem",
+            "name": "Offre Emploi",
+            "item": "https://www.jobintree.com/emploi.html",
+            "position": 2
+        },
+        {
+            "@type": "ListItem",
+            "name": "Emploi Île-de-France",
+            "item": "https://www.jobintree.com/emploi/region_ile-de-france.html",
+            "position": 3
+        },
+        {
+            "@type": "ListItem",
+            "name": "Emploi Paris",
+            "item": "https://www.jobintree.com/emploi/departement_paris-75.html",
+            "position": 4
+        },
+        {
+            "@type": "ListItem",
+            "name": "Emploi Paris",
+            "item": "https://www.jobintree.com/emploi/ville_paris-75000.html",
+            "position": 5
+        },
+        {
+            "@type": "ListItem",
+            "name": "Emploi Ingénieur big data Paris",
+            "item": "https://www.jobintree.com/emploi/metier_ingenieur-big-data-ville_paris-75000.html",
+            "position": 6
+        },
+        {
+            "@type": "ListItem",
+            "name": "Data Engineer H/F",
+            "position": 7
+        }
+    ]
+}

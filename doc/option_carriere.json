@@ -1,0 +1,33 @@
+{
+    "validThrough": "2025-04-25T00:04:23Z",
+    "employmentType": "FULL_TIME",
+    "description": "<strong>Description du poste :</strong><br> <br> Lead Data Engineer (H/F) - CDI - Marseille - 50/55KEUR -Autonomie - Implication - Entreprise challengeante<br> <br> Harry Hope, cabinet de recrutement accompagne candidats et entreprises dans leurs recherches des meilleures opportunités en France et à l'international. Afin de mieux répondre à vos enjeux, tous nos consultants sont spécialisés par secteur d'activité et zone géographique.<br> <br> Harry Hope recherche, pour son client, entreprise spécialisée dans l'immobilier, leader national dans son secteur, un Lead Data Engineer (H/F) en CDI.<br> <br> Rattaché au Directeur des Systèmes d'Informations et de la Transformation Numérique, vous jouerez un rôle crucial dans le département IT en tant que Lead Data Engineer (H/F).<br> <br> Vos missions sont articulées autour d'un grand axe : construire et mettre à disposition le socle technologique nécessaire au fonctionnement des flux inter-applicatifs et aux outils de BI de l'entreprise<br> <br> <strong>Vos missions :</strong><br> <br> - Mettre en place l'architecture technique nécessaire à l'exploitation des données et en assurer le MCO<br> o Concevoir et construire l'architecture technique<br> o FinOps Cloud Azure<br> o Administrer et maintenir la plateforme technique en place<br> o Concevoir, développer et optimiser les flux de données entrants/sortants<br> o Actualiser la documentation technique<br> - Construire et faire évoluer les modèles de données de l'entreprise<br> o Concevoir les modèles de données du Data Warehouse<br> o Optimiser les modèles de données<br> o Prendre en charge le ticketing du périmètre<br> - Participer au pilotage du domaine Data du Pôle SI<br> o Participer à la conception du portefeuille projet<br> o Mettre en oeuvre le planning d'exploitation et de tableau de bord de pilotage du périmètre<br> o Réaliser une veille technologique<br> <br> <strong>Description du profil :</strong><br> <br> Le profil qu'on cherche:<br> <br> - 5 ans d'expérience dans les métiers de la Data ayant eu un rôle d'Architecte Data ainsi/ou celui de Data Engineer.<br> o Connaissance des systèmes de données Data (datawarehouse, datalake,...)<br> o Modélisation de données<br> o Modélisation des flux d'alimentation Datawarehouse + inter-applicatifs (contrat d'interface)<br> o Développement sur l'ETL/ELT Azure Data Factory<br> o Connaissance des pratiques DevOps pour l'automatisation et le déploiement<br> o Connaissance d'outils de reporting (PowerBI, Qlik, SAP BI)<br> o Connaissance des bases de données Azure SQL et Oracle<br> o Maîtrise du SQL : optimisation des requêtes et des performances des bases de données (T-SQL, PL-SQL)<br> o Expérience dans les services cloud, idéalement Azure, pour le stockage et le traitement des données<br> o Gestion et pilotage de projet (charge, budget, planning)<br> o Communication en interne et avec les fournisseurs<br> o Connaissance des principes de gouvernance des données, de sécurité et de conformité<br> o Veille technologique : capacité à rester à jour sur les dernières tendances et technologies en matière de données<br> <br> Ce qu'on vous propose :<br> <br> - Rejoindre une équipe dynamique<br> - Participer à l'amélioration du service financier<br> - Être autonome<br> <br> Le processus de recrutement :<br> <br> 1ere phase : entretien de validation avec le cabinet Harry Hope<br> 2ème phase : entretien avec le Directeur des Systèmes d'Informations et de la Transformation Numérique<br> 3ème phase : entretien avec le Directeur des Systèmes d'Informations et de la Transformation Numérique et le Président de l'entreprise<br> <br> <strong>Description de l'entreprise :</strong><br> <br> Harry Hope, cabinet de recrutement accompagne candidats et entreprises dans leurs recherches des meilleures opportunités en France et à l'international. Afin de mieux répondre à vos enjeux, tous nos consultants sont spécialisés par secteur d'activité et zone géographique.",
+    "jobLocation": {
+        "address": {
+            "addressCountry": "France",
+            "addressLocality": "Marseille",
+            "addressRegion": "Provence-Alpes-Cote d'Azur",
+            "@type": "PostalAddress"
+        },
+        "@type": "Place"
+    },
+    "hiringOrganization": {
+        "name": "Harry Hope",
+        "@type": "Organization"
+    },
+    "datePosted": "2025-01-25T00:04:23Z",
+    "baseSalary": {
+        "currency": "EUR",
+        "value": {
+            "unitText": "YEAR",
+            "minValue": 50000,
+            "maxValue": 55000,
+            "@type": "QuantitativeValue"
+        },
+        "@type": "MonetaryAmount"
+    },
+    "@context": "http://schema.org",
+    "url": "https://www.optioncarriere.com/jobad/fraf74734f528917804df9de514029dbb4",
+    "title": "Lead Data Engineer (H/F)",
+    "@type": "JobPosting"
+}
