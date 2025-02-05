@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from app.scrap.entites.jobs import JobDetailled, JobSummary
+from app.domain.pipelines.entities.jobs import JobDetail, JobSummary
 
 class IJobScraper(ABC):
     
@@ -10,5 +10,5 @@ class IJobScraper(ABC):
         raise NotImplementedError
     
     @abstractmethod
-    async def scrap_job_content(self, url: str, website: str, *args, **kwargs)->List[JobDetailled]:
+    async def scrap_job_detail(self, url: str, website: str, *args, **kwargs)->JobDetail:
         raise NotImplementedError

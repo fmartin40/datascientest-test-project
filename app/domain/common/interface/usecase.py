@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from typing import Any
 
-from app.common.interface.presenter import Presenter
+from app.domain.common.interface.presenter import Presenter
 
 class IUseCase:
 	def __init__(self, presenter: Presenter | None) -> None:

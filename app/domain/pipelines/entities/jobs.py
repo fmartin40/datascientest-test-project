@@ -2,8 +2,9 @@ from dataclasses import dataclass, field
 from datetime import date
 import re
 from typing import List
+from xml.dom.minidom import Entity
 
-from app.common.interface.entity import Entity
+
 
 
 
@@ -18,7 +19,7 @@ class JobSummary(Entity):
 	 	
 
 @dataclass 
-class JobDetailled:
+class JobDetail(Entity):
 	job: str
 	company: str
 	city: str

@@ -1,30 +1,35 @@
-import asyncio
-from typing import List
-from app.scrap.entites.jobs import JobSummary
-from app.scrap.infra.repositories.json.jobs_in_json import JobsInJsonRepo
-from app.scrap.infra.scraper_factory import Website, get_scraper
-from app.scrap.interfaces.iscrape_service import IJobScraper
-from app.scrap.usecase.scrape_jobs_summaries_usecase import (
-    ScrapJobSummariesUseCase,
-    ScrapJobsSummariesInputDto,
+from typing import Dict, List
+from fastapi import FastAPI
+import uvicorn
+
+from app.entrypoints.router import routeur_pipelines
+
+
+
+app = FastAPI(
+	title='Job Market',
+	description="""""",
 )
 
+app.include_router(routeur_pipelines)
 
-async def scrape_job_summaries(website: Website, query: str) -> List[JobSummary]:
-    
-    scraper: IJobScraper = get_scraper(website)
-    input_dto = ScrapJobsSummariesInputDto(query=query)
-    
-    return await ScrapJobSummariesUseCase(
-        input_dto=input_dto,
-        scraper=scraper,
-        job_repository=JobsInJsonRepo(),
-        presenter=None,
-    ).execute()
+# app.include_router(routeur_builder)
+
+# Endpoint pour afficher toutes les routes existantes
+@app.get("/routes/", response_model=List[Dict])
+async def get_routes():
+	routes_info = []
+	
+	for route in app.routes:
+		# On filtre les routes de type 'HTTPRoute' pour éviter les WebSocket ou autres types de routes
+		if hasattr(route, "methods"):
+			routes_info.append({
+				"path": route.path,
+				"methods": list(route.methods),
+				"name": route.name,
+			})
+	return routes_info
 
 
-if __name__ == "__main__":
-    jobs: List[JobSummary] = asyncio.run(
-        scrape_job_summaries(Website.INDEED, "data engineer")
-    )
-    print(jobs)
+if __name__ == '__main__':
+	uvicorn.run('main:app', host='127.0.0.1', reload=True, port=8080)

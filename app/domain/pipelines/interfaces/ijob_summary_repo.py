@@ -1,16 +1,16 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from app.scrap.entites.jobs import JobSummary
+from app.domain.pipelines.entities.jobs import JobSummary
 
 class IJobSummaryRepository(ABC):
     
     @abstractmethod
-    async def create(self, job:JobSummary, *args, **kwargs):
+    async def insert(self, job:JobSummary, *args, **kwargs):
         raise NotImplementedError
     
     @abstractmethod
-    async def create_many(self, jobs: List[JobSummary], *args, **kwargs):
+    async def insert_many(self, jobs: List[JobSummary], *args, **kwargs):
         raise NotImplementedError
     
     @abstractmethod

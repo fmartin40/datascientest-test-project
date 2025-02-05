@@ -2,6 +2,7 @@ import asyncio
 from functools import lru_cache
 import os
 from pathlib import Path
+from pprint import pprint
 import random
 import re
 import aiohttp
@@ -85,5 +86,6 @@ async def main() -> None:
         data = await extract_json(page, tag)
         with open(f"{EXTRACT_FOLDER}/{file_name}", "w", encoding="utf-8") as json_file:
             json.dump(data, json_file, indent=4, ensure_ascii=False) 
-
+        
+        pprint(data)
 asyncio.run(main())
