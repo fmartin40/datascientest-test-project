@@ -1,10 +1,13 @@
 from dataclasses import dataclass
+from typing import List
 
 from app.domain.common.interface.presenter import Presenter
 from app.domain.common.interface.usecase import IUseCase
+from app.domain.pipelines.entities.jobs import JobSummary
 from app.domain.pipelines.errors.errors import FetchApiException
-from app.domain.pipelines.interfaces.ijob_summary_repo import IJobSummaryRepository
-from app.domain.pipelines.interfaces.iscrape_service import IJobScraper
+from app.domain.pipelines.interfaces.ijob_extract import IJobExtract
+from app.domain.pipelines.interfaces.ijob_transform import IJobTransform
+from app.domain.pipelines.interfaces.ijob_load import IJobLoadToRepository
 
 
 @dataclass
@@ -16,21 +19,36 @@ class ScrapJobSummariesUseCase(IUseCase):
 	def __init__(
 		self,
 		input_dto: ScrapJobsSummariesInputDto,
-		scraper:IJobScraper,
-		job_repository: IJobSummaryRepository,
+		extracter: IJobExtract,
+		transformer: IJobTransform,
+		loader: IJobLoadToRepository,
 		presenter: Presenter | None = None,
 	) -> None:
 		super().__init__(presenter)
 		self.input_dto = input_dto
-		self.job_repository = job_repository
+		self.extracter = extracter
+		self.transformer = transformer
+		self.loader = loader
 		self.presenter = presenter
 
 	async def execute(self):
 		try:
-			return self.output("summaries")  # type: ignore
+			raw_summaries: List[str] = await self.extracter.extract_jobs_summaries(self.input_dto.query)
+			# summaries: List[JobSummary] = await self.transformer.transform_many(jobs=raw_summaries)
+			# inserted: int = await self.loader.insert_many(summaries)
+			
+			return self.output(raw_summaries)  # type: ignore
 		except FetchApiException:
 			raise FetchApiException(errno = 10)
 		except Exception as exc:
 			raise Exception(exc)
 
-		
+	async def extract(self):
+		pass
+
+	async def transform(self):
+		pass
+
+	async def load(self):
+		pass
+	

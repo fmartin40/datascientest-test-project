@@ -5,12 +5,12 @@ from pathlib import Path
 from typing import List
 from dataclasses import asdict
 
-from app.domain.pipelines.entities.jobs import JobSummary
-from app.domain.pipelines.interfaces.ijob_summary_repo import IJobSummaryRepository
+from app.domain.pipelines.entities.jobs import Job, JobSummary
+from app.domain.pipelines.interfaces.ijob_load import IJobLoadToRepository
 
 
-class JobsInJsonRepo(IJobSummaryRepository):
-    async def insert(self, job:JobSummary):
+class JobsInJsonRepo(IJobLoadToRepository):
+    async def insert(self, job:Job):
         raise NotImplementedError
     
     async def insert_many(self, jobs: List[JobSummary]):

@@ -5,11 +5,13 @@ from typing import List
 from xml.dom.minidom import Entity
 
 
-
+@dataclass
+class Job(Entity):
+	pass
 
 
 @dataclass
-class JobSummary(Entity):
+class JobSummary(Job):
 	job: str
 	url: str 
 	website: str
@@ -19,7 +21,7 @@ class JobSummary(Entity):
 	 	
 
 @dataclass 
-class JobDetail(Entity):
+class JobDetail(Job):
 	job: str
 	company: str
 	city: str
