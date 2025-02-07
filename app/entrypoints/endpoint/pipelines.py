@@ -11,6 +11,10 @@ from app.domain.pipelines.usecase.scrape_jobs_summaries_usecase import ScrapJobs
 
 router = APIRouter(prefix="/pipelines", tags=["Pipelines temporaires"])
 
+# ----------------------------------------------------
+# ces endpoints sont temporaires et seront remplacés par un orchestrateurs
+
+
 @router.post("/process/summaries")
 async def process_jobs_summaries():
 
@@ -35,16 +39,15 @@ async def process_jobs_summaries():
 async def process_job_detail():
 
 	# cette partie est temporaire
-	# on pourra récupérer l'url du job detai a scraper depuis une base ou un message kafka
+	# on pourra récupérer l'url du job detail a scraper depuis une base ou un message kafka
 
 	url: str = "https://www.jobintree.com/emplois/60831578.html"
-	# url: str ="https://www.jobintree.com/emploi/recherche.html?k={job}&l={place}"
-
+	
 	input_dto = ScrapJobDetailInputDto(url = url, website="jobintree")
 
 	return await ScrapJobDetailUseCase(
 		input_dto=input_dto,
-		extracter=HttptExtract(),
+		extracter=HttptExtract(), # PlayWrightExtract()
 		transformer=TransformJsonInHtml(),
 		loader=JobsInJsonRepo(),
 		presenter=None,

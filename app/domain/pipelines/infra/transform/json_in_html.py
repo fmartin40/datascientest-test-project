@@ -1,17 +1,19 @@
 import json
-from typing import List
+from typing import Dict, List
 from bs4 import BeautifulSoup
 
 from app.domain.pipelines.entities.jobs import Job
+from app.domain.pipelines.entities.website import WebConfig
 from app.domain.pipelines.interfaces.ijob_transform import IJobTransform
 
 
 class TransformJsonInHtml(IJobTransform):
-    async def transform(self, data: str, tag: str)->Job | List[Job]:
+
+    async def transform(self, data: str, webconfig: WebConfig)->Job | List[Job]:
         soup = BeautifulSoup(data, "html.parser")
         
         #  Trouver la balise <script> avec l'id tag
-        script_tag = soup.find("script", tag)
+        script_tag = soup.find(webconfig.tag)
         
         if script_tag:
             json_text = script_tag.string  # Récupérer le texte brut du script
