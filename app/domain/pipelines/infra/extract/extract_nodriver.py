@@ -9,7 +9,7 @@ from app.domain.pipelines.interfaces.ijob_extract import IJobExtract
 
 class NoDriverExtract(IJobExtract):
 
-	async def extract_jobs_summaries(self, query: str, url: str)->List[str]:
+	async def extract_jobs_summaries(self, url: str)->List[str]:
 		raise NotImplementedError
 	
 	async def extract_job_detail(self, url: str)->str:

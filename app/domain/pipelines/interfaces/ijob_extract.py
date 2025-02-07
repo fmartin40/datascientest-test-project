@@ -4,7 +4,7 @@ from typing import List
 class IJobExtract(ABC):
     
     @abstractmethod
-    async def extract_jobs_summaries(self, query: str, *args, **kwargs)->List[str]:
+    async def extract_jobs_summaries(self, url: str, *args, **kwargs)->List[str]:
         raise NotImplementedError
     
     @abstractmethod
