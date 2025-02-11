@@ -20,10 +20,10 @@ class TransformJsonInHtmlToJob(IJobTransform):
 
 	async def transform_to_job_detail(self, data: str, webconfig: WebConfig)->JobDetail | List[JobDetail]:
 		required_keys: set = set(webconfig.detail_pattern.get('required'))
-		json_data = await self._extract_json(data, webconfig, required_keys)
+		json_data: Dict = await self._extract_json(data, webconfig, required_keys)
 		return await self._json_to_job_detail(json_data, webconfig)
 	
-	async def _extract_json(self, data: str, webconfig: WebConfig, required_keys: set) :
+	async def _extract_json(self, data: str, webconfig: WebConfig, required_keys: set) -> Dict:
 		""" extraction du json a partir des infos webconfig """
 		soup = BeautifulSoup(data, "html.parser")
 		
@@ -51,6 +51,8 @@ class TransformJsonInHtmlToJob(IJobTransform):
 		job_specs = {k:Coalesce(v,default='') for k, v in webconfig.detail_pattern.items() if k != 'required'}
 		parsed_job: Dict = glom(json_data, job_specs)
 		parsed_job['description']=await self._clean_description(parsed_job['description'])
+
+		# Si les valeurs sont des liste, on les joint avec un |
 		for k, v in parsed_job.items():
 			if isinstance(v, list):
 				parsed_job[k] = "|".join(map(str, v))
@@ -58,6 +60,6 @@ class TransformJsonInHtmlToJob(IJobTransform):
 	
 	async def _clean_description(self, html:Any)->str:
 		if isinstance(html, list):
-			html = " ".join(html)
+			html = " ".join(map(str, html))
 		text = BeautifulSoup(html, "html.parser").get_text()
 		return re.sub(r'\s+',' ', text)
