@@ -3,7 +3,7 @@ from typing import Dict, List
 
 from app.domain.common.interface.presenter import Presenter
 from app.domain.common.interface.usecase import IUseCase
-from app.domain.pipelines.config.website_config import get_website_config
+from app.domain.pipelines.infra.webconfig_json import get_website_config
 from app.domain.pipelines.entities.jobs import JobDetail
 from app.domain.pipelines.entities.website import WebConfig
 from app.domain.pipelines.errors.errors import FetchApiException

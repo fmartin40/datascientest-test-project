@@ -3,13 +3,14 @@ from typing import List
 
 from app.domain.common.interface.presenter import Presenter
 from app.domain.common.interface.usecase import IUseCase
-from app.domain.pipelines.config.website_config import get_website_config
+from app.domain.pipelines.infra.webconfig_json import get_website_config
 from app.domain.pipelines.entities.jobs import JobSummary
 from app.domain.pipelines.entities.website import WebConfig
 from app.domain.pipelines.errors.errors import FetchApiException
 from app.domain.pipelines.interfaces.ijob_extract import IJobExtract
 from app.domain.pipelines.interfaces.ijob_transform import IJobTransform
 from app.domain.pipelines.interfaces.ijob_load import IJobLoadToRepository
+from app.domain.pipelines.interfaces.iweb_config import IWebconfig
 
 
 @dataclass
@@ -24,6 +25,7 @@ class ScrapJobSummariesUseCase(IUseCase):
 		extracter: IJobExtract,
 		transformer: IJobTransform,
 		loader: IJobLoadToRepository,
+		webconfig: IWebconfig,
 		presenter: Presenter | None = None,
 	) -> None:
 		super().__init__(presenter)
@@ -31,6 +33,7 @@ class ScrapJobSummariesUseCase(IUseCase):
 		self.extracter = extracter
 		self.transformer = transformer
 		self.loader = loader
+		self.webconfig = webconfig
 		self.presenter = presenter
 
 	async def execute(self):
@@ -39,7 +42,7 @@ class ScrapJobSummariesUseCase(IUseCase):
 			# l'idée est d'imaginer un obhjet config comprenant o;i de chose propre a chaque site
 			# ex : pattern pour extraire les mots, format des url, balise html, fichier utilisé par selectorlib etc
 
-			webconfig: WebConfig = get_website_config(self.input_dto.website)
+			webconfig: WebConfig = self.webconfig.get_website_config(name = self.input_dto.website)
 			raw_summaries: List[str] = await self.extracter.extract_jobs_summaries(self.input_dto.query)
 			summaries: List[JobSummary] = await self.transformer.transform(data=raw_summaries, webconfig=webconfig)
 			# inserted: int = await self.loader.insert_many(summaries)
