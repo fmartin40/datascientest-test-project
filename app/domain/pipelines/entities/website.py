@@ -14,3 +14,5 @@ class WebConfig:
     url_summaries: str
     url_detail: str 
     tag: Dict | str
+    detail_pattern: Dict | None = None# utilisé pour extraire les json. Fait correspondre les clés du json à l'objet JobDetail
+    summary_pattern: Dict | None = None # utilisé pour extraire les json. Fait correspondre les clés du json à l'objet JobSummary

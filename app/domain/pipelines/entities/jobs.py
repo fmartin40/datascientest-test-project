@@ -1,8 +1,5 @@
-from dataclasses import dataclass, field
-from datetime import date
-import re
-from typing import List
-from xml.dom.minidom import Entity
+from dataclasses import dataclass
+from app.domain.common.interface.entity import Entity
 
 
 @dataclass
@@ -17,14 +14,15 @@ class JobSummary(Job):
 	website: str
 	# imported_on: date
 	processed: bool = False
-	
-	 	
+		 	
 
 @dataclass 
 class JobDetail(Job):
-	job: str
-	company: str
-	city: str
 	url: str 
 	website: str
-	contenu: str
+	title: str
+	company: str
+	city: str
+	postal_code: int
+	type:str
+	description: str

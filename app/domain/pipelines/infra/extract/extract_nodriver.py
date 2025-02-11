@@ -6,6 +6,10 @@ import nodriver as uc
 from app.domain.pipelines.config.profiles import get_proxy, get_user_agent
 from app.domain.pipelines.interfaces.ijob_extract import IJobExtract
 
+# ---------------------------------------------------------
+#   Cet extractor extrait le contenu d'une page
+#           en simulant un navigateur
+# ---------------------------------------------------------
 
 class NoDriverExtract(IJobExtract):
 

@@ -1,6 +1,13 @@
 version: '3.8'
 
 services:
+  fastapi_app:
+    build: .
+    container_name: fastapi-jobmarket
+    ports:
+      - 8000:8000
+    restart: always
+
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.7.1 #${STACK_VERSION}
     container_name: elasticsearch
@@ -54,6 +61,7 @@ services:
       - PGADMIN_DEFAULT_PASSWORD=root
     ports:
       - "8080:80"
+
 
 volumes:
   job_market_data:

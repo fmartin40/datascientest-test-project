@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List
+from typing import Dict, List
 
 from app.domain.common.interface.presenter import Presenter
 from app.domain.common.interface.usecase import IUseCase
@@ -36,26 +36,20 @@ class ScrapJobDetailUseCase(IUseCase):
 	async def execute(self):
 		try:
 			# cette partie webconfig et l'objet renvoyé est purement temporaire et a definir.
-			# l'idée est d'imaginer un obhjet config comprenant o;i de chose propre a chaque site
+			# l'idée est d'imaginer un objet config comprenant les configs propres a chaque site
 			# ex : pattern pour extraire les mots, format des url, balise html, fichier utilisé par selectorlib etc
-
 			webconfig: WebConfig = get_website_config(self.input_dto.website)
 			html: str = await self.extracter.extract_job_detail(self.input_dto.url)
-			job: JobDetail = await self.transformer.transform(data=html, webconfig=webconfig )
-			# inserted: int = await self.loader.insert_many(summaries)
 			
+			job: Dict = await self.transformer.transform_to_job_detail(data=html, webconfig=webconfig )
+			# job_detail: JobDetail = JobDetail.create(
+			# 	url=self.input_dto.url,
+			# 	website=webconfig.name,
+			# 	**job
+			# )
+			# inserted: int = await self.loader.insert(job=job_detail, table="jobintree_detail")
 			return self.output(job)  # type: ignore
 		except FetchApiException:
 			raise FetchApiException(errno = 10)
 		except Exception as exc:
 			raise Exception(exc)
-
-	async def extract(self):
-		pass
-
-	async def transform(self):
-		pass
-
-	async def load(self):
-		pass
-	
