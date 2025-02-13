@@ -1,6 +1,9 @@
 import asyncio
-from aiohttp import ClientSession
+from aiohttp import ClientSession, ClientTimeout
 from typing import List, Union, Optional
+
+from app.domain.common.errors.errors import NotFoundException
+from app.domain.pipelines.interfaces.ijob_extract import IJobExtract
 
 # ---------------------------------------------------------
 #   Cet extractor extrait le contenu d'une page
@@ -8,9 +11,10 @@ from typing import List, Union, Optional
 # ---------------------------------------------------------
 
 
-class HttptExtract:
+class HttptExtract(IJobExtract):
     def __init__(self):
         self.default_semaphore = asyncio.Semaphore(20)
+        self.session_timeout = ClientTimeout(total=5,sock_connect=5,sock_read=5)
 
     async def extract_jobs_summaries(self, url: str |List[str]) -> str | List[str]:
         """ Récupère un ou plusieurs contenus de page """
@@ -27,16 +31,17 @@ class HttptExtract:
         async with ClientSession() as session:
             return await self._fetch_url(session, url, self.default_semaphore)
 
-    async def _fetch_url(self, session, url: str, semaphore: asyncio.Semaphore) -> str:
+    async def _fetch_url(self, session:ClientSession, url: str, semaphore: asyncio.Semaphore) -> str:
         """ Télécharge le contenu des url """
         async with semaphore:
             try:
-                async with session.get(url) as response:
-                    data = await response.text()
-                    return data
+                async with session.get(url=url,timeout=self.session_timeout) as response:
+                    if response.status<300:
+                        return await response.text() 
+                    elif response.status==404:
+                        raise NotFoundException("L'url n'existe pas")
             except Exception as e:
-                print(f"Error fetching {url}: {e}")
-                return None
+                raise Exception(f"Erreur avec le fetch url : {e}")
 
     async def _fetch_all(self, urls: List[str], max_concurrent_requests: Optional[int] = None) -> List[str]:
         """

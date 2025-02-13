@@ -4,7 +4,7 @@ from typing import Any, Dict, List
 from bs4 import BeautifulSoup
 from glom import glom, Coalesce
 from app.domain.pipelines.entities.jobs import Job, JobDetail, JobSummary
-from app.domain.pipelines.entities.website import WebConfig
+from app.domain.pipelines.entities.webconfig import WebConfig
 from app.domain.pipelines.interfaces.ijob_transform import IJobTransform
 
 # ---------------------------------------------------------

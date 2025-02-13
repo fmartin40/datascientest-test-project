@@ -5,43 +5,59 @@ services:
     build: .
     container_name: fastapi-jobmarket
     ports:
-      - 8000:8000
+      - "8000:8000"
     restart: always
+    depends_on:
+      - pgdatabase
+      - elasticsearch
+    environment:
+      - ENVIRONMENT=docker
+      # - DATABASE_URL=${DATABASE_URL}
+      # - ELASTICSEARCH_URL=${ELASTICSEARCH_URL}
+    volumes:
+      - .:/app
+    networks:
+      - backend
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.7.1 #${STACK_VERSION}
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.7.1
     container_name: elasticsearch
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
     ports:
-      - ${ES_PORT}:9200
+      - "9200:9200"
     restart: always
     environment:
       - xpack.security.enabled=false
       - discovery.type=single-node
       - ELASTICSEARCH_USERNAME=admin
-      - ELASTICSEARCH_PASSWORD=MasterKeyData45 #${ELASTIC_PASSWORD}
+      - ELASTICSEARCH_PASSWORD=MasterKeyData45
     ulimits:
       memlock:
         soft: -1
         hard: -1
+    networks:
+      - backend
 
   kibana:
     depends_on:
       - elasticsearch
-    image: docker.elastic.co/kibana/kibana:8.7.1 #${STACK_VERSION}
+    image: docker.elastic.co/kibana/kibana:8.7.1
     container_name: kibana
     volumes:
       - kibana-data:/usr/share/kibana/data
     ports:
-     - ${KIBANA_PORT}:5601
+      - "5601:5601"
     restart: always
     environment:
       - ELASTICSEARCH_USERNAME=admin
-      - ELASTICSEARCH_PASSWORD=MasterKeyData45 #${KIBANA_PASSWORD}
+      - ELASTICSEARCH_PASSWORD=MasterKeyData45
+    networks:
+      - backend
 
   pgdatabase:
     image: postgres:13
+    container_name: pgdatabase
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
@@ -51,9 +67,12 @@ services:
       - ./initdb:/docker-entrypoint-initdb.d
     ports:
       - "5432:5432"
+    networks:
+      - backend
 
   pgadmin:
     image: dpage/pgadmin4
+    container_name: pgadmin
     volumes:
       - data_pgadmin:/var/lib/pgadmin
     environment:
@@ -61,18 +80,15 @@ services:
       - PGADMIN_DEFAULT_PASSWORD=root
     ports:
       - "8080:80"
-
+    networks:
+      - backend
 
 volumes:
   job_market_data:
   data_pgadmin:
   elasticsearch-data:
-    driver: local
   kibana-data:
-    driver: local
 
 networks:
-  es-net:
+  backend:
     driver: bridge
-
-

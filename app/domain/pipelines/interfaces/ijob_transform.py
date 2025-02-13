@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Dict, List
 
 from app.domain.pipelines.entities.jobs import Job, JobDetail, JobSummary
-from app.domain.pipelines.entities.website import WebConfig
+from app.domain.pipelines.entities.webconfig import WebConfig
 
 class IJobTransform(ABC):
     

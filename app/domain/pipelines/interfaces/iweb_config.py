@@ -1,14 +1,14 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from app.domain.pipelines.entities.website import WebConfig
+from app.domain.pipelines.entities.webconfig import WebConfig
 
 class IWebconfig(ABC):
     
     @abstractmethod
-    def get_website_config(name: str) -> WebConfig:
+    def get_website_config(self, website: str) -> WebConfig:
         raise NotImplementedError
     
     @abstractmethod
-    def create_website_config(website: str) -> WebConfig:
+    def create_website_config(self, website: WebConfig) -> WebConfig:
         raise NotImplementedError

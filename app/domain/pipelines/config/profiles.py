@@ -2,7 +2,6 @@
 from functools import lru_cache
 import random
 
-@lru_cache
 def get_user_agent()->str:
     return random.choice([
             "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.5 Safari/605.1.15",
@@ -18,17 +17,15 @@ def get_user_agent()->str:
         ])
 
 
-@lru_cache
 def get_proxy()-> str:
     proxy: str = random.choice([
-        "196.198.13.19:12345:gphg:gphg2016",
-        "196.242.195.56:12345:gphg:gphg2016",
-        "196.242.47.204:12345:gphg:gphg2016",
-        "89.37.66.107:12345:gphg:gphg2016",
-        "196.240.254.49:12345:gphg:gphg2016",
-        "185.122.170.83:12345:gphg:gphg2016",
-        "185.223.234.78:12345:gphg:gphg2016",
-        "196.242.47.219:12345:gphg:gphg2016"
+        "gphg:gphg2016@196.198.13.19:12345",
+        "gphg:gphg2016@196.242.195.56:12345",
+        "gphg:gphg2016@196.242.47.204:12345",
+        "gphg:gphg2016@89.37.66.107:12345",
+        "gphg:gphg2016@196.240.254.49:12345",
+        "gphg:gphg2016@185.122.170.83:12345",
+        "gphg:gphg2016@185.223.234.78:12345",
     ])
-    return f"https://{proxy.split(':')[2]}:{proxy.split(':')[3]}@{proxy.split(':')[0]}:{proxy.split(':')[1]}"
+    # return f"https://{proxy.split(':')[2]}:{proxy.split(':')[3]}@{proxy.split(':')[0]}:{proxy.split(':')[1]}"
        

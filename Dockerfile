@@ -1,17 +1,24 @@
 # Dockerfile
 
-# pull the official docker image
+# Utilisation de l'image officielle de Python 3.12 Alpine
 FROM python:3.12-alpine
 
-# set work directory
+# Définition du répertoire de travail
 WORKDIR /app
 
-# set env variables
+# Environnement
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# install dependencies
+# Installation des dépendances
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-CMD [ "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000" ]
+# Copie des fichiers de l'application
+COPY . .
+
+# Exposition du port utilisé par FastAPI
+EXPOSE 8000
+
+# Commande de démarrage
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

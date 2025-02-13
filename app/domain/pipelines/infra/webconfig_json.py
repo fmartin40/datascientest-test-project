@@ -1,8 +1,8 @@
-from app.domain.pipelines.entities.website import WebConfig
+from app.domain.pipelines.entities.webconfig import WebConfig
 from app.domain.pipelines.interfaces.iweb_config import IWebconfig
 
 class WebConfigJson(IWebconfig):
-    def get_website_config(website: str) -> WebConfig:
+    def get_website_config(self, website: str) -> WebConfig:
         match website:
             case "emplois-informatique":
                 return WebConfig(
@@ -29,7 +29,7 @@ class WebConfigJson(IWebconfig):
                         "company": "hiringOrganization.name",
                         "city": "jobLocation.address.addressLocality",
                         "postal_code": "jobLocation.address.postalCode",
-                        "type": "employmentType",
+                        "contract_type": "employmentType",
                         "description": "description",
                         "required": ["title", "description"]
                     },
@@ -45,7 +45,7 @@ class WebConfigJson(IWebconfig):
                         "company": "props.pageProps.initialAppParams.company.name",
                         "city": ("props.pageProps.initialAppParams.job.locations", ["city"]),
                         "postal_code": "",
-                        "type": "props.pageProps.initialAppParams.job.employmentTypes",
+                        "contract_type": "props.pageProps.initialAppParams.job.employmentTypes",
                         "description": "props.pageProps.initialAppParams.job.compiled_contents",
                         "required": ["props", "query"]
                     },
@@ -59,3 +59,6 @@ class WebConfigJson(IWebconfig):
                 )
             case _:
                 raise ValueError(f"Configuration inconnue pour le site : {website}")
+
+    def create_website_config(self, website: WebConfig) -> WebConfig:
+        raise NotImplementedError

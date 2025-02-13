@@ -1,59 +1,70 @@
-from fastapi import APIRouter
-from app.domain.pipelines.infra.extract.extract_nodriver import NoDriverExtract
-from app.domain.pipelines.infra.extract.extract_plw import PlayWrightExtract
-from app.domain.pipelines.infra.extract.http import HttptExtract
-from app.domain.pipelines.infra.load.json.jobs_in_json import JobsInJsonRepo
-from app.domain.pipelines.infra.transform.json_in_html_to_job import TransformJsonInHtmlToJob
-from app.domain.pipelines.usecase.scrape_job_detail_usecase import ScrapJobDetailInputDto, ScrapJobDetailUseCase
-from app.domain.pipelines.usecase.scrape_jobs_summaries_usecase import ScrapJobSummariesUseCase
-from app.domain.pipelines.usecase.scrape_jobs_summaries_usecase import ScrapJobsSummariesInputDto
+from typing import Annotated
+from fastapi import APIRouter, Depends, HTTPException, status
+from app.domain.common.errors.errors import FetchApiException, NotFoundException
+from app.domain.pipelines.usecase.scrape_job_detail_usecase import (
+    ScrapJobDetailInputDto,
+    ScrapJobDetailUseCase,
+)
+from app.domain.pipelines.usecase.scrape_jobs_summaries_usecase import (
+    ScrapJobsSummariesInputDto,
+)
+from app.entrypoints.dependencies import InfraFactory
 
 
 router = APIRouter(prefix="/pipelines", tags=["Pipelines temporaires"])
 
-# ----------------------------------------------------
-# ces endpoints sont temporaires et seront remplacés par un orchestrateurs
-
+# --------------------------------------------------------------------------
+# ces endpoints sont temporaires et seront remplacés par un orchestrateur
+# on utilise des endpoint pour lancer facilement le processus
+# --------------------------------------------------------------------------
 
 @router.post("/process/job/summaries")
-async def process_jobs_summaries():
+async def process_jobs_summaries(
+    input_dto: Annotated[ScrapJobsSummariesInputDto, Depends(ScrapJobsSummariesInputDto)],
+    infra: Annotated[InfraFactory, Depends(InfraFactory)],):
+    return "En construction"
+    # cette partie est temporaire et sera remplacée par les configuraton des sites à scrapper
+    # on definira également une liste de mot clés à chercher pour les job
 
-	return "En construction"
-	# cette partie est temporaire et sera remplacée par les configuraton des sites à scrapper
-	# on definira également une liste de mot clés à chercher pour les job
+    # url_summaries: str ="https://www.jobintree.com/emploi/recherche.html?k={job}&l={place}"
+    # query = url_summaries.format(job="data+engineer", place="paris")
 
-	# url_summaries: str ="https://www.jobintree.com/emploi/recherche.html?k={job}&l={place}"
-	# query = url_summaries.format(job="data+engineer", place="paris")
+    # input_dto = ScrapJobsSummariesInputDto(query = query, website="jobintree")
 
-	# input_dto = ScrapJobsSummariesInputDto(query = query, website="jobintree")
+    # return await ScrapJobSummariesUseCase(
+    # 	webconfig_repo=infra.get_webconfig_repo(),
+	# 	extracter=infra.get_extracter(),
+	# 	transformer=infra.get_transformer(),
+	# 	loader=infra.get_loader(),
+    # ).execute()
 
-	# return await ScrapJobSummariesUseCase(
-	# 	input_dto=input_dto,
-	# 	extracter=PlayWrightExtract(),
-	# 	transformer=TransformJsonInHtmlToJob(),
-	# 	loader=JobsInJsonRepo(),
-	# 	presenter=None,
-	# ).execute()
-	
+
 @router.post("/process/job/detail")
-async def process_job_detail():
+async def process_job_detail(
+    input_dto: Annotated[ScrapJobDetailInputDto, Depends(ScrapJobDetailInputDto)],
+    infra: Annotated[InfraFactory, Depends(InfraFactory)],
+):
+    # cette partie est temporaire
+    # on pourra récupérer l'url du job detail a scraper et le website
+	# depuis une base ou un message kafka passé a l'api
+	# exemple :
+    #
+    # url= "https://www.jobintree.com/emplois/61665496.html"
+    # website = "jobintree"
 
-	# cette partie est temporaire
-	# on pourra récupérer l'url du job detail a scraper depuis une base ou un message kafka
-
-	url: str = "https://www.jobintree.com/emplois/61665496.html" 
-	website: str ="jobintree"
-
-	url: str = "https://www.themuse.com/jobs/atlassian/senior-manager-data-science-6df833" 
-	website: str ="muse"
-
-	input_dto = ScrapJobDetailInputDto(url = url, website=website)
-
-	return await ScrapJobDetailUseCase(
-		input_dto=input_dto,
-		extracter=HttptExtract(),
-		transformer=TransformJsonInHtmlToJob(),
-		loader=JobsInJsonRepo(),
-		presenter=None,
-	).execute()
-	
+    # url = "https://www.themuse.com/jobs/atlassian/senior-manager-data-science-6df833"
+    # website = "muse"
+    try: 
+        return await ScrapJobDetailUseCase(
+            input_dto=input_dto,
+            webconfig_repo=infra.get_webconfig_repo(),
+            extracter=infra.get_extracter(),
+            transformer=infra.get_transformer(),
+            loader=infra.get_loader()
+        ).execute()
+    except NotFoundException as ne:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(ne))
+    except FetchApiException as fe:
+        raise HTTPException(status_code=status.HTTP_410_GONE, detail=str(fe))
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))

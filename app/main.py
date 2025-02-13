@@ -2,7 +2,7 @@ from typing import Dict, List
 from fastapi import FastAPI
 import uvicorn
 
-from app.entrypoints.router import routeur_pipelines
+from app.entrypoints.router import routeur_pipelines, routeur_search
 
 
 
@@ -11,9 +11,9 @@ app = FastAPI(
 	description="""""",
 )
 
+app.include_router(routeur_search)
 app.include_router(routeur_pipelines)
 
-# app.include_router(routeur_builder)
 
 # Endpoint pour afficher toutes les routes existantes
 @app.get("/routes/", response_model=List[Dict])
