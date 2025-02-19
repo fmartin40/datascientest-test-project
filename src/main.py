@@ -2,8 +2,8 @@ from france_travail_api import FranceTravailAPI
 from adzuna_api import AdzunaAPI
 
 if __name__ == "__main__":
-    # adzuna_api = AdzunaAPI()
-    # adzuna_api.main()
+    adzuna_api = AdzunaAPI()
+    adzuna_api.main()
 
     france_travail_api = FranceTravailAPI()
     france_travail_api.get_access_token()
@@ -13,7 +13,7 @@ if __name__ == "__main__":
             "codeROME": "M1805",  # Le code ROME de 'data engineer'
             "motsCles": "data engineer",  
             "sort": "0",     # Tri par pertinence décroissante
-            "departement": "75",  # Exemple : Paris (75)
+            # "departement": "75",  # Exemple : Paris (75)
         }
 
         all_offers  = france_travail_api.search_offers(params)

@@ -127,12 +127,15 @@ class FranceTravailAPI:
         Insère les offres d'emploi dans une base de données PostgreSQL.
         """
 
+        conn = None
+        cursor = None
+
         try:
             # Connexion à la base PostgreSQL
             conn = psycopg2.connect(
-                dbname="job_market",
-                user="root",
-                password="root",
+                dbname = os.getenv('DB_NAME'),
+                user = os.getenv('DB_USER'),
+                password = os.getenv('DB_PASSWORD'),
                 host="localhost",  # ou "pgdatabase" si vous exécutez le script dans un conteneur Docker
                 port="5432"
             )
@@ -145,13 +148,14 @@ class FranceTravailAPI:
 
                     insert_query = """
                     INSERT INTO "OffreEmploi" (
-                        "intitule", "description", "dateCreation", "contrat_id"
+                        "source", "id_Source", "intitule", "description", "dateCreation", "contrat_id"
                     ) VALUES (
-                        %(intitule)s, %(description)s, %(dateCreation)s, %(contrat_id)s
+                        'France Travail', %(id_Source)s, %(intitule)s, %(description)s, %(dateCreation)s, %(contrat_id)s
                     )
                     """
 
                     cursor.execute(insert_query, {
+                        "id_Source": offer.get("id"),
                         "intitule": offer.get("intitule"),
                         "description": offer.get("description"),
                         "dateCreation": offer.get("dateCreation"),
@@ -162,11 +166,14 @@ class FranceTravailAPI:
 
             # Commit les changements et fermer la connexion
             conn.commit()
-            cursor.close()
-            conn.close()
             print("Données insérées avec succès dans la base de données.")
         except Exception as e:
             print(f"Erreur lors de la connexion ou de l'insertion dans la base : {e}")
+        finally:
+            if cursor:
+                cursor.close()
+            if conn:
+                conn.close()
 
     def insert_contrat(self,cursor, type_contrat, type_contrat_libelle, nature_contrat, alternance):
         if type_contrat is None:
