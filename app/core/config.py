@@ -14,7 +14,7 @@ class Settings(BaseSettings):
 	ENVIRONMENT: str = "local"  # Valeur par défaut
 
 	# Base de données (choix automatique selon l'environnement)
-	POSTGRES_URL_LOCAL: str = "postgresql://root:root@localhost:5432/job_market"
+	POSTGRES_URL_LOCAL: str 
 	POSTGRES_URL_DOCKER: str = "postgresql://root:root@pgdatabase:5432/job_market"
 
 	# Elasticsearch (choix automatique selon l'environnement)

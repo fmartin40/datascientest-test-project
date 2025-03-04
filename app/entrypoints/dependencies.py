@@ -11,14 +11,14 @@ from app.domain.pipelines.infra.webconfig_json import WebConfigJson
 from app.domain.pipelines.interfaces.ijob_extract import IJobExtract
 from app.domain.pipelines.interfaces.ijob_load import IJobLoadToRepository
 from app.domain.pipelines.interfaces.ijob_transform import IJobTransform
-from app.domain.pipelines.interfaces.iweb_config import IWebconfig
+from app.domain.pipelines.interfaces.iconfig_service import IConfigService
 from app.domain.reporting.infra.search_in_elastic import SearchInElastic
 from app.domain.reporting.interfaces.ijob_search import IJobSearch
 
 
 class InfraFactory:
 
-	def get_webconfig_repo(self) -> IWebconfig:
+	def get_webconfig_repo(self) -> IConfigService:
 		return WebConfigJson()
 		
 	def get_extracter(self) -> IJobExtract:

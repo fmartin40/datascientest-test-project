@@ -9,7 +9,7 @@ from typing import Dict
 # a developper
 
 @dataclass
-class WebConfig:
+class ExtractConfig:
     name: str
     url_summaries: str
     url_detail: str 
