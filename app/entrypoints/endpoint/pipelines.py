@@ -32,7 +32,7 @@ async def process_jobs_summaries(
     # input_dto = ScrapJobsSummariesInputDto(query = query, website="jobintree")
 
     # return await ScrapJobSummariesUseCase(
-    # 	webconfig_repo=infra.get_webconfig_repo(),
+    # 	config_service=infra.get_webconfig_repo(),
 	# 	extracter=infra.get_extracter(),
 	# 	transformer=infra.get_transformer(),
 	# 	loader=infra.get_loader(),
@@ -41,8 +41,8 @@ async def process_jobs_summaries(
 
 @router.post("/process/job/detail")
 async def process_job_detail(
-    input_dto: Annotated[ScrapJobDetailInputDto, Depends(ScrapJobDetailInputDto)],
     infra: Annotated[InfraFactory, Depends(InfraFactory)],
+    input_dto: ScrapJobDetailInputDto = Depends(),
 ):
     # cette partie est temporaire
     # on pourra récupérer l'url du job detail a scraper et le website
@@ -57,7 +57,7 @@ async def process_job_detail(
     try: 
         return await ScrapJobDetailUseCase(
             input_dto=input_dto,
-            webconfig_repo=infra.get_webconfig_repo(),
+            config_service=infra.get_webconfig_repo(),
             extracter=infra.get_extracter(),
             transformer=infra.get_transformer(),
             loader=infra.get_loader()

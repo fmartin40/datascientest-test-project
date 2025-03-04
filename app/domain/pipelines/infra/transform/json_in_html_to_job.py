@@ -4,7 +4,7 @@ from typing import Any, Dict, List
 from bs4 import BeautifulSoup
 from glom import glom, Coalesce
 from app.domain.pipelines.entities.jobs import Job, JobDetail, JobSummary
-from app.domain.pipelines.entities.webconfig import WebConfig
+from app.domain.pipelines.entities.extractconfig import ExtractConfig
 from app.domain.pipelines.interfaces.ijob_transform import IJobTransform
 
 # ---------------------------------------------------------
@@ -13,17 +13,17 @@ from app.domain.pipelines.interfaces.ijob_transform import IJobTransform
 # ---------------------------------------------------------
 class TransformJsonInHtmlToJob(IJobTransform):
 
-	async def transform_to_job_summaries(self, data: str, webconfig: WebConfig)->List[JobSummary]:
+	async def transform_to_job_summaries(self, data: str, extract_config: ExtractConfig)->List[JobSummary]:
 		# required_keys: set = set(webconfig.summary_pattern.get('required'))
 		# json_data = await self._extract_json(data, webconfig, required_keys)
 		raise NotImplementedError
 
-	async def transform_to_job_detail(self, data: str, webconfig: WebConfig)->JobDetail | List[JobDetail]:
-		required_keys: set = set(webconfig.detail_pattern.get('required'))
-		json_data: Dict = await self._extract_json(data, webconfig, required_keys)
-		return await self._json_to_job_detail(json_data, webconfig)
+	async def transform_to_job_detail(self, data: str, extract_config: ExtractConfig)->JobDetail | List[JobDetail]:
+		required_keys: set = set(extract_config.detail_pattern.get('required'))
+		json_data: Dict = await self._extract_json(data, extract_config, required_keys)
+		return await self._json_to_job_detail(json_data, extract_config)
 	
-	async def _extract_json(self, data: str, webconfig: WebConfig, required_keys: set) -> Dict:
+	async def _extract_json(self, data: str, extract_config: ExtractConfig, required_keys: set) -> Dict:
 		""" extraction du json a partir des infos webconfig """
 		soup = BeautifulSoup(data, "html.parser")
 		
@@ -31,7 +31,7 @@ class TransformJsonInHtmlToJob(IJobTransform):
 		# si le json contient les clé attendues dans webconfig.detail_pattern.required, c'est le bon json
 		# sinon on passe
 		
-		scripts = soup.find_all("script", webconfig.tag)
+		scripts = soup.find_all("script", extract_config.tag)
 		for script in scripts:
 			try:
 				# On parse le json
@@ -43,12 +43,12 @@ class TransformJsonInHtmlToJob(IJobTransform):
 			except (json.JSONDecodeError, TypeError):
 				continue  # Ignore les erreurs (ex: script vide ou pas du JSON)
 		
-	async def _json_to_job_detail(self, json_data:Dict, webconfig: WebConfig )->JobDetail:
+	async def _json_to_job_detail(self, json_data:Dict, extract_config: ExtractConfig )->JobDetail:
 		# on utilise le pattern dans le webconfig pour en faire une specification glom
 		# glom permet d'extraire des noeuds imbriques dans des dictionnaires 
 		# {"title": "title", "company": "hiringOrganization.name"...}
 
-		job_specs = {k:Coalesce(v,default='') for k, v in webconfig.detail_pattern.items() if k != 'required'}
+		job_specs = {k:Coalesce(v,default='') for k, v in extract_config.detail_pattern.items() if k != 'required'}
 		parsed_job: Dict = glom(json_data, job_specs)
 		parsed_job['description']=await self._clean_description(parsed_job['description'])
 
