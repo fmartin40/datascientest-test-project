@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, status
 from app.domain.common.errors.errors import FetchApiException, NotFoundException
 from app.api.france_travail_api import FranceTravailAPI
+from app.api.adzuna_api import AdzunaAPI
 
 router = APIRouter(prefix="/api", tags=["API"])
 
@@ -42,6 +43,20 @@ async def process_france_travail_job_offers():
                     france_travail_api.fetch_offer_details(offer_id)
         else:
             print("Aucune offre trouvée.")
+
+    except NotFoundException as ne:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(ne))
+    except FetchApiException as fe:
+        raise HTTPException(status_code=status.HTTP_410_GONE, detail=str(fe))
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+
+@router.post("/process/adzuna/job_offers")
+async def process_adzuna_job_offers():
+
+    try: 
+        adzuna_api = AdzunaAPI()
+        adzuna_api.main()
 
     except NotFoundException as ne:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(ne))

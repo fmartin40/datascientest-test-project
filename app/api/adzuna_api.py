@@ -5,6 +5,7 @@ import pandas as pd
 import requests
 
 from dotenv import load_dotenv
+from datetime import datetime
 
 class AdzunaAPI:
   """
@@ -17,6 +18,15 @@ class AdzunaAPI:
 
   def __init__(self):
     load_dotenv()
+    self.current_date = datetime.now().strftime("%d%m%Y")
+    # Récupérer la racine du projet
+    self.root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+    # Construire le bon chemin vers `data/`
+    self.data_dir = os.path.join(self.root_dir, "data")
+    # Vérifier si le dossier `data/` existe, sinon le créer
+    if not os.path.exists(self.data_dir):
+        os.makedirs(self.data_dir, exist_ok=True)
+
     self.params = {"app_id": os.getenv("ADZUNA_APP_ID"),
           "app_key": os.getenv("ADZUNA_APP_KEY"),
           "results_per_page" : 20,
@@ -44,7 +54,7 @@ class AdzunaAPI:
       all_results += self.download_page(page)
     return all_results
 
-  def list_to_df(results):
+  def list_to_df(self, results):
     job_list = [{
         "job_id": job.get("id"),
         "title": job.get("title"),
@@ -65,9 +75,12 @@ class AdzunaAPI:
     df = pd.DataFrame(job_list)
     return df
 
-  def df_to_csv(df, filename="job_data.csv"):
-    df.to_csv(filename, index=False)
-    print("Le fichier CSV a été créé avec succès.")
+  def df_to_csv(self, df):
+    filename = f"{self.current_date}-adzuna-job_data.json"
+    filepath = os.path.join(self.data_dir, filename)
+
+    df.to_csv(filepath, index=False)
+    print(f"Le fichier Excel a été créé avec succès : {filepath}")
 
   def main(self):
     results = self.download_all()
