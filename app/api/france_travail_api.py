@@ -35,8 +35,6 @@ class FranceTravailAPI:
         self.root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
         # Construire le bon chemin vers `data/`
         self.data_dir = os.path.join(self.root_dir, "data")
-        print(self.root_dir)
-        print(self.data_dir)
         # Vérifier si le dossier `data/` existe, sinon le créer
         if not os.path.exists(self.data_dir):
             os.makedirs(self.data_dir, exist_ok=True)
