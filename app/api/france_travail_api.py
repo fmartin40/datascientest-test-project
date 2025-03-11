@@ -30,7 +30,16 @@ class FranceTravailAPI:
 
         self.access_token = None
         self.current_date = datetime.now().strftime("%d%m%Y")
-        self.data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'data')
+
+        # Récupérer la racine du projet
+        self.root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+        # Construire le bon chemin vers `data/`
+        self.data_dir = os.path.join(self.root_dir, "data")
+        print(self.root_dir)
+        print(self.data_dir)
+        # Vérifier si le dossier `data/` existe, sinon le créer
+        if not os.path.exists(self.data_dir):
+            os.makedirs(self.data_dir, exist_ok=True)
 
     def get_access_token(self):
         data = {
@@ -116,6 +125,9 @@ class FranceTravailAPI:
         filename = f"{self.current_date}-offres_d_emploi.json"
         filepath = os.path.join(self.data_dir, filename)
 
+        print(filename)
+        print(filepath)
+
         # Sauvegarder dans un fichier JSON
         with open(filepath, 'w', encoding='utf-8') as f:
             json.dump(offers, f, ensure_ascii=False, indent=4)
@@ -136,7 +148,7 @@ class FranceTravailAPI:
                 dbname = os.getenv('DB_NAME'),
                 user = os.getenv('DB_USER'),
                 password = os.getenv('DB_PASSWORD'),
-                host="localhost",  # ou "pgdatabase" si vous exécutez le script dans un conteneur Docker
+                host="pgdatabase",
                 port="5432"
             )
             cursor = conn.cursor()
