@@ -123,9 +123,6 @@ class FranceTravailAPI:
         filename = f"{self.current_date}-offres_d_emploi.json"
         filepath = os.path.join(self.data_dir, filename)
 
-        print(filename)
-        print(filepath)
-
         # Sauvegarder dans un fichier JSON
         with open(filepath, 'w', encoding='utf-8') as f:
             json.dump(offers, f, ensure_ascii=False, indent=4)
