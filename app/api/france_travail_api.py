@@ -151,22 +151,67 @@ class FranceTravailAPI:
             # Insérer les données dans la table
             for offer in offers:
                 try:
-                    contrat_id = self.insert_contrat(cursor, offer.get("typeContrat"), offer.get("typeContratLibelle"), offer.get("natureContrat"), offer.get("alternance"))
+                    lieuTravail_id = self.insert_lieuTravail(cursor, offer.get("lieuTravail"))
+                    entreprise_id = self.insert_entreprise(cursor, offer.get("entreprise"))
 
                     insert_query = """
                     INSERT INTO "OffreEmploi" (
-                        "source", "id_Source", "intitule", "description", "dateCreation", "contrat_id"
+                        "source",
+                        "offre_id",
+                        "intitule",
+                        "description",
+                        "dateCreation",
+                        "dateActualisation",
+                        "lieuTravail_id",
+                        "romeCode",
+                        "romeLibelle",
+                        "appellationlibelle",
+                        "entreprise_id",
+                        "typeContrat",
+                        "typeContratLibelle",
+                        "natureContrat",
+                        "experienceExige",
+                        "experienceLibelle",
+                        "experienceCommentaire"
+
                     ) VALUES (
-                        'France Travail', %(id_Source)s, %(intitule)s, %(description)s, %(dateCreation)s, %(contrat_id)s
+                        'France Travail',
+                        %(offre_id)s,
+                        %(intitule)s,
+                        %(description)s,
+                        %(dateCreation)s,
+                        %(dateActualisation)s,
+                        %(lieuTravail_id)s,
+                        %(romeCode)s,
+                        %(romeLibelle)s,
+                        %(appellationlibelle)s,
+                        %(entreprise_id)s,
+                        %(typeContrat)s,
+                        %(typeContratLibelle)s,
+                        %(natureContrat)s,
+                        %(experienceExige)s,
+                        %(experienceLibelle)s,
+                        %(experienceCommentaire)s
                     )
                     """
 
                     cursor.execute(insert_query, {
-                        "id_Source": offer.get("id"),
+                        "offre_id": offer.get("id"),
                         "intitule": offer.get("intitule"),
                         "description": offer.get("description"),
                         "dateCreation": offer.get("dateCreation"),
-                        "contrat_id": contrat_id,
+                        "dateActualisation": offer.get("dateActualisation"),
+                        "lieuTravail_id": lieuTravail_id,
+                        "romeCode": offer.get("romeCode"),
+                        "romeLibelle": offer.get("romeLibelle"),
+                        "appellationlibelle": offer.get("appellationlibelle"),
+                        "entreprise_id": entreprise_id,
+                        "typeContrat": offer.get("typeContrat"),
+                        "typeContratLibelle": offer.get("typeContratLibelle"),
+                        "natureContrat": offer.get("natureContrat"),
+                        "experienceExige": offer.get("experienceExige"),
+                        "experienceLibelle": offer.get("experienceLibelle"),
+                        "experienceCommentaire": offer.get("experienceCommentaire")
                     })
                 except Exception as e:
                     print(f"Erreur d'insertion pour l'offre {offer.get('id')}: {e}")
@@ -182,17 +227,31 @@ class FranceTravailAPI:
             if conn:
                 conn.close()
 
-    def insert_contrat(self,cursor, type_contrat, type_contrat_libelle, nature_contrat, alternance):
-        if type_contrat is None:
+    def insert_lieuTravail(self,cursor, lieuTravail):
+        if lieuTravail is None:
             return None
 
         data = {
-            "typeContrat": type_contrat,
-            "typeContratLibelle": type_contrat_libelle,
-            "natureContrat": nature_contrat,
-            "alternance": alternance
+            "libelle": lieuTravail.get('libelle'),
+            "latitude": lieuTravail.get('latitude'),
+            "longitude": lieuTravail.get('longitude'),
+            "codePostal": lieuTravail.get('codePostal'),
+            "commune": lieuTravail.get('commune')
         }
-        return self.insert_or_get_id(cursor, "Contrat", data, "typeContrat")
+        return self.insert_or_get_id(cursor, "LieuTravail", data, "libelle")
+
+    def insert_entreprise(self,cursor, entreprise):
+        if entreprise.get('nom') is None:
+            return None
+
+        data = {
+            "nom": entreprise.get('nom'),
+            "description": entreprise.get('description'),
+            "logo": entreprise.get('logo'),
+            "url": entreprise.get('url'),
+            "entrepriseAdaptee": entreprise.get('entrepriseAdaptee')
+        }
+        return self.insert_or_get_id(cursor, "Entreprise", data, "nom")
 
     def insert_or_get_id(self,cursor, table, data, unique_column):
         """
