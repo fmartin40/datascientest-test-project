@@ -14,9 +14,9 @@ async def process_france_travail_job_offers():
 
         if france_travail_api.access_token:
             params = {
-                "codeROME": "M1805",  # Le code ROME de 'data engineer'
+                # "codeROME": "M1805",  # Le code ROME de 'data engineer'
                 "motsCles": "data engineer",  
-                "sort": "0",     # Tri par pertinence décroissante
+                # "sort": "0",     # Tri par pertinence décroissante
                 # "departement": "75",  # Exemple : Paris (75) 
             }
 

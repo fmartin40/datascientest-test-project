@@ -73,9 +73,10 @@ class FranceTravailAPI:
         while True:
             # Définition du paramètre de pagination "range" pour cette requête
             params['range'] = f"{range_start}-{range_start + range_step - 1}"
-
+            
             try:
                 response = requests.get(self.SEARCH_API_URL, headers=headers, params=params)
+                print(response.headers.get("Content-Range"))
                 if response.status_code == 200:
                     # Toutes les annonces ont été envoyées en une seule fois
                     data = response.json()
@@ -101,6 +102,7 @@ class FranceTravailAPI:
                     break
                 elif response.status_code == 400:
                     print("Erreur 400 : Requête invalide. Vérifiez les paramètres.")
+                    print(response)
                     break
                 elif response.status_code == 500:
                     print("Erreur 500 : Erreur interne du serveur. Réessayez plus tard.")
@@ -153,11 +155,15 @@ class FranceTravailAPI:
                 try:
                     lieuTravail_id = self.insert_lieuTravail(cursor, offer.get("lieuTravail"))
                     entreprise_id = self.insert_entreprise(cursor, offer.get("entreprise"))
+                    salaire_id = self.insert_salaire(cursor, offer.get("salaire"))
+                    contact_id = self.insert_contact(cursor, offer.get("contact"))
+                    agence_id = self.insert_agence(cursor, offer.get("agence"))
+                    origine_id = self.insert_origine_offre(cursor, offer.get("origineOffre"))
 
                     insert_query = """
                     INSERT INTO "OffreEmploi" (
                         "source",
-                        "offre_id",
+                        "source_offre_id",
                         "intitule",
                         "description",
                         "dateCreation",
@@ -172,11 +178,30 @@ class FranceTravailAPI:
                         "natureContrat",
                         "experienceExige",
                         "experienceLibelle",
-                        "experienceCommentaire"
-
+                        "experienceCommentaire",
+                        "dureeTravailLibelle",
+                        "dureeTravailLibelleConverti",
+                        "complementExercice",
+                        "conditionExercice",
+                        "alternance",
+                        "salaire_id",
+                        "contact_id",
+                        "agence_id",
+                         "nombrePostes",
+                         "accessibleTH",
+                         "deplacementCode",
+                         "deplacementLibelle",
+                        "qualificationCode",
+                        "qualificationLibelle",
+                        "codeNAF",
+                        "secteurActivite",
+                        "secteurActiviteLibelle",
+                        "trancheEffectifEtab",
+                        "offresManqueCandidats",
+                        "origine_id"
                     ) VALUES (
                         'France Travail',
-                        %(offre_id)s,
+                        %(source_offre_id)s,
                         %(intitule)s,
                         %(description)s,
                         %(dateCreation)s,
@@ -191,12 +216,32 @@ class FranceTravailAPI:
                         %(natureContrat)s,
                         %(experienceExige)s,
                         %(experienceLibelle)s,
-                        %(experienceCommentaire)s
+                        %(experienceCommentaire)s,
+                        %(dureeTravailLibelle)s,
+                        %(dureeTravailLibelleConverti)s,
+                        %(complementExercice)s,
+                        %(conditionExercice)s,
+                        %(alternance)s,
+                        %(salaire_id)s,
+                        %(contact_id)s,
+                        %(agence_id)s,
+                        %(nombrePostes)s,
+                        %(accessibleTH)s,
+                        %(deplacementCode)s,
+                        %(deplacementLibelle)s,
+                        %(qualificationCode)s,
+                        %(qualificationLibelle)s,
+                        %(codeNAF)s,
+                        %(secteurActivite)s,
+                        %(secteurActiviteLibelle)s,
+                        %(trancheEffectifEtab)s,
+                        %(offresManqueCandidats)s,
+                        %(origine_id)s
                     )
                     """
 
                     cursor.execute(insert_query, {
-                        "offre_id": offer.get("id"),
+                        "source_offre_id": offer.get("id"),
                         "intitule": offer.get("intitule"),
                         "description": offer.get("description"),
                         "dateCreation": offer.get("dateCreation"),
@@ -211,8 +256,119 @@ class FranceTravailAPI:
                         "natureContrat": offer.get("natureContrat"),
                         "experienceExige": offer.get("experienceExige"),
                         "experienceLibelle": offer.get("experienceLibelle"),
-                        "experienceCommentaire": offer.get("experienceCommentaire")
+                        "experienceCommentaire": offer.get("experienceCommentaire"),
+                        "dureeTravailLibelle": offer.get("dureeTravailLibelle"),
+                        "dureeTravailLibelleConverti": offer.get("dureeTravailLibelleConverti"),
+                        "complementExercice": offer.get("complementExercice"),
+                        "conditionExercice": offer.get("conditionExercice"),
+                        "alternance": offer.get("alternance"),
+                        "salaire_id": salaire_id,
+                        "contact_id": contact_id,
+                        "agence_id": agence_id,
+                        "nombrePostes": offer.get("nombrePostes"),
+                        "accessibleTH": offer.get("accessibleTH"),
+                        "deplacementCode": offer.get("deplacementCode"),
+                        "deplacementLibelle": offer.get("deplacementLibelle"),
+                        "qualificationCode": offer.get("qualificationCode"),
+                        "qualificationLibelle": offer.get("qualificationLibelle"),
+                        "codeNAF": offer.get("codeNAF"),
+                        "secteurActivite": offer.get("secteurActivite"),
+                        "secteurActiviteLibelle": offer.get("secteurActiviteLibelle"),
+                        "trancheEffectifEtab": offer.get("trancheEffectifEtab"),
+                        "offresManqueCandidats": offer.get("offresManqueCandidats"),
+                        "origine_id": origine_id
                     })
+
+                    cursor.execute('SELECT id FROM "OffreEmploi" WHERE "source_offre_id" = %s', (offer.get("id"),))
+                    offre_id = cursor.fetchone()[0]
+
+                    for formation in offer.get("formations", []):
+                        formation_data = {
+                            "codeFormation": formation.get("codeFormation"),
+                            "domaineLibelle": formation.get("domaineLibelle"),
+                            "niveauLibelle": formation.get("niveauLibelle"),
+                            "commentaire": formation.get("commentaire"),
+                            "exigence": formation.get("exigence")
+                        }
+                        formation_id = self.insert_or_get_id(cursor, "Formation", formation_data, "codeFormation")
+                        cursor.execute(
+                            'INSERT INTO "OffreEmploi_Formation" ("offre_id", "formation_id") VALUES (%s, %s) ON CONFLICT DO NOTHING',
+                            (offre_id, formation_id)
+                        )
+
+                    for langue in offer.get("langues", []):
+                        langue_data = {
+                            "libelle": langue.get("libelle"),
+                            "exigence": langue.get("exigence")
+                        }
+                        langue_id = self.insert_or_get_id(cursor, "Langue", langue_data, "libelle")
+                        cursor.execute(
+                            'INSERT INTO "OffreEmploi_Langue" ("offre_id", "langue_id") VALUES (%s, %s) ON CONFLICT DO NOTHING',
+                            (offre_id, langue_id)
+                        )
+
+                    for permis in offer.get("permis", []):
+                        permis_data = {
+                            "libelle": permis.get("libelle"),
+                            "exigence": permis.get("exigence")
+                        }
+                        permis_id = self.insert_or_get_id(cursor, "Permis", permis_data, "libelle")
+                        cursor.execute(
+                            'INSERT INTO "OffreEmploi_Permis" ("offre_id", "permis_id") VALUES (%s, %s) ON CONFLICT DO NOTHING',
+                            (offre_id, permis_id)
+                        )
+
+                    for outil in offer.get("outilsBureautiques", []):
+                        outil_data = {"libelle": outil}
+                        outil_id = self.insert_or_get_id(cursor, "OutilBureautique", outil_data, "libelle")
+                        cursor.execute(
+                            'INSERT INTO "OffreEmploi_OutilBureautique" ("offre_id", "outil_id") VALUES (%s, %s) ON CONFLICT DO NOTHING',
+                            (offre_id, outil_id)
+                        )
+
+                    for competence in offer.get("competences", []):
+                        competence_data = {
+                            "code": competence.get("code"),
+                            "libelle": competence.get("libelle"),
+                            "exigence": competence.get("exigence")
+                        }
+                        competence_id = self.insert_or_get_id(cursor, "Competence", competence_data, "code")
+                        cursor.execute(
+                            'INSERT INTO "OffreEmploi_Competence" ("offre_id", "competence_id") VALUES (%s, %s) ON CONFLICT DO NOTHING',
+                            (offre_id, competence_id)
+                        )
+
+                    for qualite in offer.get("qualitesProfessionnelles", []):
+                        print(qualite)
+                        qualite_data = {
+                            "libelle": qualite.get("libelle"),
+                            "description": qualite.get("description")
+                        }
+                        qualite_id = self.insert_or_get_id(cursor, "QualiteProfessionnelle", qualite_data, "libelle")
+                        cursor.execute(
+                            'INSERT INTO "OffreEmploi_QualiteProfessionnelle" ("offre_id", "qualite_id") VALUES (%s, %s) ON CONFLICT DO NOTHING',
+                            (offre_id, qualite_id)
+                        )
+                    
+                    contexte = offer.get("contexteTravail", {})
+                    print(contexte)
+                    # Insérer les horaires
+                    for horaire in contexte.get("horaires", []):
+                        contexte_data = { "libelle": horaire, "type": "horaire" }
+                        contexte_id = self.insert_or_get_id(cursor, "ContexteTravail", contexte_data, "libelle")
+                        cursor.execute(
+                            'INSERT INTO "OffreEmploi_ContexteTravail" ("offre_id", "contexte_id") VALUES (%s, %s) ON CONFLICT DO NOTHING',
+                            (offre_id, contexte_id)
+                        )
+
+                    # Insérer les conditions d'exercice
+                    for condition in contexte.get("conditionsExercice", []):
+                        contexte_data = { "libelle": condition, "type": "condition" }
+                        contexte_id = self.insert_or_get_id(cursor, "ContexteTravail", contexte_data, "libelle")
+                        cursor.execute(
+                            'INSERT INTO "OffreEmploi_ContexteTravail" ("offre_id", "contexte_id") VALUES (%s, %s) ON CONFLICT DO NOTHING',
+                            (offre_id, contexte_id)
+                        )
                 except Exception as e:
                     print(f"Erreur d'insertion pour l'offre {offer.get('id')}: {e}")
 
@@ -252,6 +408,82 @@ class FranceTravailAPI:
             "entrepriseAdaptee": entreprise.get('entrepriseAdaptee')
         }
         return self.insert_or_get_id(cursor, "Entreprise", data, "nom")
+
+    def insert_salaire(self, cursor, salaire):
+        if not salaire:
+            return None
+        data = {
+            "libelle": salaire.get("libelle"),
+            "commentaire": salaire.get("commentaire"),
+            "complement1": salaire.get("complement1"),
+            "complement2": salaire.get("complement2")
+        }
+        return self.insert_or_get_id(cursor, "Salaire", data, "libelle")
+    
+    def insert_contact(self, cursor, contact):
+        if not contact:
+            return None
+        data = {
+            "nom": contact.get("nom"),
+            "coordonnees1": contact.get("coordonnees1"),
+            "coordonnees2": contact.get("coordonnees2"),
+            "coordonnees3": contact.get("coordonnees3"),
+            "telephone": contact.get("telephone"),
+            "courriel": contact.get("courriel"),
+            "commentaire": contact.get("commentaire"),
+            "urlRecruteur": contact.get("urlRecruteur"),
+            "urlPostulation": contact.get("urlPostulation")
+        }
+        return self.insert_or_get_id(cursor, "Contact", data, "courriel")
+
+    def insert_agence(self, cursor, agence):
+        if not agence:
+            return None
+        data = {
+            "telephone": agence.get("telephone"),
+            "courriel": agence.get("courriel")
+        }
+        return self.insert_or_get_id(cursor, "Agence", data, "courriel")
+    
+    def insert_origine_offre(self, cursor, origineOffre):
+        """
+        Insère une origineOffre et ses partenaires dans les tables correspondantes.
+        :param cursor: Curseur PostgreSQL
+        :param origineOffre: Dictionnaire JSON extrait de l'offre
+        :return: ID de l'origineOffre insérée
+        """
+        if not origineOffre:
+            return None
+
+        # Insertion ou récupération de l'origine de l'offre
+        data = {
+            "origine": origineOffre.get("origine"),
+            "urlOrigine": origineOffre.get("urlOrigine")
+        }
+        print(data)
+        origine_id = self.insert_or_get_id(cursor, "OrigineOffre", data, "urlOrigine")
+
+        # Insertion des partenaires liés à cette origine
+        for partenaire in origineOffre.get("partenaires", []):
+            print(partenaire)
+            partenaire_data = {
+                "nom": partenaire.get("nom"),
+                "url": partenaire.get("url"),
+                "logo": partenaire.get("logo")
+            }
+            partenaire_id = self.insert_or_get_id(cursor, "Partenaire", partenaire_data, "url")
+
+            # Liaison N:N entre OrigineOffre et Partenaire
+            cursor.execute(
+                """
+                INSERT INTO "OrigineOffre_Partenaire" ("origine_id", "partenaire_id")
+                VALUES (%s, %s)
+                ON CONFLICT DO NOTHING
+                """,
+                (origine_id, partenaire_id)
+            )
+
+        return origine_id
 
     def insert_or_get_id(self,cursor, table, data, unique_column):
         """
