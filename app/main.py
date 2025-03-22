@@ -9,9 +9,9 @@ app = FastAPI(
 	description="""""",
 )
 
+app.include_router(routeur_api)
 app.include_router(routeur_search)
 app.include_router(routeur_pipelines)
-app.include_router(routeur_api)
 
 # Endpoint pour afficher toutes les routes existantes
 @app.get("/routes/", response_model=List[Dict])
