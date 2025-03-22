@@ -76,7 +76,6 @@ class FranceTravailAPI:
             
             try:
                 response = requests.get(self.SEARCH_API_URL, headers=headers, params=params)
-                print(response.headers.get("Content-Range"))
                 if response.status_code == 200:
                     # Toutes les annonces ont été envoyées en une seule fois
                     data = response.json()
@@ -153,6 +152,18 @@ class FranceTravailAPI:
             # Insérer les données dans la table
             for offer in offers:
                 try:
+                    # Vérification de l'existence
+                    cursor.execute('SELECT "id", "dateActualisation" FROM "OffreEmploi" WHERE "source_offre_id" = %s', (offer.get("id"),))
+                    existing_offer = cursor.fetchone()
+                    if existing_offer:
+                        existing_id, existing_date = existing_offer
+                        new_date = datetime.fromisoformat(offer.get("dateActualisation"))
+                        if existing_date and new_date <= existing_date:
+                            print(f"Offre {offer.get('id')} déjà à jour. Ignorée.")
+                            continue
+                        print(f"Mise à jour de l'offre {offer.get('id')}")
+                        cursor.execute('DELETE FROM "OffreEmploi" WHERE "id" = %s', (existing_id,))
+
                     lieuTravail_id = self.insert_lieuTravail(cursor, offer.get("lieuTravail"))
                     entreprise_id = self.insert_entreprise(cursor, offer.get("entreprise"))
                     salaire_id = self.insert_salaire(cursor, offer.get("salaire"))
@@ -339,7 +350,6 @@ class FranceTravailAPI:
                         )
 
                     for qualite in offer.get("qualitesProfessionnelles", []):
-                        print(qualite)
                         qualite_data = {
                             "libelle": qualite.get("libelle"),
                             "description": qualite.get("description")
@@ -351,7 +361,7 @@ class FranceTravailAPI:
                         )
                     
                     contexte = offer.get("contexteTravail", {})
-                    print(contexte)
+
                     # Insérer les horaires
                     for horaire in contexte.get("horaires", []):
                         contexte_data = { "libelle": horaire, "type": "horaire" }
@@ -460,12 +470,10 @@ class FranceTravailAPI:
             "origine": origineOffre.get("origine"),
             "urlOrigine": origineOffre.get("urlOrigine")
         }
-        print(data)
         origine_id = self.insert_or_get_id(cursor, "OrigineOffre", data, "urlOrigine")
 
         # Insertion des partenaires liés à cette origine
         for partenaire in origineOffre.get("partenaires", []):
-            print(partenaire)
             partenaire_data = {
                 "nom": partenaire.get("nom"),
                 "url": partenaire.get("url"),
