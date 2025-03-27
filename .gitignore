@@ -62,3 +62,5 @@ venv/
 *.venv
 # fichiers de données
 data/
+#airflow
+logs/
