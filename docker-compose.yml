@@ -58,12 +58,15 @@ x-airflow-common: &airflow-common
     AIRFLOW__SMTP__SMTP_USER: "de.airflow@gmail.com"
     AIRFLOW__SMTP__SMTP_PASSWORD: "cfsrvkongsobheta"
     AIRFLOW__SMTP__SMTP_MAIL_FROM: "de.airflow@gmail.com"
-
-    _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- pymongo}
+    PYTHONPATH: /opt/airflow/app
+    _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- requests psycopg2-binary python-dotenv}
   volumes:
     - ./dags:/opt/airflow/dags
+    - ./data:/opt/airflow/data
     - ./logs:/opt/airflow/logs
     - ./plugins:/opt/airflow/plugins
+    - ./app:/opt/airflow/app
+    - ./.env:/opt/airflow/.env
   user: "${AIRFLOW_UID:-50000}:${AIRFLOW_GID:-50000}"
   depends_on:
     redis:
@@ -174,8 +177,6 @@ services:
       # - ELASTICSEARCH_URL=${ELASTICSEARCH_URL}
     volumes:
       - .:/app
-    networks:
-      - backend
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.7.1
@@ -194,8 +195,6 @@ services:
       memlock:
         soft: -1
         hard: -1
-    networks:
-      - backend
 
   kibana:
     depends_on:
@@ -210,8 +209,6 @@ services:
     environment:
       - ELASTICSEARCH_USERNAME=admin
       - ELASTICSEARCH_PASSWORD=MasterKeyData45
-    networks:
-      - backend
 
   pgdatabase:
     image: postgres:13
@@ -225,8 +222,6 @@ services:
       - ./initdb:/docker-entrypoint-initdb.d
     ports:
       - "5432:5432"
-    networks:
-      - backend
 
   pgadmin:
     image: dpage/pgadmin4
@@ -238,8 +233,6 @@ services:
       - PGADMIN_DEFAULT_PASSWORD=root
     ports:
       - "8081:80"
-    networks:
-      - backend
 
 # ---------- VOLUMES ----------
 volumes:
@@ -248,9 +241,4 @@ volumes:
   data_pgadmin:
   elasticsearch-data:
   kibana-data:
-
-# ---------- NETWORK ----------
-networks:
-  backend:
-    driver: bridge
 
