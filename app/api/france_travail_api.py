@@ -27,7 +27,6 @@ class FranceTravailAPI:
         load_dotenv()
         self.client_id = os.getenv('FRANCE_TRAVAIL_CLIENT_ID')
         self.client_secret = os.getenv('FRANCE_TRAVAIL_CLIENT_SECRET')
-        print(self.client_id)
         self.session = requests.Session()
         self.session.headers.update({'Content-Type': 'application/x-www-form-urlencoded'})
 
