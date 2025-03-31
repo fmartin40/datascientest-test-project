@@ -14,10 +14,7 @@ async def process_france_travail_job_offers():
 
         if france_travail_api.access_token:
             params = {
-                # "codeROME": "M1805",  # Le code ROME de 'data engineer'
                 "motsCles": "data engineer",  
-                # "sort": "0",     # Tri par pertinence décroissante
-                # "departement": "75",  # Exemple : Paris (75) 
             }
 
             all_offers  = france_travail_api.search_offers(params)
@@ -30,12 +27,6 @@ async def process_france_travail_job_offers():
         if all_offers:
             france_travail_api.save_offers_in_json_file(all_offers)
             france_travail_api.insert_offers_to_db(all_offers)
-
-            # Récupérer les détails pour les 5 premières offres
-            # for offer in all_offers[:5]:
-            #     offer_id = offer.get('id')
-            #     if offer_id:
-            #         france_travail_api.fetch_offer_details(offer_id)
         else:
             print("Aucune offre trouvée.")
 

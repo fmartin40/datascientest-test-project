@@ -6,6 +6,9 @@ import psycopg2
 from psycopg2 import sql
 from datetime import datetime
 from dotenv import load_dotenv
+from datetime import timezone
+
+from utils.date import safe_parse_iso_date
 
 class FranceTravailAPI:
     """
@@ -24,7 +27,6 @@ class FranceTravailAPI:
         load_dotenv()
         self.client_id = os.getenv('FRANCE_TRAVAIL_CLIENT_ID')
         self.client_secret = os.getenv('FRANCE_TRAVAIL_CLIENT_SECRET')
-
         self.session = requests.Session()
         self.session.headers.update({'Content-Type': 'application/x-www-form-urlencoded'})
 
@@ -152,17 +154,40 @@ class FranceTravailAPI:
             # Insérer les données dans la table
             for offer in offers:
                 try:
+                    # Sécurité sur les dates
+                    raw_date_actualisation = offer.get("dateActualisation")
+                    format_date_actualisation = safe_parse_iso_date(raw_date_actualisation)
+
+                    if not format_date_actualisation:
+                        print(f"Date invalide pour l'offre {offer.get('id')} : {raw_date_actualisation}")
+                        continue
+
+                    raw_date_creation = offer.get("dateCreation")
+                    format_date_creation = safe_parse_iso_date(raw_date_creation)
+
+                    if not format_date_creation:
+                        print(f"Date invalide pour l'offre {offer.get('id')} : {raw_date_creation}")
+                        continue
+
                     # Vérification de l'existence
                     cursor.execute('SELECT "id", "dateActualisation" FROM "OffreEmploi" WHERE "source_offre_id" = %s', (offer.get("id"),))
                     existing_offer = cursor.fetchone()
+
                     if existing_offer:
                         existing_id, existing_date = existing_offer
-                        new_date = datetime.fromisoformat(offer.get("dateActualisation"))
-                        if existing_date and new_date <= existing_date:
-                            print(f"Offre {offer.get('id')} déjà à jour. Ignorée.")
+                        should_update = True
+
+                        if existing_date:
+                            existing_date = existing_date.replace(tzinfo=timezone.utc)
+                            if format_date_actualisation <= existing_date:
+                                print(f"Offre {offer.get('id')} déjà à jour. Ignorée.")
+                                should_update = False
+
+                        if should_update:
+                            print(f"Mise à jour de l'offre {offer.get('id')}")
+                            cursor.execute('DELETE FROM "OffreEmploi" WHERE "id" = %s', (existing_id,))
+                        else:
                             continue
-                        print(f"Mise à jour de l'offre {offer.get('id')}")
-                        cursor.execute('DELETE FROM "OffreEmploi" WHERE "id" = %s', (existing_id,))
 
                     lieuTravail_id = self.insert_lieuTravail(cursor, offer.get("lieuTravail"))
                     entreprise_id = self.insert_entreprise(cursor, offer.get("entreprise"))
@@ -255,8 +280,8 @@ class FranceTravailAPI:
                         "source_offre_id": offer.get("id"),
                         "intitule": offer.get("intitule"),
                         "description": offer.get("description"),
-                        "dateCreation": offer.get("dateCreation"),
-                        "dateActualisation": offer.get("dateActualisation"),
+                        "dateCreation": format_date_creation.isoformat(),
+                        "dateActualisation": format_date_actualisation.isoformat(),
                         "lieuTravail_id": lieuTravail_id,
                         "romeCode": offer.get("romeCode"),
                         "romeLibelle": offer.get("romeLibelle"),
