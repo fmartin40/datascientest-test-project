@@ -1,0 +1,27 @@
+FROM ubuntu:latest
+
+# Set the working directory in the container
+WORKDIR /worker
+
+# Install dependencies
+RUN apt-get update && apt-get install -y software-properties-common
+
+# Add the deadsnakes repository
+RUN add-apt-repository ppa:deadsnakes/ppa
+
+# Install Python at the version 3.10
+RUN apt-get install -y python3.10 python3.10-dev python3.10-distutils python3.10-venv
+
+# Create a virtual environment
+RUN python3.10 -m venv env 
+
+# Copy Python dependencies
+COPY worker/requirements.txt /worker/
+
+# Install Python dependencies
+RUN /worker/env/bin/pip install --no-cache-dir -r requirements.txt
+
+# Copy the tasks file
+COPY worker/tasks.py /worker/tasks.py
+
+CMD ["/worker/env/bin/celery", "-A", "tasks", "worker", "--loglevel=INFO", "--logfile=/logs/worker.log"]

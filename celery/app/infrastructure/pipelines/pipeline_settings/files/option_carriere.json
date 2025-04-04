@@ -1,0 +1,10 @@
+{
+    "name":"option carriere",
+    "detail_extract_type":"json",
+    "detail_json_tag":{"type": "application/ld+json"},
+    "detail_required_json_keys": ["title","hiringOrganization"],
+    "detail_transform_pattern":{
+        "props": "title",
+        "query": "hiringOrganization.name"
+    }
+}
