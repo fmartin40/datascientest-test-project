@@ -3,7 +3,7 @@ from typing import Dict, List
 
 from app.domain.common.interface.presenter import Presenter
 from app.domain.common.interface.usecase import IUseCase
-from app.domain.common.utils.uuid import generate_unique_id
+from app.utils.uuid import generate_unique_id
 from app.domain.pipelines.entities.jobs import JobDetail
 from app.domain.pipelines.entities.extractconfig import ExtractConfig
 from app.domain.common.errors.errors import FetchApiException
