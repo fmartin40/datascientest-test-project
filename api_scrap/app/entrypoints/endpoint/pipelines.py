@@ -28,13 +28,11 @@ async def list_jobs_summaries(
     celery_client: Celery = Depends(Provide[ContainerService.celery_client]),
 ):
     try:
-        task = (
-            celery_client.send_task(
-                "extract_summaries",  # Nom exact de la tâche
-                kwargs=input_dto.model_dump()
-            ),
+        task = celery_client.send_task(
+            "extract_summaries",  # Nom exact de la tâche
+            kwargs=input_dto.model_dump()
         )
-
+        
         return {"task_id": task.id, "status": "pending"}
     except Exception as e:
         raise HTTPException(
@@ -53,6 +51,7 @@ async def get_job_detail(
             "extract_jobdetail",  # Nom exact de la tâche
             kwargs=asdict(input_dto),
         )
+        
         return {"task_id": task.id, "status": "pending"}
     except Exception as e:
         raise HTTPException(

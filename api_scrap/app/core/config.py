@@ -3,7 +3,7 @@ from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-ROOT_DIR = Path(__file__).parent.parent.parent
+ROOT_DIR = Path(__file__).parent.parent
 DOTENV = os.path.join(ROOT_DIR, '.env')
 
 
@@ -11,6 +11,7 @@ class Settings(BaseSettings):
 	model_config = SettingsConfigDict(env_file=DOTENV, extra="ignore")
 	
 	CONFIG_FOLDER: str = "app/infrastructure/pipelines/pipeline_settings/files"
+	
 	# Détection de l'environnement (local ou docker)
 	ENVIRONMENT: str = "local"  # Valeur par défaut
 

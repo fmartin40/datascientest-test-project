@@ -22,11 +22,4 @@ class ContainerService(containers.DeclarativeContainer):
 		get_celery_client
 	)
 	
-	# Autres services et dépendances
-	# ...
 	
-	# Vous pouvez également créer un Factory Provider pour les tâches Celery
-	# celery_task = providers.Factory(
-	# 	lambda client, task_name: client.signature(task_name),
-	# 	client=celery_client
-	# )
