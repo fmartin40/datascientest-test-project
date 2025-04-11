@@ -1,0 +1,6 @@
+{
+    "name":"emplois informatique",
+    "detail_extract_type":"json",
+    "detail_json_tag":{"type": "application/ld+json"},
+    "detail_transform_pattern":{}
+}

@@ -1,0 +1,47 @@
+# version: "3.9"
+
+services:
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile 
+    container_name: celery
+    command: ["celery", "-A", "app.main", "worker", "--loglevel=INFO", "--logfile=/logs/worker.log"]
+    volumes:
+      # - .:/app
+      - ./logs:/logs
+    env_file: ./app/.env
+    environment:
+      - ENVIRONMENT=prod
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  # flower:
+  #   image: mher/flower
+  #   command: ["python", "-m", "flower", "--broker=amqp://admin:admin@rabbitmq:5672//"]
+  #   ports:
+  #     - "5555:5555"
+  #   depends_on:
+  #     - rabbitmq
+
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"  # RabbitMQ
+      - "15672:15672"  # Management interface
+    env_file: ./app/.env
+    restart: always
+    logging:
+      driver: "none"
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  
+volumes:
+  rabbitmq_data:
+  logs:

@@ -1,6 +1,0 @@
-{
-    "name":"glassdoor",
-    "detail_extract_type":"json",
-    "detail_json_tag":{"id": "__NEXT_DATA__"},
-    "detail_transform_pattern":{}
-}
