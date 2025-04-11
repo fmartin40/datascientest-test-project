@@ -1,0 +1,15 @@
+
+{
+    "name":"muse",
+    "detail_extract_type":"json",
+    "detail_json_tag":{"id": "__NEXT_DATA__"},
+    "detail_required_json_keys": ["props"],
+    "detail_transform_pattern":{
+        "title": "props.pageProps.initialAppParams.job.name",
+        "company": "props.pageProps.initialAppParams.company.name",
+        "city": ("props.pageProps.initialAppParams.job.locations", ["city"]),
+        "postal_code": "",
+        "contract_type": "props.pageProps.initialAppParams.job.employmentTypes",
+        "description": "props.pageProps.initialAppParams.job.compiled_contents",
+    }
+}
