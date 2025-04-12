@@ -8,7 +8,7 @@ from pydantic import BaseModel
 
 from app.core.container_service import ContainerService
 
-router = APIRouter(prefix="/pipelines", tags=["Pipelines de scrap"])
+router = APIRouter()
 
 # Une simple base de données en mémoire pour stocker les résultats
 # Dans un cas réel, vous utiliseriez une base de données persistante
@@ -59,24 +59,3 @@ async def get_job_detail(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
         )
 
-
-@router.post("/jobs/process")
-@inject
-async def process_jobs_extraction(
-    input_dto: ScrapJobSummaryInputDto,
-    container_service: ContainerService = Depends(Provide[ContainerService]),
-):
-    pass
-
-
-@router.post("/webhook/scraping-result")
-async def scraping_webhook(result: ScrapingResult):
-    scraping_results[result.task_id] = result.model_dump()
-    return {"status": "received"}
-
-
-@router.get("/get-result/{task_id}")
-async def get_result(task_id: str):
-    if task_id in scraping_results:
-        return scraping_results[task_id]
-    raise HTTPException(status_code=404, detail="Résultat non trouvé ou tâche en cours")

@@ -1,8 +1,8 @@
 from typing import Dict
 
-from app.workers.pipelines.entities.jobs import JobDetail
-from app.workers.pipelines.entities.settings import ParserSettings, WebsiteInfo
-from app.workers.pipelines.interfaces.itransformer import ITransformer
+from app.workers.common.entities.jobs import JobDetail
+from app.workers.common.entities.settings import ParserSettings, WebsiteInfo
+from app.workers.common.interfaces.itransformer import ITransformer
 
 
 # class JobDetailFromHTMLTransformer(ITransformer):

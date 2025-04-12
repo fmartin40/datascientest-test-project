@@ -1,7 +1,7 @@
 from typing import List
 
-from app.workers.pipelines.entities.settings import ParserSettings, WebsiteInfo
-from app.workers.pipelines.interfaces.iextractor import IExtractor
+from app.workers.common.entities.settings import ParserSettings, WebsiteInfo
+from app.workers.common.interfaces.iextractor import IExtractor
 from app.infrastructure.pipelines.extract.extract_detail import JobDetailHTMLExtractor, JobDetailJSONExtractor
 from app.infrastructure.pipelines.extract.extract_summaries import JobSummaryHTMLExtractor, JobSummaryJSONExtractor
 

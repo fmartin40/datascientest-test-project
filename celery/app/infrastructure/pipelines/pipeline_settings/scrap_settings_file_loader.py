@@ -1,8 +1,8 @@
 import json
 from typing import Dict
 
-from app.workers.pipelines.entities.settings import WebsiteSettings
-from app.workers.pipelines.interfaces.iwebsite_settings import IWebsiteSettingsLoader
+from app.workers.common.entities.settings import WebsiteSettings
+from app.workers.common.interfaces.iwebsite_settings import IWebsiteSettingsLoader
 from app.core.config import settings
 
 class WebsiteSettingsFileLoader(IWebsiteSettingsLoader):

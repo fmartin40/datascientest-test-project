@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Dict
 
-from app.workers.pipelines.entities.settings import WebsiteSettings
+from app.workers.common.entities.settings import WebsiteSettings
 
 
 class IWebsiteSettingsLoader(ABC):

@@ -4,9 +4,9 @@ import urllib.parse
 
 from bs4 import BeautifulSoup
 from app.infrastructure.pipelines.extract.fetchurl import FetchUrl
-from app.workers.pipelines.entities.jobs import JobSummary
-from app.workers.pipelines.entities.settings import ParserSettings, WebsiteInfo
-from app.workers.pipelines.interfaces.iextractor import IExtractor
+from app.workers.common.entities.jobs import JobSummary
+from app.workers.common.entities.settings import ParserSettings, WebsiteInfo
+from app.workers.common.interfaces.iextractor import IExtractor
 
 
 class JobSummaryHTMLExtractor(IExtractor):

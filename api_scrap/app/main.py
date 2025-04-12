@@ -3,12 +3,13 @@ from fastapi import FastAPI
 import uvicorn
 
 from app.core.container_service import ContainerService
-from app.entrypoints.router import routeur_pipelines
+from app.entrypoints.router import routeur_scrap, routeur_profile   
 
 
 # Instancier et configurer le container
 endpoints: List[str] = [
     "app.entrypoints.endpoint.scrap",
+    "app.entrypoints.endpoint.profile",
 ]
 container_service = ContainerService()
 # container_usecase = ContainerUseCase(container_service=container_service)
@@ -20,7 +21,8 @@ app = FastAPI(
 )
 
 # app.include_router(routeur_search)
-app.include_router(routeur_pipelines)
+app.include_router(routeur_scrap)
+app.include_router(routeur_profile)
 
 
 # healthcheck dans le dockerfile
