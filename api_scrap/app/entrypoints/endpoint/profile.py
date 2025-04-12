@@ -1,6 +1,6 @@
 from dataclasses import asdict
 from typing import Any, Dict
-from app.domain.pipelines.dtos.scrapjob import ScrapJobSummaryInputDto, ScrapJobDetailInputDto
+from app.domain.scrap.dtos.scrapjob import ScrapJobSummaryInputDto, ScrapJobDetailInputDto
 from celery import Celery
 from fastapi import APIRouter, Depends, HTTPException, status
 from dependency_injector.wiring import inject, Provide
@@ -28,6 +28,7 @@ async def list_jobs_summaries(
     celery_client: Celery = Depends(Provide[ContainerService.celery_client]),
 ):
     try:
+        print("BROKER URL:", celery_client.conf.broker_url)
         task = celery_client.send_task(
             "extract_summaries",  # Nom exact de la tâche
             kwargs=input_dto.model_dump()
@@ -35,6 +36,7 @@ async def list_jobs_summaries(
         
         return {"task_id": task.id, "status": "pending"}
     except Exception as e:
+        print(e)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
         )
@@ -49,7 +51,7 @@ async def get_job_detail(
     try:
         task = celery_client.send_task(
             "extract_jobdetail",  # Nom exact de la tâche
-            kwargs=asdict(input_dto),
+            kwargs=input_dto.model_dump(),
         )
         
         return {"task_id": task.id, "status": "pending"}

@@ -8,7 +8,7 @@ from app.entrypoints.router import routeur_pipelines
 
 # Instancier et configurer le container
 endpoints: List[str] = [
-    "app.entrypoints.endpoint.pipelines",
+    "app.entrypoints.endpoint.scrap",
 ]
 container_service = ContainerService()
 # container_usecase = ContainerUseCase(container_service=container_service)
