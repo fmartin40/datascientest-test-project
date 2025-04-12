@@ -29,11 +29,11 @@ class Settings(BaseSettings):
 	CELERY_RESULT_BACKEND: str = "rpc://"
 
 	RABBITMQ_URL_LOCAL: str = "localhost"
-	RABBITMQ_URL_DOCKER: str 
+	RABBITMQ_URL_PROD: str 
 	RABBITMQ_DEFAULT_USER: str
 	RABBITMQ_DEFAULT_PASS: str
 
-	FASTAPI_WEBHOOK_URL: str = "http://localhost:8000/pipelines/webhook/scraping-result"
+	FASTAPI_WEBHOOK_URL: str = "http://scrap_api:8000/pipelines/webhook/scraping-result"
 	
 	@property
 	def POSTGRES_HOST(self):
@@ -45,7 +45,7 @@ class Settings(BaseSettings):
 
 	@property
 	def RABBITMQ_URL(self):
-		return self.RABBITMQ_URL_DOCKER if self.ENVIRONMENT == "prod" else self.RABBITMQ_URL_LOCAL
+		return self.RABBITMQ_URL_PROD if self.ENVIRONMENT == "prod" else self.RABBITMQ_URL_LOCAL
 
 
 settings = Settings()  # type: ignore

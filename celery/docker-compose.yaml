@@ -16,7 +16,9 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
-
+    networks:
+      - jobsearch_network
+    
   # flower:
   #   image: mher/flower
   #   command: ["python", "-m", "flower", "--broker=amqp://admin:admin@rabbitmq:5672//"]
@@ -40,8 +42,14 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - jobsearch_network
 
-  
+# Réseaux partagés (à créer au préalable via `docker network create jobsearch_network`)
+networks:
+  jobsearch_network:
+    external: true
+
 volumes:
   rabbitmq_data:
   logs:
