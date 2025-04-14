@@ -28,7 +28,6 @@ async def list_jobs_summaries(
     celery_client: Celery = Depends(Provide[ContainerService.celery_client]),
 ):
     try:
-        print("BROKER URL:", celery_client.conf.broker_url)
         task = celery_client.send_task(
             "extract_summaries",  # Nom exact de la tâche
             kwargs=input_dto.model_dump()
