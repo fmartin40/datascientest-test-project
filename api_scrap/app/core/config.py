@@ -11,6 +11,7 @@ class Settings(BaseSettings):
 	model_config = SettingsConfigDict(env_file=DOTENV, extra="ignore")
 	
 	CONFIG_FOLDER: str = "app/infrastructure/pipelines/pipeline_settings/files"
+	
 	# Détection de l'environnement (local ou docker)
 	ENVIRONMENT: str = "local"  # Valeur par défaut
 
@@ -33,8 +34,6 @@ class Settings(BaseSettings):
 	RABBITMQ_DEFAULT_USER: str
 	RABBITMQ_DEFAULT_PASS: str
 
-	FASTAPI_WEBHOOK_URL: str = "http://scrap_api:8000/pipelines/webhook/scraping-result"
-	
 	@property
 	def POSTGRES_HOST(self):
 		return self.POSTGRES_HOST_DOCKER if self.ENVIRONMENT == "prod" else self.POSTGRES_HOST_LOCAL

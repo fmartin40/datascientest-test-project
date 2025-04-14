@@ -1,0 +1,21 @@
+# version: "3.9"
+
+services:
+      
+  scrap_api:
+    build: .
+    container_name: api-scrap-jobmarket
+    ports:
+      - "8000:8000"
+    restart: always
+    env_file: ./app/.env
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    environment:
+      - ENVIRONMENT=prod
+    networks:
+      - jobsearch_network
+
+# Réseaux partagés (à créer au préalable via `docker network create jobsearch_network`)
+networks:
+  jobsearch_network:
+    external: true

@@ -6,17 +6,19 @@ services:
       context: .
       dockerfile: Dockerfile 
     container_name: celery
-    command: ["celery", "-A", "main", "worker", "--loglevel=INFO", "--logfile=/logs/worker.log"]
+    command: ["celery", "-A", "app.main", "worker", "--loglevel=INFO", "--logfile=/logs/worker.log"]
     volumes:
       # - .:/app
       - ./logs:/logs
-    env_file: .env
+    env_file: ./app/.env
     environment:
       - ENVIRONMENT=prod
     depends_on:
       rabbitmq:
         condition: service_healthy
-
+    networks:
+      - jobsearch_network
+    
   # flower:
   #   image: mher/flower
   #   command: ["python", "-m", "flower", "--broker=amqp://admin:admin@rabbitmq:5672//"]
@@ -31,7 +33,7 @@ services:
     ports:
       - "5672:5672"  # RabbitMQ
       - "15672:15672"  # Management interface
-    env_file: .env
+    env_file: ./app/.env
     restart: always
     logging:
       driver: "none"
@@ -40,8 +42,13 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - jobsearch_network
 
-  
+# Réseaux partagés (à créer au préalable via `docker network create jobsearch_network`)
+networks:
+  jobsearch_network:
+    external: true
 
 volumes:
   rabbitmq_data:
