@@ -1,5 +1,20 @@
 services:
-  
+  elastic_api:
+    build: .
+    container_name: elastic-api
+    ports:
+      - "8000:8000"
+    restart: always
+    depends_on:
+      - elasticsearch
+    env_file: ./app/.env
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    environment:
+      - ENVIRONMENT=prod
+    networks:
+      - jobsearch_network
+
+
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.7.1
     container_name: elasticsearch
@@ -8,6 +23,7 @@ services:
     ports:
       - "9200:9200"
     restart: always
+    env_file: ./app/.env
     environment:
       - xpack.security.enabled=false
       - discovery.type=single-node
@@ -15,7 +31,8 @@ services:
       memlock:
         soft: -1
         hard: -1
-    env_file: ./app/.env
+    networks:
+      - jobsearch_network
 
   kibana:
     depends_on:
@@ -27,39 +44,16 @@ services:
     ports:
       - "5601:5601"
     restart: always
-    environment:
-      - ELASTICSEARCH_USERNAME=admin
-      - ELASTICSEARCH_PASSWORD=MasterKeyData45
-
-  pgdatabase:
-    image: postgres:13
-    container_name: pgdatabase
-    environment:
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=job_market
-    volumes:
-      - job_market_data:/var/lib/postgresql/data
-      - ./initdb:/docker-entrypoint-initdb.d
-    ports:
-      - "5432:5432"
-
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin
-    volumes:
-      - data_pgadmin:/var/lib/pgadmin
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
-      - PGADMIN_DEFAULT_PASSWORD=root
-    ports:
-      - "8081:80"
+    env_file: ./app/.env
+    networks:
+      - jobsearch_network
 
 # ---------- VOLUMES ----------
 volumes:
-  airflow-postgres-db-volume:
-  job_market_data:
-  data_pgadmin:
   elasticsearch-data:
   kibana-data:
+
+networks:
+  jobsearch_network:
+    external: true
 

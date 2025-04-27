@@ -13,13 +13,14 @@ class Settings(BaseSettings):
 	
 	ENVIRONMENT:str # "local" ou "prod"
 
+	INDEX_JOBS: str = "jobs"
 	# Password for the 'elastic' user (at least 6 characters)
 	ELASTICSEARCH_USERNAME: str
-	ELASTIC_PASSWORD: str
+	ELASTICSEARCH_PASSWORD: str
 
-	ELASTIC_HOST_LOCAL: str
-	ELASTIC_HOST: str
-	ELASTIC_INDEX: str
+	ELASTICSEARCH_HOST_LOCAL: str
+	ELASTICSEARCH_HOST: str
+	ELASTICSEARCH_INDEX: str
 	ES_PORT: int
 
 	# Elastic settings
@@ -39,11 +40,12 @@ class Settings(BaseSettings):
 
 	
 	@property
-	def ELASTIC_HOST(self):
-		return self.ELASTIC_HOST if self.ENVIRONMENT == "prod" else self.ELASTIC_HOST_LOCAL
+	def ELASTICSEARCH_HOST(self):
+		return self.ELASTICSEARCH_HOST if self.ENVIRONMENT == "prod" else self.ELASTICSEARCH_HOST_LOCAL
 
 @lru_cache
 def get_settings():
 	return Settings()  # type: ignore
 
 settings = get_settings()  # type: ignore
+print(settings.ELASTICSEARCH_HOST)

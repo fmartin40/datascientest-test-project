@@ -1,5 +1,5 @@
 # ce docker-compose.override.yml est chargé par le run.sh avec le mode dev
-# il permet d'ajoute le volume app et derelancer le server à chaque modification --reload
+# il permet d'ajoute le volume app et de relancer le server à chaque modification --reload
 
 services:
   elastic_api:
