@@ -1,0 +1,65 @@
+services:
+  
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.7.1
+    container_name: elasticsearch
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    restart: always
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    env_file: ./app/.env
+
+  kibana:
+    depends_on:
+      - elasticsearch
+    image: docker.elastic.co/kibana/kibana:8.7.1
+    container_name: kibana
+    volumes:
+      - kibana-data:/usr/share/kibana/data
+    ports:
+      - "5601:5601"
+    restart: always
+    environment:
+      - ELASTICSEARCH_USERNAME=admin
+      - ELASTICSEARCH_PASSWORD=MasterKeyData45
+
+  pgdatabase:
+    image: postgres:13
+    container_name: pgdatabase
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=job_market
+    volumes:
+      - job_market_data:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    volumes:
+      - data_pgadmin:/var/lib/pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=root
+    ports:
+      - "8081:80"
+
+# ---------- VOLUMES ----------
+volumes:
+  airflow-postgres-db-volume:
+  job_market_data:
+  data_pgadmin:
+  elasticsearch-data:
+  kibana-data:
+
