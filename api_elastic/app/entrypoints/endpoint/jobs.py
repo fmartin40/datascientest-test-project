@@ -4,28 +4,18 @@ from app.domain.job.entities.jobs import Job
 from app.core.container import ContainerService
 from app.domain.job.interfaces.ijob_repository import IJobRepository
 
-router = APIRouter(tags=["jobs"])
 
-@router.get("/", response_model=list[Job])
+router = APIRouter()
+
+@router.get("/")
 @inject
 async def list_jobs(
     repo: IJobRepository = Depends(Provide[ContainerService.job_repository]),
 ):
     try:
-        return [Job(
-            job_id="1",
-            url="https://www.google.com",
-            website="google",
-            title="test",
-            company="test",
-            city="test",
-            postal_code=12345,
-            contract_type="test",
-            description="test"
-        )]
-
         return await repo.list()
     except Exception as e:
+        print(e)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
         )

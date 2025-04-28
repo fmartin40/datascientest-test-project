@@ -3,9 +3,11 @@ from app.core.config import settings
 
 
 def get_es_client():
-    client = AsyncElasticsearch(
-        hosts=f"{settings.ELASTICSEARCH_HOST}:{settings.ES_PORT}",
-        http_auth=(settings.ELASTICSEARCH_USERNAME, settings.ELASTICSEARCH_PASSWORD),
-        headers={"Content-Type": "application/json", "Accept": "application/json"}
-    )
-    return client
+    try:
+        return AsyncElasticsearch(
+            hosts= f"{settings.ELASTIC_HOST}:{settings.ES_PORT}",
+            basic_auth=(settings.ELASTIC_USERNAME, settings.ELASTIC_PASSWORD),
+        )
+    except Exception as e:
+        print(e)
+        raise e

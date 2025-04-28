@@ -7,6 +7,7 @@ from app.domain.job.interfaces.ijob_repository import IJobRepository
 class JobRepositoryElastic(IJobRepository):
     def __init__(self, es: AsyncElasticsearch):
         self.es = es
+        
         self.index = settings.INDEX_JOBS
 
     async def add(self, job: Job) -> None:

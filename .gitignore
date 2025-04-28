@@ -64,3 +64,4 @@ venv/
 data/
 #airflow
 logs/
+.fetch-client/

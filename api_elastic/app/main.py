@@ -21,10 +21,11 @@ async def lifespan(app: FastAPI):
     yield
     await es_client.close()
 
-app = FastAPI(lifespan=lifespan)
+
 app = FastAPI(
     title="Api façade pour Elastic Search",
     description="""""",
+    # lifespan=lifespan
 )
 
 app.include_router(routeur_job)
@@ -51,6 +52,3 @@ async def get_routes():
             })
     return routes_info
 
-
-if __name__ == "__main__":
-    uvicorn.run("main:app", host="127.0.0.1", reload=True, port=8080)
