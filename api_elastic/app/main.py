@@ -1,8 +1,5 @@
 from typing import Dict, List
 from fastapi import FastAPI
-import uvicorn
-from contextlib import asynccontextmanager
-from elasticsearch import AsyncElasticsearch
 from app.core.container import ContainerService
 from app.entrypoints.router import routeur_job   
 
@@ -13,13 +10,13 @@ endpoints: List[str] = [
 ]
 container_service = ContainerService()
 container_service.wire(modules=endpoints)
-es_client = container_service.es_client()
+# es_client = container_service.es_client()
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    await container_service.init_resources()
-    yield
-    await es_client.close()
+# @asynccontextmanager
+# async def lifespan(app: FastAPI):
+#     await container_service.init_resources()
+#     yield
+#     await es_client.close()
 
 
 app = FastAPI(

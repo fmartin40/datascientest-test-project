@@ -16,17 +16,18 @@ class Settings(BaseSettings):
 	ENVIRONMENT:str ="local"  # "local" ou "prod"
 
 	INDEX_JOBS: str = "jobs"
-	# Password for the 'elastic' user (at least 6 characters)
 	ELASTIC_USERNAME: str
 	ELASTIC_PASSWORD: str
 
 	ELASTIC_HOST_LOCAL: str = "http://localhost"
+	ELASTIC_HOST_PROD: str  # Nouvelle variable pour l'environnement de production
+	
 	ELASTIC_INDEX: str
 	ES_PORT: int
 
 	@property
 	def ELASTIC_HOST(self):
-		return self.ELASTIC_HOST if self.ENVIRONMENT == "prod" else self.ELASTIC_HOST_LOCAL
+		return self.ELASTIC_HOST_PROD if self.ENVIRONMENT == "prod" else self.ELASTIC_HOST_LOCAL
 
 @lru_cache
 def get_settings():
