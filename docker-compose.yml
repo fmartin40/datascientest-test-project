@@ -164,7 +164,6 @@ services:
     depends_on:
       - celery
       - rabbitmq
-      - flower-scrap
       - pgdatabase
       - api-elastic
     env_file: .env
@@ -196,8 +195,7 @@ services:
     ports:
       - "5556:5555"
     depends_on:
-      rabbitmq:
-        condition: service_healthy
+      - celery
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -207,11 +205,11 @@ services:
       - "15672:15672"  # Management interface
     env_file: .env
     restart: always
-    logging:
-      driver: "none"
+    # logging:
+    #   driver: "none"
     healthcheck:
       test: ["CMD", "rabbitmqctl", "status"]
-      interval: 10s
+      interval: 5s
       timeout: 5s
       retries: 5
     
@@ -225,7 +223,6 @@ services:
       - "${API_ELASTIC_PORT}:${API_ELASTIC_PORT}"
     restart: always
     depends_on:
-      - kibana
       - elasticsearch
     env_file: .env
     command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "${API_ELASTIC_PORT}"]
@@ -241,6 +238,8 @@ services:
       - "9200:9200"
     restart: always
     env_file: .env
+    depends_on:
+      - elasticsearch
     environment:
       - discovery.type=single-node
       - ELASTIC_USERNAME=${ELASTIC_USERNAME}
@@ -251,8 +250,6 @@ services:
         hard: -1
     
   kibana:
-    depends_on:
-      - elasticsearch
     image: docker.elastic.co/kibana/kibana:8.18.0
     container_name: kibana
     volumes:
@@ -261,6 +258,8 @@ services:
       - "5601:5601"
     restart: always
     env_file: .env
+    depends_on:
+      - elasticsearch
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
       - ELASTICSEARCH_USERNAME=${KIBANA_USERNAME}
