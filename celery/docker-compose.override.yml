@@ -1,0 +1,15 @@
+services:
+
+  flower:
+    image: mher/flower
+    container_name: flower
+    env_file: .env
+    environment:
+      - CELERY_BROKER_URL=amqp://admin:admin@rabbitmq:5672//
+    ports:
+      - "5555:5555"
+    depends_on:
+      - rabbitmq
+    networks:
+      - jobsearch_network
+

@@ -4,12 +4,12 @@ services:
     build: .
     container_name: elastic-api
     ports:
-      - "8001:8001"
+      - "${API_ELASTIC_PORT}:${API_ELASTIC_PORT}"
     restart: always
     depends_on:
       - elasticsearch
     env_file: .env
-    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8001"]
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "${API_ELASTIC_PORT}"]
     environment:
       - ENVIRONMENT=prod
     # networks:

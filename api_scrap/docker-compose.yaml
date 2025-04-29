@@ -2,20 +2,34 @@
 
 services:
       
-  scrap_api:
+  api_scrap:
     build: .
-    container_name: api-scrap-jobmarket
+    container_name: api-scrap
     ports:
-      - "8000:8000"
+      - "${API_SCRAP_PORT}:${API_SCRAP_PORT}"
     restart: always
-    env_file: ./app/.env
-    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    env_file: .env
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "${API_SCRAP_PORT}"]
     environment:
       - ENVIRONMENT=prod
     networks:
       - jobsearch_network
 
-# Réseaux partagés (à créer au préalable via `docker network create jobsearch_network`)
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 30s
+      retries: 50
+    restart: always
+    networks:
+      - jobsearch_network
+
 networks:
   jobsearch_network:
     external: true
+    name: jobsearch_network
+

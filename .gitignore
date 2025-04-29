@@ -64,4 +64,6 @@ venv/
 data/
 #airflow
 logs/
+logs_flower/        
 .fetch-client/
+.env

@@ -1,24 +1,11 @@
-from dataclasses import asdict
-from typing import Any, Dict
-from app.domain.scrap.dtos.scrapjob import ScrapJobSummaryInputDto, ScrapJobDetailInputDto
+from app.domain.profile.dtos.scrapjob import ScrapJobSummaryInputDto, ScrapJobDetailInputDto
 from celery import Celery
 from fastapi import APIRouter, Depends, HTTPException, status
 from dependency_injector.wiring import inject, Provide
-from pydantic import BaseModel
 
 from app.core.container_service import ContainerService
 
 router = APIRouter()
-
-# Une simple base de données en mémoire pour stocker les résultats
-# Dans un cas réel, vous utiliseriez une base de données persistante
-scraping_results = {}
-
-
-class ScrapingResult(BaseModel):
-    task_id: str
-    status: str
-    data: Dict[str, Any]
 
 
 @router.post("/jobs/summaries")

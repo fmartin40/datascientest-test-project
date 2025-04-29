@@ -1,8 +1,10 @@
 from abc import ABC, abstractmethod
+from typing import List, Optional
+from app.workers.common.entities.jobs import JobSummary, JobDetail
 
 class IExtractor(ABC):
     @abstractmethod
-    async def extract(self, *args, **kwargs) -> str:
+    async def extract(self, *args, **kwargs) -> List[JobSummary]|JobDetail:
         raise NotImplementedError
     
     

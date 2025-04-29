@@ -2,6 +2,7 @@ from dependency_injector import containers, providers
 # from app.infrastructure.orchestration.celery.server import get_celery_client
 from app.core.config import settings
 from celery import Celery
+from app.infrastructure.redis.job_redis import RedisLoader
 
 class ContainerService(containers.DeclarativeContainer):
 	config = providers.Configuration()
@@ -14,6 +15,9 @@ class ContainerService(containers.DeclarativeContainer):
         backend="rpc://"
     )
 
+	job_repo = providers.Singleton(
+        RedisLoader,
+    )
 	
 	
 	

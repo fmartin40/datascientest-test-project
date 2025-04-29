@@ -1,6 +1,7 @@
 from typing import List
 from itertools import chain
 import urllib.parse
+import asyncio
 
 from bs4 import BeautifulSoup
 from app.infrastructure.pipelines.extract.fetchurl import FetchUrl
@@ -18,14 +19,14 @@ class JobSummaryHTMLExtractor(IExtractor):
 	async def extract(self, query: str, location: str, loop: int) -> List[JobSummary]:
 		try:
 			content = await self._fetch(query=query, location=location, loop=loop)
-			soup = BeautifulSoup(content, "html.parser")
+			soup = BeautifulSoup(content, "html.parser") # type: ignore
 			summaries: List[JobSummary] = []
 			
 			for selector in self.parser.selectors.values():
 				elements = soup.select(selector)
 				
 				for el in elements:
-					href = el.get("href")
+					href:str = el.get("href") # type: ignore
 					if href:
 						summaries.append(
 							JobSummary(
@@ -44,23 +45,28 @@ class JobSummaryHTMLExtractor(IExtractor):
 		request_url: str = self.website_info.request_url
 		query = query.replace(" ", self.website_info.query_space_replacement)
 
-		if loop == 1:
-			url = request_url.format(query=query, location=location)
-			url = urllib.parse.urljoin(self.website_info.root_url, url)
-			content = await self.fetch.fetch(url)
-		else:
-			urls = []
-			for i in range(2, loop + 1):
-				paginated_url = request_url.format(query=query, location=location)
-				paginated_url += f"&{self.parser.pagination}={i}"
-				paginated_url = urllib.parse.urljoin(
-					self.website_info.root_url, paginated_url
-				)
-				urls.append(paginated_url)
+		try:
+			if loop == 1:
+				url = request_url.format(query=query, location=location)
+				url = urllib.parse.urljoin(self.website_info.root_url, url)
+				content = await self.fetch.fetch(url)
+			else:
+				urls = []
+				for i in range(2, loop + 1):
+					paginated_url = request_url.format(query=query, location=location)
+					paginated_url += f"&{self.parser.pagination}={i}"
+					paginated_url = urllib.parse.urljoin(
+						self.website_info.root_url, paginated_url
+					)
+					urls.append(paginated_url)
 
-			contents = await self.fetch.multi_fetch(urls)
-			content = list(chain.from_iterable(contents))
-		return content
+				contents = await self.fetch.multi_fetch(urls)
+				content = list(chain.from_iterable(contents))
+			return content
+		except asyncio.TimeoutError:
+			raise Exception(f"Timeout lors de la requête pour query={query}, location={location}")
+		except Exception as e:
+			raise Exception(f"Erreur lors du fetch: {str(e)}")
 
 
 class JobSummaryJSONExtractor(IExtractor):

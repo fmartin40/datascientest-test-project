@@ -1,13 +1,3 @@
-from celery import Celery
-from app.core.config import settings
+from app.celery_app import celery_client
 
-print('go')
-broker_url = f"amqp://{settings.RABBITMQ_DEFAULT_USER}:{settings.RABBITMQ_DEFAULT_PASS}@{settings.RABBITMQ_URL}:5672//"
-
-celery_client = Celery(
-    "jobmarket",
-    broker=broker_url,
-    backend='rpc://'
-)
-
-celery_client.autodiscover_tasks(["app.workers.scrap","app.workers.test"])
+celery_client.autodiscover_tasks(["app.workers.scrap","app.workers.test.summaries","app.workers.test.detail" ])

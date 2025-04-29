@@ -1,11 +1,10 @@
 from typing import List
-from app.workers.common.entities.jobs import JobDetail
 from app.workers.common.entities.settings import (
 	ParserSettings,
 	WebsiteInfo,
 	WebsiteSettings,
 )
-
+from app.workers.common.entities.jobs import JobSummary, JobDetail
 from app.workers.common.interfaces.itransformer import ITransformer
 from app.infrastructure.pipelines.extract.extractor_factory import ExtractorsFactory
 from app.infrastructure.pipelines.transform.transformer_factory import TransformesrsFactory
@@ -23,17 +22,17 @@ class ScraperServices:
 		transformer = next(parser for parser in self.parsers if parser.role == "transformer")
 		self.transformer: ITransformer = TransformesrsFactory.provide(website_info=self.website_info, parser=transformer)
 
-	async def extract_summarize(self, query: str, location:str, loop: int) -> str:
+	async def extract_summarize(self, query: str, location:str, loop: int) -> List[JobSummary]:
 		try:
 			print("Extractor summary: ", self.summary_extractor.__class__.__name__)
-			return await self.summary_extractor.extract(query=query, location=location, loop=loop)
+			return await self.summary_extractor.extract(query=query, location=location, loop=loop) # type: ignore
 		except Exception as exc:
 			print('get_summary_transformer : ', exc)
 			raise
 	
-	async def extract_detail(self, url: str) -> str:
+	async def extract_detail(self, url: str) -> List[JobDetail]:
 		print("Extractor detail : ", self.summary_extractor.__class__.__name__)
-		return await self.detail_extractor.extract(url=url)
+		return await self.detail_extractor.extract(url=url) # type: ignore
 
 	async def transform(self, jobdetail: JobDetail):
 		print("Transformer : ", self.transformer.__class__.__name__)

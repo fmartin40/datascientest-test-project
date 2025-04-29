@@ -9,5 +9,6 @@ dependencies = [
     "dependency-injector>=4.46.0",
     "fastapi>=0.115.12",
     "pydantic-settings>=2.8.1",
+    "redis>=5.2.1",
     "uvicorn>=0.34.0",
 ]
