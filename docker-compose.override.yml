@@ -1,7 +1,20 @@
 services:
 
+  api_scrap:
+    build: ./api_scrap/.
+    container_name: api-scrap
+    ports:
+      - "8000:8000"
+    restart: always
+    env_file: .env
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    environment:
+      - ENVIRONMENT=prod
+    # networks:
+    #   - jobsearch_network
+
   api_elastic:
-    build: .
+    build: ./api_elastic/.
     container_name: elastic-api
     ports:
       - "8001:8001"
@@ -56,13 +69,3 @@ services:
 
     # networks:
     #   - jobsearch_network
-
-# ---------- VOLUMES ----------
-volumes:
-  elasticsearch-data:
-  kibana-data:
-
-# networks:
-#   jobsearch_network:
-#     # external: true
-

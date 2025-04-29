@@ -3,29 +3,17 @@ from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-ROOT_DIR = Path(__file__).parent.parent
+ROOT_DIR = Path(__file__).parent.parent.parent
 DOTENV = os.path.join(ROOT_DIR, '.env')
 
 
 class Settings(BaseSettings):
-	model_config = SettingsConfigDict(env_file=DOTENV, extra="ignore")
+	model_config = SettingsConfigDict(env_file=DOTENV, extra="allow")
 	
 	CONFIG_FOLDER: str = "app/infrastructure/pipelines/pipeline_settings/files"
 	
 	# Détection de l'environnement (local ou docker)
 	ENVIRONMENT: str = "local"  # Valeur par défaut
-
-	# Base de données (choix automatique selon l'environnement)
-	POSTGRES_USER: str
-	POSTGRES_PASSWORD: str
-	POSTGRES_DB: str
-	POSTGRES_HOST_LOCAL: str 
-	POSTGRES_HOST_DOCKER: str 
-
-	# Elasticsearch (choix automatique selon l'environnement)
-	ELASTIC_HOST_LOCAL: str = "http://127.0.0.1:9200"
-	ELASTIC_HOST_DOCKER: str = "http://elasticsearch:9200"
-	ELASTIC_INDEX: str = "jobs"
 
 	CELERY_RESULT_BACKEND: str = "rpc://"
 
