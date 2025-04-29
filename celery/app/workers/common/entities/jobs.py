@@ -1,25 +1,16 @@
 
-from typing import List
+from typing import Dict, List
 from pydantic import BaseModel
 
 class Job(BaseModel):
 	url: str 
 	website: str
 
-	model_config = {
-        "extra": "ignore"  # ignore les clés inattendues
-    }
 
 class JobSummary(Job):
-	pass
+	url: str 
+	website: str
 
-
-class JobDetailInfos(BaseModel):
-	pass
-
-	model_config = {
-        "extra": "ignore"  # ignore les clés inattendues
-    }
 
 class JobDetail(Job):
 	job_id: str
@@ -29,4 +20,7 @@ class JobDetail(Job):
 	postal_code: int
 	contract_type:str|List[str]
 	description: str
-	infos: JobDetailInfos | None = None
+	infos: Dict | None = None
+
+class JobDetailInfos(BaseModel):
+	pass

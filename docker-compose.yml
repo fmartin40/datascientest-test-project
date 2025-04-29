@@ -91,17 +91,6 @@ services:
       retries: 5
     restart: always
 
-  redis:
-    image: redis:latest
-    ports:
-      - 6379:6379
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 30s
-      retries: 50
-    restart: always
-
   airflow-webserver:
     <<: *airflow-common
     command: webserver
@@ -162,54 +151,126 @@ services:
       retries: 5
     restart: always
 
-  fastapi_app:
-    build: .
-    container_name: fastapi-jobmarket
+# --------------------  
+#       API SCRAP 
+#  -------------------
+
+  api-scrap:
+    build: ./api_scrap/.
+    container_name: api-scrap
     ports:
-      - "8000:8000"
+      - "${API_SCRAP_PORT}:${API_SCRAP_PORT}"
     restart: always
     depends_on:
+      - celery
+      - rabbitmq
+      - flower-scrap
       - pgdatabase
-      - elasticsearch
+      - api-elastic
+    env_file: .env
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8001"]
     environment:
-      - ENVIRONMENT=docker
-      # - DATABASE_URL=${DATABASE_URL}
-      # - ELASTICSEARCH_URL=${ELASTICSEARCH_URL}
-    # volumes:
-    #   - .:/app
+      - ENVIRONMENT=prod
+    
+  celery:
+    build:
+      context: ./celery/.
+      dockerfile: Dockerfile 
+    container_name: celery
+    command: ["celery", "-A", "app.main", "worker", "--loglevel=INFO", "--logfile=/logs/worker.log"]
+    volumes:
+      - ./logs:/logs
+    env_file: .env
+    environment:
+      - ENVIRONMENT=prod
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    
+  flower-scrap:
+    image: mher/flower
+    container_name: flower-scrap
+    env_file: .env
+    environment:
+      - CELERY_BROKER_URL=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@${RABBITMQ_URL_PROD}:5672//
+    ports:
+      - "5556:5555"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"  # RabbitMQ
+      - "15672:15672"  # Management interface
+    env_file: .env
+    restart: always
+    logging:
+      driver: "none"
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    
+# ---------------------------------------  
+#       Base de données ElasticSearch 
+# ---------------------------------------
+  api-elastic:
+    build: ./api_elastic/.
+    container_name: api-elastic
+    ports:
+      - "${API_ELASTIC_PORT}:${API_ELASTIC_PORT}"
+    restart: always
+    depends_on:
+      - kibana
+      - elasticsearch
+    env_file: .env
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "${API_ELASTIC_PORT}"]
+    environment:
+      - ENVIRONMENT=prod
+    
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.7.1
+    image: docker.elastic.co/elasticsearch/elasticsearch-wolfi:9.0.0
     container_name: elasticsearch
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
     ports:
       - "9200:9200"
     restart: always
+    env_file: .env
     environment:
-      - xpack.security.enabled=false
       - discovery.type=single-node
-      - ELASTICSEARCH_USERNAME=admin
-      - ELASTICSEARCH_PASSWORD=MasterKeyData45
+      - ELASTIC_USERNAME=${ELASTIC_USERNAME}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
     ulimits:
       memlock:
         soft: -1
         hard: -1
-
+    
   kibana:
     depends_on:
       - elasticsearch
-    image: docker.elastic.co/kibana/kibana:8.7.1
+    image: docker.elastic.co/kibana/kibana:8.18.0
     container_name: kibana
     volumes:
       - kibana-data:/usr/share/kibana/data
     ports:
       - "5601:5601"
     restart: always
+    env_file: .env
     environment:
-      - ELASTICSEARCH_USERNAME=admin
-      - ELASTICSEARCH_PASSWORD=MasterKeyData45
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=${KIBANA_USERNAME}
+      - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
+      - SERVER_PUBLICBASEURL=http://localhost:5601
+      - SERVER_NAME=kibana.local
 
+# ---------------------------------------  
+#       Base de données PostgreSQL 
+# ---------------------------------------
   pgdatabase:
     image: postgres:13
     container_name: pgdatabase
@@ -234,6 +295,18 @@ services:
     ports:
       - "8081:80"
 
+
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 30s
+      retries: 50
+    restart: always
+
 # ---------- VOLUMES ----------
 volumes:
   airflow-postgres-db-volume:
@@ -241,4 +314,11 @@ volumes:
   data_pgadmin:
   elasticsearch-data:
   kibana-data:
+  rabbitmq_data:
+  logs:
+
+
+# networks:
+#   jobsearch_network:
+#     driver: bridge
 
