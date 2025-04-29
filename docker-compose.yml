@@ -175,8 +175,8 @@ services:
       - ENVIRONMENT=docker
       # - DATABASE_URL=${DATABASE_URL}
       # - ELASTICSEARCH_URL=${ELASTICSEARCH_URL}
-    volumes:
-      - .:/app
+    # volumes:
+    #   - .:/app
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.7.1
