@@ -1,4 +1,3 @@
-# version: "3.9"
 
 services:
 
@@ -10,12 +9,11 @@ services:
     command: ["celery", "-A", "app.main", "worker", "--loglevel=INFO", "--logfile=/logs/worker.log"]
     volumes:
       - ./logs:/logs
+      - ./app:/app/app
     env_file: .env
     environment:
       - ENVIRONMENT=prod
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
+    
     networks:
       - jobsearch_network
 
@@ -48,6 +46,21 @@ services:
     restart: always
     networks:
       - jobsearch_network
+
+  flower-scrap:
+      image: mher/flower
+      container_name: flower-scrap
+      env_file: .env
+      environment:
+        - CELERY_BROKER_URL=amqp://admin:admin@rabbitmq:5672//
+      ports:
+        - "5555:5555"
+      depends_on:
+        - rabbitmq
+      networks:
+        - jobsearch_network
+
+
 
 volumes:
   rabbitmq_data:

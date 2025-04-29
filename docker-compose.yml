@@ -166,10 +166,14 @@ services:
       - rabbitmq
       - pgdatabase
       - api-elastic
+      - redis
     env_file: .env
     command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8001"]
     environment:
       - ENVIRONMENT=prod
+    networks:
+      - jobsearch_network 
+    
     
   celery:
     build:
@@ -185,6 +189,11 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - jobsearch_network 
+    
     
   flower-scrap:
     image: mher/flower
@@ -195,7 +204,13 @@ services:
     ports:
       - "5556:5555"
     depends_on:
-      - celery
+      celery: 
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - jobsearch_network 
+    
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -212,6 +227,9 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - jobsearch_network 
+    
     
 # ---------------------------------------  
 #       Base de données ElasticSearch 
@@ -223,11 +241,15 @@ services:
       - "${API_ELASTIC_PORT}:${API_ELASTIC_PORT}"
     restart: always
     depends_on:
-      - elasticsearch
+      elasticsearch:
+        condition: service_started
     env_file: .env
     command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "${API_ELASTIC_PORT}"]
     environment:
       - ENVIRONMENT=prod
+    networks:
+      - jobsearch_network 
+    
     
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-wolfi:9.0.0
@@ -238,8 +260,6 @@ services:
       - "9200:9200"
     restart: always
     env_file: .env
-    depends_on:
-      - elasticsearch
     environment:
       - discovery.type=single-node
       - ELASTIC_USERNAME=${ELASTIC_USERNAME}
@@ -248,6 +268,9 @@ services:
       memlock:
         soft: -1
         hard: -1
+    networks:
+      - jobsearch_network 
+    
     
   kibana:
     image: docker.elastic.co/kibana/kibana:8.18.0
@@ -266,6 +289,9 @@ services:
       - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
       - SERVER_PUBLICBASEURL=http://localhost:5601
       - SERVER_NAME=kibana.local
+    networks:
+      - jobsearch_network 
+    
 
 # ---------------------------------------  
 #       Base de données PostgreSQL 
@@ -282,6 +308,9 @@ services:
       - ./initdb:/docker-entrypoint-initdb.d
     ports:
       - "5432:5432"
+    networks:
+      - jobsearch_network 
+      
 
   pgadmin:
     image: dpage/pgadmin4
@@ -293,10 +322,14 @@ services:
       - PGADMIN_DEFAULT_PASSWORD=root
     ports:
       - "8081:80"
+    networks:
+      - jobsearch_network 
+    
 
 
   redis:
     image: redis:latest
+    container_name: redis
     ports:
       - 6379:6379
     healthcheck:
@@ -305,6 +338,8 @@ services:
       timeout: 30s
       retries: 50
     restart: always
+    networks:
+      - jobsearch_network 
 
 # ---------- VOLUMES ----------
 volumes:
@@ -317,7 +352,9 @@ volumes:
   logs:
 
 
-# networks:
-#   jobsearch_network:
-#     driver: bridge
+networks:
+  jobsearch_network:
+    external: true
+    name: jobsearch_network
+
 
