@@ -1,12 +1,12 @@
 from typing import List
-from app.workers.pipelines.entities.jobs import JobDetail
-from app.workers.pipelines.entities.settings import (
+from app.workers.common.entities.jobs import JobDetail
+from app.workers.common.entities.settings import (
 	ParserSettings,
 	WebsiteInfo,
 	WebsiteSettings,
 )
 
-from app.workers.pipelines.interfaces.itransformer import ITransformer
+from app.workers.common.interfaces.itransformer import ITransformer
 from app.infrastructure.pipelines.extract.extractor_factory import ExtractorsFactory
 from app.infrastructure.pipelines.transform.transformer_factory import TransformesrsFactory
 

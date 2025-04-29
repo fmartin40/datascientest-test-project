@@ -8,7 +8,7 @@ from pydantic import BaseModel
 
 from app.core.container_service import ContainerService
 
-router = APIRouter(prefix="/pipelines", tags=["Pipelines de scrap"])
+router = APIRouter()
 
 # Une simple base de données en mémoire pour stocker les résultats
 # Dans un cas réel, vous utiliseriez une base de données persistante
@@ -21,16 +21,15 @@ class ScrapingResult(BaseModel):
     data: Dict[str, Any]
 
 
-@router.post("/jobs/summaries")
+@router.post("/test/summaries")
 @inject
 async def list_jobs_summaries(
     input_dto: ScrapJobSummaryInputDto,
     celery_client: Celery = Depends(Provide[ContainerService.celery_client]),
 ):
     try:
-        print("BROKER URL:", celery_client.conf.broker_url)
         task = celery_client.send_task(
-            "extract_summaries",  # Nom exact de la tâche
+            "test_extract_summaries",  # Nom exact de la tâche
             kwargs=input_dto.model_dump()
         )
         
@@ -42,7 +41,7 @@ async def list_jobs_summaries(
         )
 
 
-@router.post("/jobs/detail")
+@router.post("/test/detail")
 @inject
 async def get_job_detail(
     input_dto: ScrapJobDetailInputDto,
@@ -50,7 +49,7 @@ async def get_job_detail(
 ):
     try:
         task = celery_client.send_task(
-            "extract_jobdetail",  # Nom exact de la tâche
+            "test_extract_jobdetail",  # Nom exact de la tâche
             kwargs=input_dto.model_dump(),
         )
         
@@ -61,22 +60,13 @@ async def get_job_detail(
         )
 
 
-@router.post("/jobs/process")
-@inject
-async def process_jobs_extraction(
-    input_dto: ScrapJobSummaryInputDto,
-    container_service: ContainerService = Depends(Provide[ContainerService]),
-):
-    pass
-
-
-@router.post("/webhook/scraping-result")
+@router.post("/test/scraping-result")
 async def scraping_webhook(result: ScrapingResult):
     scraping_results[result.task_id] = result.model_dump()
     return {"status": "received"}
 
 
-@router.get("/get-result/{task_id}")
+@router.get("/test/get-result/{task_id}")
 async def get_result(task_id: str):
     if task_id in scraping_results:
         return scraping_results[task_id]

@@ -1,7 +1,7 @@
 import asyncio
 from typing import List
 from app.core.container_service import ContainerService
-from app.workers.pipelines.entities.jobs import JobDetail, JobSummary
+from app.workers.common.entities.jobs import JobDetail, JobSummary
 from app.main import celery_client
 import requests
 from app.core.config import settings
@@ -9,7 +9,7 @@ from app.core.config import settings
 container_service = ContainerService()
 
 
-@celery_client.task(name="extract_summaries")
+@celery_client.task(name="test_extract_summaries")
 def extract_summaries(website: str, query: str, location: str, loop: int = 1):
     try:
         summaries: List[JobSummary] = asyncio.run(
@@ -62,7 +62,7 @@ def extract_summaries(website: str, query: str, location: str, loop: int = 1):
         raise
 
 
-@celery_client.task(name="extract_jobdetail")
+@celery_client.task(name="test_extract_jobdetail")
 def extract_jobdetail(url: str, website: str):
     try:
         jobdetail: JobDetail = asyncio.run(

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List
-from app.workers.pipelines.entities.jobs import Job
+from app.workers.common.entities.jobs import Job
 
 class ILoader(ABC):
     

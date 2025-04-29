@@ -1,7 +1,7 @@
 from typing import List
 
-from app.workers.pipelines.entities.jobs import Job
-from app.workers.pipelines.interfaces.iloader import ILoader
+from app.workers.common.entities.jobs import Job
+from app.workers.common.interfaces.iloader import ILoader
 
 # ----------------------------------------------------
 #               Fake db dans un json 

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from app.workers.pipelines.entities.jobs import JobDetail
+from app.workers.common.entities.jobs import JobDetail
 
 class ITransformer(ABC):
     @abstractmethod

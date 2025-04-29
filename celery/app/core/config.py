@@ -33,7 +33,7 @@ class Settings(BaseSettings):
 	RABBITMQ_DEFAULT_USER: str
 	RABBITMQ_DEFAULT_PASS: str
 
-	FASTAPI_WEBHOOK_URL: str = "http://scrap_api:8000/pipelines/webhook/scraping-result"
+	FASTAPI_WEBHOOK_URL: str = "http://scrap_api:8000/profile/test/scraping-result"
 	
 	@property
 	def POSTGRES_HOST(self):

@@ -1,28 +1,32 @@
 from typing import Dict, List
 from fastapi import FastAPI
-import uvicorn
-
-from app.core.container_service import ContainerService
-from app.entrypoints.router import routeur_scrap, routeur_profile   
+from app.core.container import ContainerService
+from app.entrypoints.router import routeur_job   
 
 
 # Instancier et configurer le container
 endpoints: List[str] = [
-    "app.entrypoints.endpoint.scrap",
-    "app.entrypoints.endpoint.profile",
+    "app.entrypoints.endpoint.jobs"
 ]
 container_service = ContainerService()
-# container_usecase = ContainerUseCase(container_service=container_service)
 container_service.wire(modules=endpoints)
+# es_client = container_service.es_client()
+
+# @asynccontextmanager
+# async def lifespan(app: FastAPI):
+#     await container_service.init_resources()
+#     yield
+#     await es_client.close()
+
 
 app = FastAPI(
-    title="Job Market",
+    title="Api façade pour Elastic Search",
     description="""""",
+    # lifespan=lifespan
 )
 
-# app.include_router(routeur_search)
-app.include_router(routeur_scrap)
-app.include_router(routeur_profile)
+app.include_router(routeur_job)
+
 
 
 # healthcheck dans le dockerfile
@@ -45,6 +49,3 @@ async def get_routes():
             })
     return routes_info
 
-
-if __name__ == "__main__":
-    uvicorn.run("main:app", host="127.0.0.1", reload=True, port=8080)

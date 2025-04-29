@@ -2,9 +2,9 @@ import json
 from typing import List, Dict, Union
 from glom import glom
 from bs4 import BeautifulSoup
-from app.workers.pipelines.entities.jobs import JobDetail
-from app.workers.pipelines.entities.settings import ParserSettings, WebsiteInfo
-from app.workers.pipelines.interfaces.iextractor import IExtractor
+from app.workers.common.entities.jobs import JobDetail
+from app.workers.common.entities.settings import ParserSettings, WebsiteInfo
+from app.workers.common.interfaces.iextractor import IExtractor
 from app.infrastructure.pipelines.extract.fetchurl import FetchUrl
 
 
