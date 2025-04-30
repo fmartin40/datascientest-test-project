@@ -18,8 +18,6 @@ services:
       - redis
     env_file: .env
     command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8001"]
-    environment:
-      - ENVIRONMENT=prod
     networks:
       - jobsearch_network 
     
@@ -33,8 +31,6 @@ services:
     volumes:
       - ./logs:/logs
     env_file: .env
-    environment:
-      - ENVIRONMENT=prod
     depends_on:
       rabbitmq:
         condition: service_healthy
