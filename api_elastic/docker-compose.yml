@@ -1,68 +1,45 @@
 services:
 
-  api_elastic:
+  api-elastic:
     build: .
-    container_name: elastic-api
+    container_name: api-elastic
+    env_file: .env
     ports:
       - "${API_ELASTIC_PORT}:${API_ELASTIC_PORT}"
     restart: always
-    depends_on:
-      - elasticsearch
-    env_file: .env
-    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "${API_ELASTIC_PORT}"]
+    volumes:
+      - ./app:/app/app
+    command: ["uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "${API_ELASTIC_PORT}"]
+    
     environment:
       - ENVIRONMENT=prod
-    # networks:
-    #   - jobsearch_network
+    networks:
+      - jobsearch_network
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-wolfi:9.0.0
     container_name: elasticsearch
     volumes:
-      - elasticsearch-data:/usr/share/elasticsearch/data
+      - elasticsearch_data:/usr/share/elasticsearch/data
     ports:
-      - "9200:9200"
+      - "${API_ELASTIC_PORT}:${API_ELASTIC_PORT}"
     restart: always
     env_file: .env
     environment:
       - discovery.type=single-node
       - ELASTIC_USERNAME=${ELASTIC_USERNAME}
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-
     ulimits:
       memlock:
         soft: -1
         hard: -1
-    # networks:
-    #   - jobsearch_network
+    networks:
+      - jobsearch_network 
 
-  kibana:
-    depends_on:
-      - elasticsearch
-    image: docker.elastic.co/kibana/kibana:8.18.0
-    container_name: kibana
-    volumes:
-      - kibana-data:/usr/share/kibana/data
-    ports:
-      - "5601:5601"
-    restart: always
-    env_file: .env
-    environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-      - ELASTICSEARCH_USERNAME=${KIBANA_USERNAME}
-      - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
-      - SERVER_PUBLICBASEURL=http://localhost:5601
-      - SERVER_NAME=kibana.local
-
-    # networks:
-    #   - jobsearch_network
-
-# ---------- VOLUMES ----------
 volumes:
-  elasticsearch-data:
-  kibana-data:
-
-# networks:
-#   jobsearch_network:
-#     # external: true
+  elasticsearch_data:
+  
+networks:
+  jobsearch_network:
+    external: true
 

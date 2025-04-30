@@ -1,0 +1,119 @@
+
+
+services:
+  
+    
+# ---------------------------------------  
+#       Base de données ElasticSearch 
+# ---------------------------------------
+  api-elastic:
+    build: ./api_elastic/.
+    container_name: api-elastic
+    ports:
+      - "${API_ELASTIC_PORT}:${API_ELASTIC_PORT}"
+    restart: always
+    depends_on:
+      elasticsearch:
+        condition: service_started
+    env_file: .env
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "${API_ELASTIC_PORT}"]
+    environment:
+      - ENVIRONMENT=prod
+    networks:
+      - jobsearch_network 
+    
+    
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch-wolfi:9.0.0
+    container_name: elasticsearch
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    restart: always
+    env_file: .env
+    environment:
+      - discovery.type=single-node
+      - ELASTIC_USERNAME=${ELASTIC_USERNAME}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    networks:
+      - jobsearch_network 
+    
+    
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.18.0
+    container_name: kibana
+    volumes:
+      - kibana_data:/usr/share/kibana/data
+    ports:
+      - "5601:5601"
+    restart: always
+    env_file: .env
+    depends_on:
+      elasticsearch:
+        condition: service_started
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=${KIBANA_USERNAME}
+      - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
+      - SERVER_PUBLICBASEURL=http://localhost:5601
+      - SERVER_NAME=kibana.local
+    networks:
+      - jobsearch_network 
+    
+
+# ---------------------------------------  
+#       Base de données PostgreSQL 
+# ---------------------------------------
+  pgdatabase:
+    image: postgres:13
+    container_name: pgdatabase
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=job_market
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    networks:
+      - jobsearch_network 
+      
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    depends_on:
+      pgdatabase:
+        condition: service_started
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=root
+    ports:
+      - "8081:80"
+    networks:
+      - jobsearch_network 
+    
+
+# ---------- VOLUMES ----------
+volumes:
+  postgres_data:
+  pgadmin_data:
+  elasticsearch_data:
+  kibana_data:
+  rabbitmq_data:
+
+
+networks:
+  jobsearch_network:
+    external: true
+    name: jobsearch_network
+
+

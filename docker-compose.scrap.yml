@@ -1,0 +1,106 @@
+
+
+services:
+ 
+# --------------------  
+#       API SCRAP 
+#  -------------------
+
+  api-scrap:
+    build: ./api_scrap/.
+    container_name: api-scrap
+    ports:
+      - "${API_SCRAP_PORT}:${API_SCRAP_PORT}"
+    restart: always
+    depends_on:
+      - celery
+      - rabbitmq
+      - redis
+    env_file: .env
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8001"]
+    environment:
+      - ENVIRONMENT=prod
+    networks:
+      - jobsearch_network 
+    
+    
+  celery:
+    build:
+      context: ./celery/.
+      dockerfile: Dockerfile 
+    container_name: celery
+    command: ["celery", "-A", "app.main", "worker", "--loglevel=INFO", "--logfile=/logs/worker.log"]
+    volumes:
+      - ./logs:/logs
+    env_file: .env
+    environment:
+      - ENVIRONMENT=prod
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - jobsearch_network 
+    
+    
+  flower-scrap:
+    image: mher/flower
+    container_name: flower-scrap
+    env_file: .env
+    environment:
+      - CELERY_BROKER_URL=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@${RABBITMQ_URL_PROD}:5672//
+    ports:
+      - "5556:5555"
+    depends_on:
+      celery: 
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - jobsearch_network 
+    
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"  # RabbitMQ
+      - "15672:15672"  # Management interface
+    env_file: .env
+    restart: always
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - jobsearch_network 
+    
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - 6379:6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 30s
+      retries: 50
+    restart: always
+    networks:
+      - jobsearch_network 
+
+    
+# ---------- VOLUMES ----------
+volumes:
+  logs:
+
+
+networks:
+  jobsearch_network:
+    external: true
+    name: jobsearch_network
+
+
