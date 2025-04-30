@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import List
 from fastapi import FastAPI
 from fastapi.concurrency import asynccontextmanager
 from app.core.container import ContainerService
@@ -20,12 +20,23 @@ async def lifespan(app: FastAPI):
         es_index = {
             "mappings": {
                 "properties": {
-                    "text": {"type": "text"},
-                    "embedding": {"type": "dense_vector", "dims": 768}
+                    "job_id": {"type": "keyword"},
+                    "url": {"type": "keyword"},
+                    "website": {"type": "keyword"},
+                    "title": {"type": "keyword"},
+                    "company": {"type": "keyword"},
+                    "city": {"type": "keyword"},
+                    "postal_code": {"type": "integer"},
+                    "contract_type": {"type": "keyword"},
+                    "description": {"type": "text"},
+                    "infos": {"type": "nested", "properties": {
+                        "technologies": {"type": "keyword"},
+                        "embeddings": {"type": "dense_vector", "dims": 768}
+                    }}
                 }
             }
         }
-        es_client.indices.create(index="jobs", body=es_index, ignore=[400])
+        await es_client.indices.create(index="jobs", body=es_index)
     yield
     await es_client.close()
 

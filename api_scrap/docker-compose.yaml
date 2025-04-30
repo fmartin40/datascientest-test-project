@@ -1,37 +1,18 @@
-# version: "3.9"
-
 services:
-      
+
   api-scrap:
     build: .
     container_name: api-scrap
-    ports:
-      - "${API_SCRAP_PORT}:${API_SCRAP_PORT}"
-    restart: always
     env_file: .env
     volumes:
       - ./app:/app/app
-    command: ["uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "${API_SCRAP_PORT}"]
-    environment:
-      - ENVIRONMENT=prod
-    networks:
-      - jobsearch_network
-
-  redis:
-    image: redis:latest
     ports:
-      - 6379:6379
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 30s
-      retries: 50
-    restart: always
+      - "${API_SCRAP_PORT}:${API_SCRAP_PORT}"
+    command: ["uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "${API_SCRAP_PORT}"]
     networks:
       - jobsearch_network
 
 networks:
   jobsearch_network:
     external: true
-    name: jobsearch_network
 

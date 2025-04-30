@@ -4,41 +4,14 @@ services:
     build: .
     container_name: api-elastic
     env_file: .env
-    ports:
-      - "${API_ELASTIC_PORT}:${API_ELASTIC_PORT}"
-    restart: always
     volumes:
       - ./app:/app/app
+    ports:
+      - "${API_ELASTIC_PORT}:${API_ELASTIC_PORT}"
     command: ["uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "${API_ELASTIC_PORT}"]
-    
-    environment:
-      - ENVIRONMENT=prod
     networks:
       - jobsearch_network
 
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch-wolfi:9.0.0
-    container_name: elasticsearch
-    volumes:
-      - elasticsearch_data:/usr/share/elasticsearch/data
-    ports:
-      - "${API_ELASTIC_PORT}:${API_ELASTIC_PORT}"
-    restart: always
-    env_file: .env
-    environment:
-      - discovery.type=single-node
-      - ELASTIC_USERNAME=${ELASTIC_USERNAME}
-      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    networks:
-      - jobsearch_network 
-
-volumes:
-  elasticsearch_data:
-  
 networks:
   jobsearch_network:
     external: true

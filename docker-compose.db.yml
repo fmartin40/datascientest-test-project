@@ -28,6 +28,8 @@ services:
     container_name: elasticsearch
     volumes:
       - elasticsearch_data:/usr/share/elasticsearch/data
+      # changement du mot de passe kibana_system
+      - ./init-elasticsearch.sh:/init-elasticsearch.sh 
     ports:
       - "9200:9200"
     restart: always
@@ -36,10 +38,19 @@ services:
       - discovery.type=single-node
       - ELASTIC_USERNAME=${ELASTIC_USERNAME}
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - KIBANA_SYSTEM_PASSWORD=${KIBANA_PASSWORD}
     ulimits:
       memlock:
         soft: -1
         hard: -1
+    # changement du mot de passe kibana_system 
+    # en appelant le bash passé en volume
+    command: >
+      /bin/bash -c '
+        /usr/local/bin/docker-entrypoint.sh elasticsearch &
+        /init-elasticsearch.sh &
+        wait
+      '
     networks:
       - jobsearch_network 
     
