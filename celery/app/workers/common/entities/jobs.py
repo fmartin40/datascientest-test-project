@@ -1,5 +1,5 @@
 
-from typing import Dict, List
+from typing import List
 from pydantic import BaseModel
 
 class Job(BaseModel):
@@ -12,6 +12,10 @@ class JobSummary(Job):
 	website: str
 
 
+class JobDetailInfos(BaseModel):
+	technologies: list[str]
+	embeddings: list[float]
+
 class JobDetail(Job):
 	job_id: str
 	title: str
@@ -20,7 +24,4 @@ class JobDetail(Job):
 	postal_code: int
 	contract_type:str|List[str]
 	description: str
-	infos: Dict | None = None
-
-class JobDetailInfos(BaseModel):
-	pass
+	infos: JobDetailInfos | None = None
