@@ -40,12 +40,12 @@ services:
       - jobsearch_network 
     
     
-  flower-scrap:
+  flower:
     image: mher/flower
-    container_name: flower-scrap
+    container_name: flower
     env_file: .env
     environment:
-      - CELERY_BROKER_URL=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@${RABBITMQ_URL_PROD}:5672//
+      - CELERY_BROKER_URL=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@${RABBITMQ_URL}:5672//
     ports:
       - "5556:5555"
     depends_on:
