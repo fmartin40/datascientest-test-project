@@ -1,6 +1,6 @@
 services:
 
-  api_elastic:
+  api-elastic:
     build: .
     container_name: elastic-api
     ports:
