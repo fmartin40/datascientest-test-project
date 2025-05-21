@@ -3,10 +3,28 @@ from typing import Optional, Sequence
 from pydantic import BaseModel
 from app.domain.job.entities.jobs import Job
 from app.domain.job.interfaces.ijob_repository import IJobRepository
-from app.infrastructure.models.models import OffreEmploiOrm, EntrepriseOrm, SalaireOrm, FormationOrm, LangueOrm, CompetenceOrm, SourceOrm, ModeTravailOrm, ExperienceOrm, DureeTravailOrm
+from app.infrastructure.models.models import (
+    OffreEmploiOrm,
+    EntrepriseOrm,
+    SalaireOrm,
+    FormationOrm,
+    LangueOrm,
+    CompetenceOrm,
+    SourceOrm,
+    ModeTravailOrm,
+    ExperienceOrm,
+    DureeTravailOrm,
+)
 from app.domain.job.entities.jobs import (
-    Source, Entreprise, Salaire, Experience, DureeTravail,
-    ModeTravail, Formation, Langue, Competence
+    Source,
+    Entreprise,
+    Salaire,
+    Experience,
+    DureeTravail,
+    ModeTravail,
+    Formation,
+    Langue,
+    Competence,
 )
 
 from tortoise.contrib.pydantic import pydantic_model_creator
@@ -27,16 +45,16 @@ OffreEmploiPydantic = pydantic_model_creator(
     OffreEmploiOrm,
     name="OffreEmploiPydantic",
     include=(
-        "source",         # Tortoise le mappe à .source automatiquement
-        "entreprise",     # => entreprise
-        "salaire",        # => salaire
-        "experience",     # => experience
+        "source",  # Tortoise le mappe à .source automatiquement
+        "entreprise",  # => entreprise
+        "salaire",  # => salaire
+        "experience",  # => experience
         "duree_travail",  # => duree_travail
-        "mode_travail",   # => mode_travail
-        "formations",        # M2M
-        "langues",           # M2M
-        "competences",       # M2M
-    )
+        "mode_travail",  # => mode_travail
+        "formations",  # M2M
+        "langues",  # M2M
+        "competences",  # M2M
+    ),
 )
 
 logger = logging.getLogger(__name__)
@@ -51,7 +69,14 @@ class JobRepositoryPostgres(IJobRepository):
             logger.error(f"Erreur lors de l'ajout d'une offre d'emploi : {e}")
             raise
 
-    async def list(self, competence: Optional[str] = None) -> Sequence[Job]:
+    async def list(
+        self,
+        competence: Optional[str] = None,
+        langue: Optional[str] = None,
+        formation: Optional[str] = None,
+        entreprise: Optional[str] = None,
+        type_contrat: Optional[str] = None,
+    ) -> Sequence[Job]:
         try:
             query = OffreEmploiOrm.all().prefetch_related(
                 "entreprise",
@@ -62,11 +87,23 @@ class JobRepositoryPostgres(IJobRepository):
                 "mode_travail",
                 "competences",
                 "formations",
-                "langues"
+                "langues",
             )
 
+            filters = Q()
             if competence:
-                query = query.filter(Q(competences__libelle__icontains=competence.lower()))
+                filters &= Q(competences__libelle__icontains=competence.lower())
+            if langue:
+                filters &= Q(langues__libelle__icontains=langue.lower())
+            if formation:
+                filters &= Q(formations__libelle__icontains=formation.lower())
+            if entreprise:
+                filters &= Q(entreprise__libelle__icontains=entreprise.lower())
+            if type_contrat:
+                filters &= Q(type_contrat__icontains=type_contrat.lower())
+
+            if filters:
+                query = query.filter(filters)
 
             offres = await query
             result = []
@@ -77,14 +114,28 @@ class JobRepositoryPostgres(IJobRepository):
                     date_creation=offre.date_creation,
                     type_contrat=offre.type_contrat,
                     source=Source(**offre.source.__dict__) if offre.source else None,
-                    entreprise=Entreprise(**offre.entreprise.__dict__) if offre.entreprise else None,
-                    salaire=Salaire(**offre.salaire.__dict__) if offre.salaire else None,
-                    experience=Experience(**offre.experience.__dict__) if offre.experience else None,
-                    duree_travail=DureeTravail(**offre.duree_travail.__dict__) if offre.duree_travail else None,
-                    mode_travail=ModeTravail(**offre.mode_travail.__dict__) if offre.mode_travail else None,
-                    formations=[Formation(**f.__dict__) for f in await offre.formations.all()],
+                    entreprise=Entreprise(**offre.entreprise.__dict__)
+                    if offre.entreprise
+                    else None,
+                    salaire=Salaire(**offre.salaire.__dict__)
+                    if offre.salaire
+                    else None,
+                    experience=Experience(**offre.experience.__dict__)
+                    if offre.experience
+                    else None,
+                    duree_travail=DureeTravail(**offre.duree_travail.__dict__)
+                    if offre.duree_travail
+                    else None,
+                    mode_travail=ModeTravail(**offre.mode_travail.__dict__)
+                    if offre.mode_travail
+                    else None,
+                    formations=[
+                        Formation(**f.__dict__) for f in await offre.formations.all()
+                    ],
                     langues=[Langue(**l.__dict__) for l in await offre.langues.all()],
-                    competences=[Competence(**c.__dict__) for c in await offre.competences.all()]
+                    competences=[
+                        Competence(**c.__dict__) for c in await offre.competences.all()
+                    ],
                 )
                 result.append(job)
 
@@ -103,7 +154,7 @@ class JobRepositoryPostgres(IJobRepository):
                     "formations",
                     "langues",
                     "competences",
-                    "source"
+                    "source",
                 )
                 .first()
             )

@@ -6,36 +6,43 @@ from pydantic import BaseModel
 class IJobRepository(ABC):
     @abstractmethod
     def add(self, job: Job) -> None:
-        pass
+        raise NotImplementedError
 
     @abstractmethod
-    def list(self, competence: Optional[str] = None) -> List[Job]:
-        pass
+    def list(
+    self,
+    competence: Optional[str] = None,
+    langue: Optional[str] = None,
+    formation: Optional[str] = None,
+    entreprise: Optional[str] = None,
+    type_contrat: Optional[str] = None,
+) -> list[Job]:
+        raise NotImplementedError
 
     @abstractmethod
     def get(self, job_id: str) -> Optional[Job]:
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def delete(self, job_id: str) -> bool:
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def list_competences(self) -> List[BaseModel]:
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def list_formations(self) -> List[BaseModel]:
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def list_langues(self) -> List[BaseModel]:
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def list_entreprises(self) -> List[BaseModel]:
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def list_salaires(self) -> List[BaseModel]:
-        pass 
+        raise NotImplementedError 

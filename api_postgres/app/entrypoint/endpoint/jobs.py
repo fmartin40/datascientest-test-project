@@ -1,24 +1,35 @@
-from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi import APIRouter, HTTPException, status, Depends, Query
 from dependency_injector.wiring import inject, Provide
 from app.domain.job.entities.jobs import Job
 from app.core.container import ContainerService
 from app.domain.job.interfaces.ijob_repository import IJobRepository
-
+from typing import Optional
 
 router = APIRouter()
 
-@router.get("/")
+@router.get("/jobs")
 @inject
 async def list_jobs(
-    competence: str | None = None,
+    competence: Optional[str] = Query(None),
+    langue: Optional[str] = Query(None),
+    formation: Optional[str] = Query(None),
+    entreprise: Optional[str] = Query(None),
+    type_contrat: Optional[str] = Query(None),
     repo: IJobRepository = Depends(Provide[ContainerService.job_repository]),
 ):
     try:
-        return await repo.list(competence) # type: ignore
+        return await repo.list(
+            competence=competence,
+            langue=langue,
+            formation=formation,
+            entreprise=entreprise,
+            type_contrat=type_contrat,
+        ) # type: ignore
     except Exception as e:
         print(e)
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Erreur lors de la récupération des offres"
         )
 
 @router.get("/{job_id}", response_model=Job)
