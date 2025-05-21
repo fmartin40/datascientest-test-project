@@ -4,6 +4,12 @@ CREATE TABLE IF NOT EXISTS "Entreprise" (
   "libelle" VARCHAR(255)
 );
 
+CREATE TABLE IF NOT EXISTS "Ville" (
+  "id" SERIAL PRIMARY KEY,
+  "libelle" VARCHAR(255)
+);
+
+
 CREATE TABLE IF NOT EXISTS "Salaire" (
   "id" SERIAL PRIMARY KEY,
   "libelle" TEXT
@@ -39,6 +45,11 @@ CREATE TABLE IF NOT EXISTS "ModeTravail" (
   "libelle" VARCHAR(50) UNIQUE NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS "TypeContrat" (
+  "id" SERIAL PRIMARY KEY,
+  "libelle" VARCHAR(50) UNIQUE NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS "Source" (
   "id" SERIAL PRIMARY KEY,
   "libelle" VARCHAR(255)
@@ -50,12 +61,13 @@ CREATE TABLE IF NOT EXISTS "OffreEmploi" (
   "jobId" VARCHAR(255),
   "dateCreation" TIMESTAMP,
   "libelle" VARCHAR(255),
-  "typeContrat" VARCHAR(255),
   "experience_id" INT REFERENCES "Experience"("id") ON DELETE SET NULL,
   "duree_travail_id" INT REFERENCES "DureeTravail"("id") ON DELETE SET NULL,
   "entreprise_id" INT REFERENCES "Entreprise"("id") ON DELETE SET NULL,
+  "ville_id" INT REFERENCES "Ville"("id") ON DELETE SET NULL,
   "salaire_id" INT REFERENCES "Salaire"("id") ON DELETE SET NULL,
   "mode_travail_id" INT REFERENCES "ModeTravail"("id") ON DELETE SET NULL,
+  "type_contrat_id" INT REFERENCES "TypeContrat"("id") ON DELETE SET NULL,
   "source_id" INT REFERENCES "Source"("id") ON DELETE SET NULL
 );
 

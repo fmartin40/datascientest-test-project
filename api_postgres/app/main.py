@@ -6,13 +6,15 @@ from app.core.config import settings
 
 from app.core.container import ContainerService
 from app.entrypoint.router import (
-	routeur_job,
+	routeur_job_reader,
+    routeur_job_writer,
 )
 
 
 # Instancier et configurer le container UNE SEULE FOIS
 endpoint = [
-	'app.entrypoint.endpoint.jobs',
+	'app.entrypoint.endpoint.job_reader',
+    'app.entrypoint.endpoint.job_writer',
 ]
 container_service = ContainerService()
 container_service.wire(modules=endpoint)
@@ -23,7 +25,8 @@ app = FastAPI(
 )
 
 # Ajouter les routeurs
-app.include_router(routeur_job)
+app.include_router(routeur_job_reader)
+app.include_router(routeur_job_writer)
 
 # midleware pour forcer https
 class HTTPSRedirectMiddleware(BaseHTTPMiddleware):

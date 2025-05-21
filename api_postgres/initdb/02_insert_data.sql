@@ -1,105 +1,100 @@
--- SOURCES
-INSERT INTO "Source" ("libelle") VALUES
-('france_travail'),
-('jobintree'),
-('welcome_to_jungle'),
-('glassdoor');
+-- =======================
+-- Données de référence
+-- =======================
 
--- ENTREPRISES
-INSERT INTO "Entreprise" ("libelle") VALUES
-('DataWorks'),
-('CloudXpert'),
-('AI Builders'),
-('NextData');
+-- Langues
+INSERT INTO "Langue" (libelle) VALUES 
+('fr'), ('de'), ('en');
 
--- SALAIRES
-INSERT INTO "Salaire" ("libelle") VALUES
-('35k-45k'),
-('45k-55k'),
-('55k-65k');
+-- Compétences
+INSERT INTO "Competence" (libelle) VALUES 
+('Docker'), ('Kubernetes'), ('Spark'), ('SQL'), ('Airflow'), 
+('Kafka'), ('Hadoop'), ('Scala'), ('Pandas'), ('MongoDB');
 
--- FORMATIONS
-INSERT INTO "Formation" ("libelle") VALUES
-('Master Big Data'),
-('Licence Informatique'),
-('Certification Cloud');
+-- Entreprises (utilisées comme villes)
+INSERT INTO "Entreprise" (libelle) VALUES 
+('Xebia'), ('Capgemini'), ('Atos');
 
--- LANGUES
-INSERT INTO "Langue" ("libelle") VALUES
-('Français'),
-('Anglais'),
-('Allemand');
+-- Villes
+INSERT INTO "Ville" (libelle) VALUES 
+('Paris'), ('Lyon'), ('Marseille');
 
--- COMPETENCES
-INSERT INTO "Competence" ("libelle") VALUES
-('Python'),
-('SQL'),
-('Spark'),
-('Kafka'),
-('Airflow');
+-- Sources
+INSERT INTO "Source" (libelle) VALUES 
+('jobintree'), ('muse'), ('emploi_informatique'), ('option_carriere');
 
--- MODES DE TRAVAIL
-INSERT INTO "ModeTravail" ("libelle") VALUES
-('remote'),
-('presentiel'),
-('hybride');
+-- Types de contrat
+INSERT INTO "TypeContrat" (libelle) VALUES 
+('CDD'), ('CDI'), ('alternance');
 
--- EXPERIENCES
-INSERT INTO "Experience" ("libelle") VALUES
-('0-1 an'),
-('2-3 ans'),
-('3-5 ans'),
-('5+ ans');
+-- Modes de travail
+INSERT INTO "ModeTravail" (libelle) VALUES 
+('télétravail'), ('présentiel'), ('hybride');
 
--- DUREE DE TRAVAIL
-INSERT INTO "DureeTravail" ("libelle") VALUES
-('Temps plein'),
-('Temps partiel');
+-- Durées de travail
+INSERT INTO "DureeTravail" (libelle) VALUES 
+('temps plein'), ('temps partiel');
 
--- OFFRES D'EMPLOI
+-- Salaires
+INSERT INTO "Salaire" (libelle) VALUES 
+('40k-50k'), ('50k-60k'), ('60k-70k');
+
+-- Formations
+INSERT INTO "Formation" (libelle) VALUES 
+('Licence Informatique'), ('Master Data'), ('Bootcamp Big Data');
+
+-- Expériences
+INSERT INTO "Experience" (libelle) VALUES 
+('3 ans');
+
+-- =======================
+-- Offres d'emploi (titres variés)
+-- =======================
+
 INSERT INTO "OffreEmploi" (
-  "jobId", "dateCreation", "libelle", "typeContrat",
-  "experience_id", "duree_travail_id", "entreprise_id",
-  "salaire_id", "mode_travail_id", "source_id"
-) VALUES
-('a1b2c3d4e5f60718293a4b5c6d7e8f91', NOW(), 'Data Engineer Junior', 'CDI', 1, 1, 1, 1, 1, 1),
-('b2c3d4e5f60718293a4b5c6d7e8f91a1', NOW(), 'Data Engineer', 'CDI', 2, 1, 2, 2, 2, 2),
-('c3d4e5f60718293a4b5c6d7e8f91a1b2', NOW(), 'Senior Data Engineer', 'CDI', 4, 1, 3, 3, 3, 3),
-('d4e5f60718293a4b5c6d7e8f91a1b2c3', NOW(), 'Cloud Data Engineer', 'CDD', 3, 2, 1, 2, 1, 4),
-('e5f60718293a4b5c6d7e8f91a1b2c3d4', NOW(), 'ETL Developer', 'CDI', 3, 1, 2, 3, 2, 1),
-('f60718293a4b5c6d7e8f91a1b2c3d4e5', NOW(), 'Data Engineer Python', 'CDI', 2, 2, 3, 1, 3, 2),
-('0718293a4b5c6d7e8f91a1b2c3d4e5f6', NOW(), 'Big Data Engineer', 'CDI', 3, 1, 1, 2, 1, 3),
-('8293a4b5c6d7e8f91a1b2c3d4e5f6071', NOW(), 'Streaming Data Engineer', 'CDI', 2, 1, 2, 3, 2, 4),
-('93a4b5c6d7e8f91a1b2c3d4e5f607182', NOW(), 'DataOps Engineer', 'CDI', 3, 1, 3, 1, 3, 1),
-('a4b5c6d7e8f91a1b2c3d4e5f60718293', NOW(), 'ML Pipeline Engineer', 'CDI', 2, 1, 1, 2, 2, 2);
+    "jobId", "dateCreation", "libelle",
+    "experience_id", "duree_travail_id", "entreprise_id",
+    "salaire_id", "mode_travail_id", "type_contrat_id", "source_id","ville_id"
+) VALUES 
+('JOB001', NOW(), 'Ingénieur Data – Spécialiste Pipeline & Big Data', 1, 1, 1, 1, 1, 1, 1, 1),
+('JOB002', NOW(), 'Développeur Data – ETL & Traitement Distribué', 1, 2, 3, 2, 3, 2, 4, 2),
+('JOB003', NOW(), 'Architecte Données – Infrastructure Cloud & On-Prem', 1, 1, 2, 3, 2, 3, 3, 2),
+('JOB004', NOW(), 'Data Engineer Python – Stack Open Source', 1, 2, 1, 2, 2, 2, 2, 3),
+('JOB005', NOW(), 'Spécialiste Data Pipeline – Projet Retail Analytics', 1, 1, 3, 1, 1, 3, 1, 3),
+('JOB006', NOW(), 'Ingénieur Données – Temps Réel & Kafka', 1, 2, 2, 3, 3, 2, 3, 1),
+('JOB007', NOW(), 'Consultant Data Engineering – Cloud AWS', 1, 1, 1, 1, 1, 1, 4, 1),
+('JOB008', NOW(), 'Data Engineer Confirmé – Projets IoT & Smart City', 1, 2, 3, 2, 2, 2, 1, 2),
+('JOB009', NOW(), 'Expert Pipeline Données – Machine Learning Ready', 1, 1, 2, 3, 3, 3, 2, 3),
+('JOB010', NOW(), 'Développeur Data – Monitoring et Observabilité', 1, 2, 1, 2, 1, 2, 3, 1);
 
--- COMPETENCES PAR OFFRE
-INSERT INTO "OffreEmploi_Competence" ("offre_id", "competence_id") VALUES
-(1, 1), (1, 2),
-(2, 2), (2, 3),
-(3, 3), (3, 4),
-(4, 4), (4, 5),
-(5, 1), (5, 5),
-(6, 1), (6, 3),
-(7, 2), (7, 4),
-(8, 3), (8, 5),
-(9, 1), (9, 4),
-(10, 2), (10, 5);
+-- =======================
+-- Relations Offre ↔ Formation
+-- =======================
 
--- FORMATIONS PAR OFFRE
-INSERT INTO "OffreEmploi_Formation" ("offre_id", "formation_id") VALUES
-(1, 1), (2, 2), (3, 3), (4, 1), (5, 2),
+INSERT INTO "OffreEmploi_Formation" (offre_id, formation_id) VALUES 
+(1, 1), (2, 2), (3, 3), (4, 1), (5, 2), 
 (6, 3), (7, 1), (8, 2), (9, 3), (10, 1);
 
--- LANGUES PAR OFFRE
-INSERT INTO "OffreEmploi_Langue" ("offre_id", "langue_id") VALUES
-(1, 1), (1, 2),
-(2, 2),
-(3, 1), (3, 3),
-(4, 2),
-(5, 3),
-(6, 1), (6, 3),
-(7, 1),
-(8, 2),
-(9, 2), (9, 3),
-(10, 1), (10, 2);
+-- =======================
+-- Relations Offre ↔ Langue
+-- =======================
+
+INSERT INTO "OffreEmploi_Langue" (offre_id, langue_id) VALUES 
+(1, 1), (2, 2), (3, 3), (4, 1), (5, 2), 
+(6, 3), (7, 1), (8, 2), (9, 3), (10, 1);
+
+-- =======================
+-- Relations Offre ↔ Compétences
+-- =======================
+
+INSERT INTO "OffreEmploi_Competence" (offre_id, competence_id) VALUES 
+(1,1), (1,2), (1,3),
+(2,4), (2,5), (2,6),
+(3,7), (3,8), (3,9),
+(4,10), (4,1), (4,2),
+(5,3), (5,4), (5,5),
+(6,6), (6,7), (6,8),
+(7,9), (7,10), (7,1),
+(8,2), (8,3), (8,4),
+(9,5), (9,6), (9,7),
+(10,8), (10,9), (10,10);

@@ -8,6 +8,13 @@ class EntrepriseOrm(Model):
     class Meta:
         table = "Entreprise"
 
+class VilleOrm(Model):
+    id = fields.IntField(pk=True)
+    libelle = fields.CharField(max_length=255, null=True)
+
+    class Meta:
+        table = "Ville"
+
 class SalaireOrm(Model):
     id = fields.IntField(pk=True)
     libelle = fields.TextField(null=True)
@@ -57,6 +64,13 @@ class ModeTravailOrm(Model):
     class Meta:
         table = "ModeTravail"
 
+class TypeContratOrm(Model):
+    id = fields.IntField(pk=True)
+    libelle = fields.CharField(max_length=50, unique=True, null=False)
+
+    class Meta:
+        table = "TypeContrat"
+
 class SourceOrm(Model):
     id = fields.IntField(pk=True)
     libelle = fields.CharField(max_length=255, null=True, source_field="libelle")
@@ -80,11 +94,17 @@ class OffreEmploiOrm(Model):
     entreprise = fields.ForeignKeyField(
         "models.EntrepriseOrm", related_name="offres", null=True, source_field="entreprise_id"
     )
+    ville = fields.ForeignKeyField(
+        "models.VilleOrm", related_name="offres", null=True, source_field="ville_id"
+    )
     salaire = fields.ForeignKeyField(
         "models.SalaireOrm", related_name="offres", null=True, source_field="salaire_id"
     )
     mode_travail = fields.ForeignKeyField(
         "models.ModeTravailOrm", related_name="offres", null=True, source_field="mode_travail_id"
+    )
+    type_contrat = fields.ForeignKeyField(
+        "models.TypeContratOrm", related_name="offres", null=True, source_field="type_contrat_id"
     )
     source = fields.ForeignKeyField(
         "models.SourceOrm", related_name="offres", null=True, source_field="source_id"
