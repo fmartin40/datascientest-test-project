@@ -2,29 +2,22 @@
 from typing import Dict, List
 from pydantic import BaseModel
 
+class JobDetailInfos(BaseModel):
+	technologies: list[str]
+	embeddings: list[float]
 
-class WebsiteInfo(BaseModel):
-    website: str
-    root_url: str
-    request_url: str
-    query_space_replacement: str
+class JobDetail(BaseModel):
+	url: str 
+	website: str
+	job_id: str
+	title: str
+	company: str
+	city: str
+	postal_code: int
+	contract_type:str|List[str]
+	description: str
+	infos: JobDetailInfos | None = None
 
-
-class ParserSettings(BaseModel):
-    role: str
-    step: str
-    format: str
-    actif: bool
-    selectors: Dict
-    pagination: str | None = None
-    json_tag: Dict | None = None
-    json_required_keys: List[str] | None = None
-
-
-class WebsiteSettings(BaseModel):
-    website_info: WebsiteInfo
-    parsers: List[ParserSettings]
-    
 
 
 

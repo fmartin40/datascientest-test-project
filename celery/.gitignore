@@ -66,5 +66,30 @@ venv/
 *.env
 *.venv
 
-# fichiers de données
-data/
+**/__pycache__/
+**/.cache/
+**/.pytest_cache/
+**/.vscode/
+**/.idea/
+*.pyc
+*.pyo
+*.pyd
+*.log
+.git
+.pytest_cache
+.vscode
+.idea
+
+.cache/
+model_cache/
+
+
+docker-compose.yml
+Dockerfile
+uv.lock
+
+workers.log
+.logs/
+
+.dockerignore
+.gitignore
