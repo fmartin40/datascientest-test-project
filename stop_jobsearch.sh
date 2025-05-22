@@ -24,7 +24,7 @@ read -p "Voulez-vous vraiment continuer ? (yes/no) " CONFIRM1
 
 if [ "$CONFIRM1" == "yes" ]; then
   echo " Suppression de tous les volumes Docker..."
-  docker volume rmi $(docker volume ls -q)
+  docker volume rm $(docker volume ls -q)
   echo " Tous les volumes ont été supprimés."
 else
   echo " Opération annulée."

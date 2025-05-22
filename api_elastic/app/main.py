@@ -2,12 +2,14 @@ from typing import List
 from fastapi import FastAPI
 from fastapi.concurrency import asynccontextmanager
 from app.core.container import ContainerService
-from app.entrypoints.router import routeur_job   
+from app.entrypoints.router import routeur_job_reader, routeur_job_writer   
+from app.core.config import settings
 
 
 # Instancier et configurer le container
 endpoints: List[str] = [
-    "app.entrypoints.endpoint.jobs"
+    "app.entrypoints.endpoint.job_reader",
+    "app.entrypoints.endpoint.job_writer"
 ]
 container_service = ContainerService()
 container_service.wire(modules=endpoints)
@@ -16,27 +18,19 @@ container_service.wire(modules=endpoints)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     es_client = container_service.es_client()
-    if not await es_client.indices.exists(index="jobs"):
-        es_index = {
-            "mappings": {
-                "properties": {
-                    "job_id": {"type": "keyword"},
-                    "url": {"type": "keyword"},
-                    "website": {"type": "keyword"},
-                    "title": {"type": "keyword"},
-                    "company": {"type": "keyword"},
-                    "city": {"type": "keyword"},
-                    "postal_code": {"type": "integer"},
-                    "contract_type": {"type": "keyword"},
-                    "description": {"type": "text"},
-                    "infos": {"type": "nested", "properties": {
-                        "technologies": {"type": "keyword"},
-                        "embeddings": {"type": "dense_vector", "dims": 768}
-                    }}
-                }
-            }
-        }
-        await es_client.indices.create(index="jobs", body=es_index)
+
+    index_name = settings.ELASTIC_INDEX
+    print(f"Vérification de l'index {index_name}...")
+    
+    if not await es_client.indices.exists(index=index_name):
+        print(f"ATTENTION: L'index {index_name} n'existe pas!")
+        print(f"L'index {index_name} devrait être créé par le script d'initialisation d'Elasticsearch.")
+        print("Vérifiez que le conteneur elasticsearch a bien démarré et que le script insert_data.sh a été exécuté.")
+    else:
+        print(f" Index {index_name} trouvé")
+        count = await es_client.count(index=index_name)
+        print(f"Nombre de documents: {count.get('count', 0)}")
+    
     yield
     await es_client.close()
 
@@ -47,7 +41,8 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-app.include_router(routeur_job)
+app.include_router(routeur_job_reader)
+app.include_router(routeur_job_writer)
 
 
 # healthcheck dans le dockerfile

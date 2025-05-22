@@ -12,12 +12,12 @@ class Settings(BaseSettings):
 	model_config = SettingsConfigDict(env_file=DOTENV, extra = "allow")
 	
 	
-	INDEX_JOBS: str = "jobs"
+	JOB_INDEX: str = "offre_emploi"
 	ELASTIC_USERNAME: str
 	ELASTIC_PASSWORD: str
 
 	ELASTIC_HOST: str = "http://elasticsearch"
-	ELASTIC_INDEX: str = "jobs"
+	ELASTIC_INDEX: str = "offre_emploi"
 	ES_PORT: int
 
 	
