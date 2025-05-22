@@ -61,7 +61,7 @@ venv/
 *.env
 *.venv
 # fichiers de données
-data/
+
 #airflow
 logs/
 logs_flower/        
