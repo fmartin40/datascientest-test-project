@@ -1,15 +1,11 @@
 
-from typing import List
+from datetime import date
+from typing import List, Optional
 from pydantic import BaseModel
 
 
 class Job(BaseModel):
-	job_id: str
-	url: str 
-	website: str
-	title: str
-	company: str
-	city: str
-	postal_code: int
-	contract_type:str|List[str]
-	description: str
+    job_id: str
+    libelle: Optional[str]
+    date_creation: Optional[date] = date.today()
+    description: str
