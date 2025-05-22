@@ -12,11 +12,10 @@ services:
     ports:
       - "${API_SCRAP_PORT}:${API_SCRAP_PORT}"
     restart: always
-    depends_on:
-      - celery
-      - rabbitmq
-      - redis
+    
     env_file: .env
+    environment:
+      - ENVIRONMENT=prod
     command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8001"]
     networks:
       - jobsearch_network 

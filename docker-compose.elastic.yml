@@ -16,7 +16,10 @@ services:
       elasticsearch:
         condition: service_started
     env_file: .env
+    # prod
     command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "${API_ELASTIC_PORT}"]
+    # dev
+    # command: ["uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "${API_ELASTIC_PORT}"]
     networks:
       - jobsearch_network 
     
@@ -27,16 +30,16 @@ services:
     volumes:
       - elasticsearch_data:/usr/share/elasticsearch/data
       # changement du mot de passe kibana_system
-      - ./init-elasticsearch.sh:/init-elasticsearch.sh 
+      - ./init_elasticsearch.sh:/init_elasticsearch.sh
     ports:
       - "9200:9200"
     restart: always
     env_file: .env
     environment:
-      - discovery.type=single-node
-      - ELASTIC_USERNAME=${ELASTIC_USERNAME}
-      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-      - KIBANA_SYSTEM_PASSWORD=${KIBANA_PASSWORD}
+      discovery.type: single-node
+      xpack.security.enabled: true
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+
     ulimits:
       memlock:
         soft: -1
@@ -44,35 +47,40 @@ services:
     # changement du mot de passe kibana_system 
     # en appelant le bash passé en volume
     command: >
-      /bin/bash -c '
+        /bin/bash -c '
         /usr/local/bin/docker-entrypoint.sh elasticsearch &
-        /init-elasticsearch.sh &
-        wait
-      '
+        /init_elasticsearch.sh >> /tmp/init.log 2>&1 &
+        wait'
+    healthcheck:
+      test: ["CMD", "curl", "-u", "elastic:${ELASTIC_PASSWORD}", "-f", "http://localhost:9200/_cluster/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
     networks:
       - jobsearch_network 
-    
     
   kibana:
     image: docker.elastic.co/kibana/kibana:8.18.0
     container_name: kibana
-    volumes:
-      - kibana_data:/usr/share/kibana/data
     ports:
       - "5601:5601"
     restart: always
     env_file: .env
     depends_on:
       elasticsearch:
-        condition: service_started
+        condition: service_healthy
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-      - ELASTICSEARCH_USERNAME=${KIBANA_USERNAME}
-      - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
-      - SERVER_PUBLICBASEURL=http://localhost:5601
-      - SERVER_NAME=kibana.local
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5601"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
     networks:
-      - jobsearch_network 
+      - jobsearch_network
+
     
 
 # ---------- VOLUMES ----------
