@@ -2,16 +2,15 @@ from typing import List, Optional
 from elasticsearch import AsyncElasticsearch
 from app.core.config import settings
 from app.domain.job.entities.jobs import Job
-from app.domain.job.interfaces.ijob_repository import IJobRepository
+from app.domain.job.interfaces.ijob_reader import IJobReader
+import logging
 
-class JobRepositoryElastic(IJobRepository):
+logger = logging.getLogger(__name__)
+
+class JobReader(IJobReader):
     def __init__(self, es: AsyncElasticsearch):
         self.es = es
-        
-        self.index = settings.INDEX_JOBS
-
-    async def add(self, job: Job) -> None:
-        await self.es.index(index=self.index, id=job.job_id, document=job.model_dump())
+        self.index = settings.JOB_INDEX
 
     async def list(self) -> List[Job]:
         resp = await self.es.search(index=self.index, query={"match_all": {}})
@@ -21,12 +20,9 @@ class JobRepositoryElastic(IJobRepository):
         try:
             resp = await self.es.get(index=self.index, id=job_id)
             return Job(**resp["_source"])
-        except Exception:
-            return None
+        except Exception as e:
+            logger.error(f"Erreur lors de la récupération du job {job_id} : {e}")
+            raise
+ 
+    
 
-    async def delete(self, job_id: str) -> bool:
-        try:
-            await self.es.delete(index=self.index, id=job_id)
-            return True
-        except Exception:
-            return False 

@@ -56,16 +56,16 @@ INSERT INTO "OffreEmploi" (
     "experience_id", "duree_travail_id", "entreprise_id",
     "salaire_id", "mode_travail_id", "type_contrat_id", "source_id","ville_id"
 ) VALUES 
-('JOB001', CURRENT_DATE, 'Ingénieur Data – Spécialiste Pipeline & Big Data', 1, 1, 1, 1, 1, 1, 1, 1),
-('JOB002', CURRENT_DATE, 'Développeur Data – ETL & Traitement Distribué', 1, 2, 3, 2, 3, 2, 4, 2),
-('JOB003', CURRENT_DATE, 'Architecte Données – Infrastructure Cloud & On-Prem', 1, 1, 2, 3, 2, 3, 3, 2),
-('JOB004', CURRENT_DATE, 'Data Engineer Python – Stack Open Source', 1, 2, 1, 2, 2, 2, 2, 3),
-('JOB005', CURRENT_DATE, 'Spécialiste Data Pipeline – Projet Retail Analytics', 1, 1, 3, 1, 1, 3, 1, 3),
-('JOB006', CURRENT_DATE, 'Ingénieur Données – Temps Réel & Kafka', 1, 2, 2, 3, 3, 2, 3, 1),
-('JOB007', CURRENT_DATE, 'Consultant Data Engineering – Cloud AWS', 1, 1, 1, 1, 1, 1, 4, 1),
-('JOB008', CURRENT_DATE, 'Data Engineer Confirmé – Projets IoT & Smart City', 1, 2, 3, 2, 2, 2, 1, 2),
-('JOB009', CURRENT_DATE, 'Expert Pipeline Données – Machine Learning Ready', 1, 1, 2, 3, 3, 3, 2, 3),
-('JOB010', CURRENT_DATE, 'Développeur Data – Monitoring et Observabilité', 1, 2, 1, 2, 1, 2, 3, 1);
+('job-1', CURRENT_DATE, 'Ingénieur Data – Spécialiste Pipeline & Big Data', 1, 1, 1, 1, 1, 1, 1, 1),
+('job-2', CURRENT_DATE, 'Développeur Data – ETL & Traitement Distribué', 1, 2, 3, 2, 3, 2, 4, 2),
+('job-3', CURRENT_DATE, 'Architecte Données – Infrastructure Cloud & On-Prem', 1, 1, 2, 3, 2, 3, 3, 2),
+('job-4', CURRENT_DATE, 'Data Engineer Python – Stack Open Source', 1, 2, 1, 2, 2, 2, 2, 3),
+('job-5', CURRENT_DATE, 'Spécialiste Data Pipeline – Projet Retail Analytics', 1, 1, 3, 1, 1, 3, 1, 3),
+('job-6', CURRENT_DATE, 'Ingénieur Données – Temps Réel & Kafka', 1, 2, 2, 3, 3, 2, 3, 1),
+('job-7', CURRENT_DATE, 'Consultant Data Engineering – Cloud AWS', 1, 1, 1, 1, 1, 1, 4, 1),
+('job-8', CURRENT_DATE, 'Data Engineer Confirmé – Projets IoT & Smart City', 1, 2, 3, 2, 2, 2, 1, 2),
+('job-9', CURRENT_DATE, 'Expert Pipeline Données – Machine Learning Ready', 1, 1, 2, 3, 3, 3, 2, 3),
+('job-10', CURRENT_DATE, 'Développeur Data – Monitoring et Observabilité', 1, 2, 1, 2, 1, 2, 3, 1);
 
 -- =======================
 -- Relations Offre ↔ Formation

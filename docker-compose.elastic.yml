@@ -11,15 +11,21 @@ services:
       - "${API_ELASTIC_PORT}:${API_ELASTIC_PORT}"
     restart: always
     env_file: .env
-    # prod
-    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "${API_ELASTIC_PORT}"]
-    # dev
-    # command: ["uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "${API_ELASTIC_PORT}"]
+    # --- prod
+    #command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "${API_ELASTIC_PORT}"]
+    
+    #  ---- dev
+    volumes:
+      - ./api_elastic/app:/app/app  # Montage des fichiers source pour le hot-reload
+    command: ["uvicorn", "app.main:app", "--reload", "--reload-dir", "/app/app", "--host", "0.0.0.0", "--port", "${API_ELASTIC_PORT}"]
     healthcheck:
       test: ["CMD", "curl", "-u", "elastic:${ELASTIC_PASSWORD}", "-f", "http://elasticsearch:9200/_cluster/health"]
       interval: 10s
       timeout: 5s
       retries: 6
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
     networks:
       - jobsearch_network 
     
@@ -31,9 +37,12 @@ services:
       - elasticsearch_data:/usr/share/elasticsearch/data
       
       # Chargement de données dans elasticsearch
-      - ./init/elasticsearch/emplois.ndjson:/emplois.ndjson
-      - ./init/elasticsearch/insert_data.sh:/insert_data.sh
-      - ./init/elasticsearch/entrypoint.sh:/entrypoint.sh
+      - ./init/elasticsearch/emplois.ndjson:/emplois.ndjson:ro
+      - ./init/elasticsearch/insert_data.sh:/insert_data.sh:ro
+      - ./init/elasticsearch/entrypoint.sh:/entrypoint.sh:ro
+      
+      # Si le répertoire init_elasticsearch.sh existe, le monter également
+      - ./init/elasticsearch/init_elasticsearch.sh:/init_elasticsearch.sh:ro
     ports:
       - "9200:9200"
     restart: always
