@@ -81,7 +81,7 @@ class SourceOrm(Model):
 class OffreEmploiOrm(Model):
     id = fields.IntField(pk=True)
     job_id = fields.CharField(max_length=255, null=True, source_field="jobId")
-    date_creation = fields.DatetimeField(null=True, source_field="dateCreation")
+    date_creation = fields.DateField(null=True, source_field="dateCreation")
     libelle = fields.CharField(max_length=255, null=True, source_field="libelle")
     type_contrat = fields.CharField(max_length=255, null=True, source_field="typeContrat")
 

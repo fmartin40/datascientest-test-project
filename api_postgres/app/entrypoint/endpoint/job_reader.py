@@ -10,6 +10,8 @@ router = APIRouter(tags=["read job infos"])
 @router.get("/jobs")
 @inject
 async def list_jobs(
+    limit: int = Query(30, ge=1, le=30),
+    offset: int = Query(0, ge=0),
     competence: Optional[int] = Query(None),
     langue: Optional[int] = Query(None),
     formation: Optional[int] = Query(None),
@@ -38,6 +40,8 @@ async def list_jobs(
             salaire=salaire,
             source=source,
             light=light,
+            limit=limit,
+            offset=offset,
         )
     except Exception as e:
         print(e)

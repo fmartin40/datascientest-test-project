@@ -14,41 +14,41 @@ class IJobWriter(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def add_competence(self, competence: BaseModel) -> BaseModel:
+    async def add_competence(self, competence: str) -> BaseModel:
         raise NotImplementedError
 
     @abstractmethod
-    async def add_formation(self, formation: BaseModel) -> BaseModel:
+    async def add_formation(self, formation: str) -> BaseModel:
         raise NotImplementedError
 
     @abstractmethod
-    async def add_langue(self, langue: BaseModel) -> BaseModel:
+    async def add_langue(self, langue: str) -> BaseModel:
         raise NotImplementedError
 
     @abstractmethod
-    async def add_entreprise(self, entreprise: BaseModel) -> BaseModel:
+    async def add_entreprise(self, entreprise: str) -> BaseModel:
         raise NotImplementedError
 
     @abstractmethod
-    async def add_salaire(self, salaire: BaseModel) -> BaseModel:
+    async def add_salaire(self, salaire: str) -> BaseModel:
         raise NotImplementedError
 
     @abstractmethod
-    async def add_type_contrat(self, type_contrat: BaseModel) -> BaseModel:
+    async def add_type_contrat(self, type_contrat: str) -> BaseModel:
         raise NotImplementedError
 
     @abstractmethod
-    async def add_duree_travail(self, duree_travail: BaseModel) -> BaseModel:
+    async def add_duree_travail(self, duree_travail: str) -> BaseModel:
         raise NotImplementedError
 
     @abstractmethod
-    async def add_mode_travail(self, mode_travail: BaseModel) -> BaseModel:
+    async def add_mode_travail(self, mode_travail: str) -> BaseModel:
         raise NotImplementedError
 
     @abstractmethod
-    async def add_experience(self, experience: BaseModel) -> BaseModel:
+    async def add_experience(self, experience: str) -> BaseModel:
         raise NotImplementedError
 
     @abstractmethod
-    async def add_source(self, source: BaseModel) -> BaseModel:
+    async def add_source(self, source: str) -> BaseModel:
         raise NotImplementedError

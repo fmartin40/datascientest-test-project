@@ -11,6 +11,8 @@ class IJobReader(ABC):
     @abstractmethod
     def list(
     self,
+    limit: int,
+    offset: int,
     competence: Optional[int] = None,
     langue: Optional[int] = None,
     formation: Optional[int] = None,

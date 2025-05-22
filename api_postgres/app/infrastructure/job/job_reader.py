@@ -79,6 +79,8 @@ class JobReader(IJobReader):
 
     async def list(
         self,
+        limit: int,
+        offset: int,
         competence: Optional[int] = None,
         langue: Optional[int] = None,
         formation: Optional[int] = None,
@@ -132,7 +134,7 @@ class JobReader(IJobReader):
                 filters &= Q(source__id=source)
 
             if filters:
-                query = query.filter(filters)
+                query = query.filter(filters).limit(limit).offset(offset)
 
             if light:
                 return await self._get_light(query)
