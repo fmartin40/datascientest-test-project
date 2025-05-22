@@ -56,7 +56,7 @@
       "role":"transformer",
       "step": "detail",
       "format": "embenddings",
-      "actif": true,
+      "actif": false,
       "selectors": {}
     },
     {
