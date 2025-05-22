@@ -1,6 +1,6 @@
-from typing import List, Optional, Any
+from typing import List, Optional
 from pydantic import BaseModel
-from datetime import datetime
+from datetime import date
 
 class Entreprise(BaseModel):
     id: int
@@ -51,7 +51,7 @@ class Job(BaseModel):
     job_id: str
     source: Optional[Source]
     libelle: Optional[str] = None
-    date_creation: Optional[datetime] = None
+    date_creation: Optional[date] = None
     entreprise: Optional[Entreprise] = None
     ville: Optional[Ville] = None
     type_contrat: Optional[TypeContrat] = None

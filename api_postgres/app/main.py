@@ -54,7 +54,6 @@ async def safe_handler(request: Request, call_next):
         )
     
  
-     
 # Connexion à MySQL via Tortoise
 register_tortoise(
     app,
