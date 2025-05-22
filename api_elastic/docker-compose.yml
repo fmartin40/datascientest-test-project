@@ -12,6 +12,7 @@ services:
     networks:
       - jobsearch_network
 
+
 networks:
   jobsearch_network:
     external: true

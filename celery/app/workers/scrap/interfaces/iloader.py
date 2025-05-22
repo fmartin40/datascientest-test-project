@@ -1,0 +1,13 @@
+from abc import ABC, abstractmethod
+from typing import List
+from app.workers.scrap.entities.jobs import Job
+
+class ILoader(ABC):
+    
+    @abstractmethod
+    async def insert(self, job:Job, *args, **kwargs):
+        raise NotImplementedError
+    
+    @abstractmethod
+    async def insert_many(self, jobs: List[Job], *args, **kwargs):
+        raise NotImplementedError

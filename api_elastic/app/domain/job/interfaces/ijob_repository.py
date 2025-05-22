@@ -4,17 +4,17 @@ from app.domain.job.entities.jobs import Job
 
 class IJobRepository(ABC):
     @abstractmethod
-    def add(self, job: Job) -> None:
+    async def add(self, job: Job) -> None:
         pass
 
     @abstractmethod
-    def list(self) -> List[Job]:
+    async def list(self) -> List[Job]:
         pass
 
     @abstractmethod
-    def get(self, job_id: str) -> Optional[Job]:
+    async def get(self, job_id: str) -> Optional[Job]:
         pass
 
     @abstractmethod
-    def delete(self, job_id: str) -> bool:
+    async def delete(self, job_id: str) -> bool:
         pass 

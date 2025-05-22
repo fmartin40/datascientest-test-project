@@ -1,0 +1,48 @@
+
+{
+    "website_info":{
+      "website": "muse",
+      "root_url": "https://www.muse.com",
+      "request_url": "",
+      "query_space_replacement": "+"
+    },
+    "parsers": [
+      {
+        "role":"extractor",
+        "step": "summary",
+        "format": "html",
+        "actif": true,
+        "selectors": {
+          "url": "article > div > h3 > a"
+        },
+        "pagination":"p"
+      },
+      {
+        "role":"extractor",
+        "step": "detail",
+        "format": "json",
+        "actif": true,
+        "json_tag": { "id": "__NEXT_DATA__" },
+        "json_required_keys": [
+          "props"
+        ],
+        "selectors": {
+            "title": "props.pageProps.initialAppParams.job.name",
+            "company": "props.pageProps.initialAppParams.company.name",
+            "city": "props.pageProps.initialAppParams.job.locations",
+            "postal_code": "",
+            "contract_type": "props.pageProps.initialAppParams.job.employmentTypes",
+            "description": "props.pageProps.initialAppParams.job.compiled_contents"
+        }
+      },
+      
+      {
+        "role":"transformer",
+        "step": "detail",
+        "format": "llm",
+        "actif": true,
+        "selectors": {}
+      }
+    ]
+  }
+  

@@ -1,0 +1,49 @@
+{
+    "website_info":{
+      "website": "glassdoor",
+      "root_url": "https://www.glassdoor.com",
+      "request_url": "",
+      "query_space_replacement": "+"
+    },
+    "parsers": [
+      {
+        "role":"extractor",
+        "step": "summary",
+        "format": "html",
+        "actif": true,
+        "selectors": {
+          "url": "article > div > h3 > a"
+        },
+        "pagination":"p"
+      },
+      {
+        "role":"extractor",
+        "step": "detail",
+        "format": "json",
+        "actif": true,
+        "json_tag": { "id": "__NEXT_DATA__" },
+        "json_required_keys": [
+          "title",
+          "description",
+          "hiringOrganization",
+          "jobLocation"
+        ],
+        "selectors": {
+          "title": "title",
+          "company": "hiringOrganization.name",
+          "city": "jobLocation.address.addressLocality",
+          "postal_code": "jobLocation.address.postalCode",
+          "contract_type": "employmentType",
+          "description": "description"        
+        }
+      },
+      {
+        "role":"transformer",
+        "step": "detail",
+        "format": "llm",
+        "actif": true,
+        "selectors": {}
+      }
+    ]
+  }
+  
