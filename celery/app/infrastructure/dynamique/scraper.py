@@ -4,10 +4,10 @@ from app.workers.scrap.entities.settings import (
 	WebsiteInfo,
 	WebsiteSettings,
 )
-from app.workers.scrap.entities.jobs import JobDetailInfos, JobSummary, JobDetail
+from app.workers.scrap.entities.jobs import JobSummary, JobDetail
 from app.workers.scrap.interfaces.itransformer import ITransformer
-from app.infrastructure.scrap.extract.extractor_factory import ExtractorsFactory
-from app.infrastructure.scrap.transform.transformer_factory import TransformersFactory
+from app.infrastructure.dynamique.extract.extractor_factory import ExtractorsFactory
+from app.infrastructure.dynamique.transform.transformer_factory import TransformersFactory
 
 
 class Scraper:
@@ -41,5 +41,5 @@ class Scraper:
 		infos: Dict = {}
 		for transformer in self.transformers:
 			infos.update(await transformer.transform(jobdetail))
-		jobdetail.infos = JobDetailInfos(**infos) # type: ignore
+		# jobdetail.infos = JobDetailInfos(**infos) # type: ignore
 		return jobdetail

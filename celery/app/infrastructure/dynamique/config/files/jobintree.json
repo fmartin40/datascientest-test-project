@@ -12,7 +12,11 @@
       "format": "html",
       "actif": true,
       "selectors": {
-        "url": "article > div > h3 > a"
+        "url": "article > div > h3 > a",
+        "libelle": "article > div > h3 > a",
+        "entreprise": "ul.job-criteria > li:nth-child(3)",
+        "ville": "div > ul:nth-child(2) > li:nth-child(2) > span:nth-child(2)",
+        "type_contrat": "div > ul:nth-child(2) > li:nth-child(3) > span:nth-child(2)"
       },
       "pagination":"p"
     },

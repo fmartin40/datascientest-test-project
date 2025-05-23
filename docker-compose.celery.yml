@@ -22,23 +22,34 @@ services:
         condition: service_started
     networks:
       - jobsearch_network 
+    healthcheck:
+      test: ["CMD", "celery", "-A", "app.main", "status"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
     
     
   flower:
     image: mher/flower
     container_name: flower
     env_file: .env
+    
     environment:
       - CELERY_BROKER_URL=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@${RABBITMQ_URL}:5672//
     ports:
       - "5556:5555"
     depends_on:
       celery: 
-        condition: service_started
+        condition: service_healthy
       rabbitmq:
         condition: service_healthy
     networks:
-      - jobsearch_network 
+      - jobsearch_network
+    # healthcheck:
+    #   test: ["CMD", "wget", "--spider", "-q", "http://localhost:5555/"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 5 
     
 
   rabbitmq:

@@ -22,10 +22,10 @@ celery_client.conf.update(
 )
 
 # Configuration des queues pour les différentes tâches
-celery_client.conf.task_routes = {
-    'extract_summaries': {'queue': 'summaries_queue'},
-    'extract_jobdetail': {'queue': 'details_queue'},
-}
+# celery_client.conf.task_routes = {
+#     'extract_summaries': {'queue': 'summaries_queue'},
+#     'extract_jobdetail': {'queue': 'details_queue'},
+# }
 
 # Configuration des limites de rate pour éviter de surcharger les sites
 celery_client.conf.task_default_rate_limit = '10/m'  # Limite globale par défaut

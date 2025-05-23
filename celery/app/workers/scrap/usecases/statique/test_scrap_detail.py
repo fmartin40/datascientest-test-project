@@ -4,9 +4,9 @@ import logging
 from celery import shared_task, current_task
 from app.core.container import ContainerService
 from app.workers.scrap.entities.jobs import JobDetail
+from app.infrastructure.statique.scraper import Scraper
 
 container = ContainerService()
-scraper_registry = container.scraper_registry()
 redis_loader = container.redis_loader()
 
 logging.basicConfig(
@@ -17,10 +17,10 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-@shared_task(name="test_extract_jobdetail")
-def extract_jobdetail_for_test(url: str, website: str):
+@shared_task(name="statique.test_extract_jobdetail", autoretry_for=(Exception,), retry_kwargs={'max_retries': 3, 'countdown': 60})
+def extract_jobdetail(url: str, source: str):
     try:
-        logger.info(f"Début de l'extraction - url: {url}, website: {website}")
+        logger.info(f"Début de l'extraction - url: {url}, source: {source}")
         
         # Créer une nouvelle boucle événementielle
         event_loop = asyncio.new_event_loop()
@@ -28,7 +28,7 @@ def extract_jobdetail_for_test(url: str, website: str):
         
         try:
             # Récupérer le scraper via le registry
-            scraper = scraper_registry.get_scraper(website)
+            scraper: Scraper = container.static_scrapers()[source] # type: ignore
             logger.info(f"Scraper récupéré: {scraper.__class__.__name__}")
             
             # Exécuter l'extraction et la transformation de façon asynchrone
@@ -48,7 +48,7 @@ def extract_jobdetail_for_test(url: str, website: str):
             job: Dict = dict(
                 task_id=task_id,
                 url=url,
-                website=website,
+                source=source,
                 job_detail=job_detail.model_dump(),
             )
             
@@ -63,6 +63,6 @@ def extract_jobdetail_for_test(url: str, website: str):
             event_loop.close()
 
     except Exception as e:
-        logger.error(f"ERREUR dans extract_jobdetail_for_test: {e}", exc_info=True)
+        logger.error(f"ERREUR dans extract_jobdetail: {e}", exc_info=True)
         print(f"[ERROR] {e}")
         raise

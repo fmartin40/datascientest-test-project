@@ -2,13 +2,15 @@ from typing import List
 from itertools import chain
 import urllib.parse
 import asyncio
+import logging
 
 from bs4 import BeautifulSoup
-from app.infrastructure.scrap.extract.fetchurl import FetchUrl
+from app.infrastructure.dynamique.extract.fetchurl import FetchUrl
 from app.workers.scrap.entities.jobs import JobSummary
 from app.workers.scrap.entities.settings import ParserSettings, WebsiteInfo
 from app.workers.scrap.interfaces.iextractor import IExtractor
 
+logger = logging.getLogger(__name__)
 
 class JobSummaryHTMLExtractor(IExtractor):
 	def __init__(self, website_info: WebsiteInfo, parser: ParserSettings):
@@ -28,12 +30,19 @@ class JobSummaryHTMLExtractor(IExtractor):
 				for el in elements:
 					href:str = el.get("href") # type: ignore
 					if href:
+						logger.info(f"libelle: {el.get('libelle')}, entreprise: {el.get('entreprise')}, ville: {el.get('ville')}, type_contrat: {el.get('type_contrat')}")
+
 						summaries.append(
 							JobSummary(
 								url=urllib.parse.urljoin(
 									self.website_info.root_url, href
 								),
-								website=self.website_info.website
+								website=self.website_info.website,
+								libelle=el.get("libelle"), # type: ignore
+								source=self.website_info.website, # type: ignore
+								entreprise=el.get("entreprise"), # type: ignore
+								ville=el.get("ville"), # type: ignore
+								type_contrat=el.get("type_contrat"), # type: ignore
 							)
 						)
 			return summaries

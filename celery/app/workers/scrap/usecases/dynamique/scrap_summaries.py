@@ -3,11 +3,11 @@ from typing import Optional
 from app.core.container import ContainerService
 from celery import shared_task, current_task
 import logging
-from app.workers.scrap.usecases.scrap_detail import extract_jobdetail
+from app.workers.scrap.usecases.dynamique.scrap_detail import extract_jobdetail
 
 logger = logging.getLogger(__name__)
 
-@shared_task(name="extract_summaries", queue="summaries_queue")
+@shared_task(name="dynamique.extract_summaries", autoretry_for=(Exception,), retry_kwargs={'max_retries': 3, 'countdown': 60})
 def extract_summaries(
     website: str,
     query: str,
