@@ -20,32 +20,49 @@ logger = logging.getLogger(__name__)
 @shared_task(name="test_extract_jobdetail")
 def extract_jobdetail_for_test(url: str, website: str):
     try:
-        logger.info("Début de l'extraction")
+        logger.info(f"Début de l'extraction - url: {url}, website: {website}")
         
-        async def process_job():
-            # Récupérer le scraper via le registry (avec config à jour automatiquement)
+        # Créer une nouvelle boucle événementielle
+        event_loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(event_loop)
+        
+        try:
+            # Récupérer le scraper via le registry
             scraper = scraper_registry.get_scraper(website)
-
-            job_detail: JobDetail = await scraper.extract_detail(url=url)  # type: ignore
-            job_transformed: JobDetail = await scraper.transform(job_detail)
-            logger.info(f"Job transformé : {job_transformed}")
-           
-            # Id de la task pour redis
+            logger.info(f"Scraper récupéré: {scraper.__class__.__name__}")
+            
+            # Exécuter l'extraction et la transformation de façon asynchrone
+            async def process_job():
+                job_detail: JobDetail = await scraper.extract_detail(url=url) # type: ignore
+                logger.info("Détails extraits avec succès")
+                job_transformed: JobDetail = await scraper.transform(job_detail)
+                logger.info("Job transformé avec succès")
+                return job_detail, job_transformed
+                
+            job_detail, job_transformed = event_loop.run_until_complete(process_job())
+            
+            # ID de la tâche Celery pour suivi dans Redis
             task_id: str = current_task.request.id  # type: ignore
+            logger.info(f"Task ID: {task_id}")
+            
             job: Dict = dict(
                 task_id=task_id,
                 url=url,
                 website=website,
                 job_detail=job_detail.model_dump(),
             )
-            return task_id, job
-
-        # Exécuter toutes les opérations asynchrones dans une seule boucle
-        task_id, job =asyncio.run(process_job())
-
-        print('job ============================', job)
-        redis_loader.insert(key=task_id, job=job)
+            
+            # Insérer les données dans Redis
+            logger.info(f"Insertion dans Redis avec task_id: {task_id}")
+            redis_loader.insert(key=task_id, job=job)
+            logger.info(f"Données insérées dans Redis - task_id: {task_id}")
+            
+            return task_id
+        finally:
+            # Fermer la boucle événementielle
+            event_loop.close()
 
     except Exception as e:
-        logger.error(f"Erreur lors de l'extraction: {str(e)}")
+        logger.error(f"ERREUR dans extract_jobdetail_for_test: {e}", exc_info=True)
+        print(f"[ERROR] {e}")
         raise

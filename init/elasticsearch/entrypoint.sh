@@ -49,13 +49,26 @@ sleep 2
 
 # Vérifier si les scripts existent
 echo "Vérification des fichiers d'insertion..."
+echo "Contenu de la racine:"
 ls -la /
+echo "Informations sur insert_data.sh:"
+file /insert_data.sh 2>/dev/null || echo "Commande 'file' non disponible ou fichier non trouvé"
+echo "Permissions:"
+stat /insert_data.sh 2>/dev/null || echo "Commande 'stat' non disponible ou fichier non trouvé"
+
 if [ -f "/insert_data.sh" ]; then
     echo "Script d'insertion trouvé, exécution..."
+    echo "Permissions avant chmod:"
+    ls -la /insert_data.sh
     chmod +x /insert_data.sh
+    echo "Permissions après chmod:"
+    ls -la /insert_data.sh
+    echo "Exécution du script d'insertion..."
     /insert_data.sh
 else
     echo "ERREUR: Script /insert_data.sh non trouvé!"
+    echo "Recherche du script dans d'autres emplacements:"
+    find / -name "insert_data.sh" 2>/dev/null || echo "Commande 'find' non disponible ou aucun fichier trouvé"
 fi
 
 # Vérifier que les données ont été insérées
