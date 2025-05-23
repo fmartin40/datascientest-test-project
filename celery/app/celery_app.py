@@ -9,3 +9,23 @@ celery_client = Celery(
     broker=broker_url,
     backend='rpc://'
 )
+
+# Configuration Celery
+celery_client.conf.update(
+    task_serializer='json',
+    accept_content=['json'],
+    result_serializer='json',
+    timezone='Europe/Paris',
+    enable_utc=True,
+    worker_hijack_root_logger=False,  # Important: ne pas détourner le logger racine
+    worker_redirect_stdouts=False,    # Ne pas rediriger stdout/stderr
+)
+
+# Configuration des queues pour les différentes tâches
+celery_client.conf.task_routes = {
+    'extract_summaries': {'queue': 'summaries_queue'},
+    'extract_jobdetail': {'queue': 'details_queue'},
+}
+
+# Configuration des limites de rate pour éviter de surcharger les sites
+celery_client.conf.task_default_rate_limit = '10/m'  # Limite globale par défaut
