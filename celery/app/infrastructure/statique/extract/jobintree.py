@@ -62,9 +62,9 @@ class JobInTreeExtractor(IStaticExtractor):
     async def extract_details(self, job_summary: JobSummary) -> JobDetail | None:
         try:
             if not job_summary.url.startswith(self.base_url):
-                url = urllib.parse.urljoin(self.base_url, job_summary.url)
+                job_summary.url = urllib.parse.urljoin(self.base_url, job_summary.url)
 
-            content: str = await self.fetch.fetch(url)
+            content: str = await self.fetch.fetch(job_summary.url)
 
             jsons = BeautifulSoup(content, "html.parser").find_all(
                 "script", {"type": "application/ld+json"}
@@ -81,11 +81,7 @@ class JobInTreeExtractor(IStaticExtractor):
 
             for js in jsons:
                 json_to_parse: Dict = json.loads(js.string)  # type: ignore
-                logger.info(f"json_to_parse: {detail_required_json_keys}")
-                logger.info(f"json_to_parse: {json_to_parse.keys()}")
-                logger.info(
-                    f"json_to_parse: {detail_required_json_keys.issubset(json_to_parse.keys())}"
-                )
+
                 if detail_required_json_keys.issubset(json_to_parse.keys()):
                     parsed = glom(json_to_parse, selectors)  # type: ignore
                     logger.info(f"Parsed: {parsed}")
@@ -97,7 +93,7 @@ class JobInTreeExtractor(IStaticExtractor):
                         ville=job_summary.ville,
                         type_contrat=job_summary.type_contrat,
                         entreprise=job_summary.entreprise,
-                        description=parsed["description"],
+                        description=self._clean_description(parsed["description"]),
                         source=self.source,
                         date_publication=parsed["date_publication"],
                         mode_travail=None,
@@ -107,10 +103,6 @@ class JobInTreeExtractor(IStaticExtractor):
                         formation=None,
                     )
                     logger.info(f"JobDetail: {jobdetail}")
-                    if jobdetail.description:
-                        jobdetail.description = self._clean_description(
-                            jobdetail.description
-                        )
                     return jobdetail
             return None
         except Exception as exc:
@@ -119,11 +111,13 @@ class JobInTreeExtractor(IStaticExtractor):
 
     def _clean_description(self, description: str) -> str:
         try:
+            if not description:
+                return ""
             clean_description: str = unescape(description)
             clean_description: str = BeautifulSoup(
                 clean_description, "html.parser"
-            ).get_text(separator="\n", strip=True)
-            clean_description: str = "\n".join([
+            ).get_text(separator=" ", strip=True)
+            clean_description: str = " ".join([
                 line.strip() for line in clean_description.splitlines() if line.strip()
             ])
             return clean_description

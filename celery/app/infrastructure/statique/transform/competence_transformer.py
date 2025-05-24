@@ -1,12 +1,12 @@
-from typing import Any, List
 from app.workers.scrap.interfaces.itransformer import ITransformer
 import re
-
+from app.workers.scrap.entities.jobs import JobDetail
+from app.infrastructure.ressource import get_competences
 
 class CompetencesTransformer(ITransformer):
-    def __init__(self):
+    def __init__(self, container=None):
         self.competences: list[str] = []
-        self._load_competences()   
+        self.container = container
         
     def _extract_keyword(self, text: str) -> list[str]:
         normalized_text: str = re.sub(
@@ -87,8 +87,9 @@ class CompetencesTransformer(ITransformer):
         # return self.competence
 
 
-    async def transform(self, text:str, llm:bool=False) -> List[str]:
+    async def transform(self, job_detail:JobDetail, llm:bool=False) -> JobDetail:
         if llm:
-            return []
+            job_detail.competence = self._extract_keyword(job_detail.description)
         else:
-            return self._extract_keyword(text)
+            job_detail.competence = self._extract_keyword(job_detail.description)
+        return job_detail

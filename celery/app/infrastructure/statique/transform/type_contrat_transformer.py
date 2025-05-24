@@ -1,8 +1,9 @@
-from typing import Any, List
+from typing import Any
 from app.workers.scrap.interfaces.itransformer import ITransformer
 import re
 from rapidfuzz import process, fuzz
 import logging
+from app.workers.scrap.entities.jobs import JobDetail
 
 logger = logging.getLogger(__name__)
 
@@ -54,8 +55,9 @@ class TypeContratTransformer(ITransformer):
         ]
         # return self.type_contrat
 
-    async def transform(self, text:str, llm:bool=False) -> str:
+    async def transform(self, job_detail:JobDetail, llm:bool=False) -> JobDetail:
         if llm:
-            return ""
+            job_detail.type_contrat = self._extract_keyword(job_detail.description)
         else:
-            return self._extract_keyword(text)
+            job_detail.type_contrat = self._extract_keyword(job_detail.description)
+        return job_detail

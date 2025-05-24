@@ -8,7 +8,7 @@ class IStaticExtractor(ABC):
         raise NotImplementedError
     
     @abstractmethod
-    async def extract_details(self, *args, **kwargs) -> JobDetail:
+    async def extract_details(self, *args, **kwargs) -> JobDetail | None:
         raise NotImplementedError
     
     

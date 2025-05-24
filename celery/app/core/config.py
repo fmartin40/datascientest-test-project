@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
+import spacy
 
 ROOT_DIR = Path(__file__).parent.parent.parent
 DOTENV = os.path.join(ROOT_DIR, '.env')
@@ -10,7 +10,7 @@ DOTENV = os.path.join(ROOT_DIR, '.env')
 class Settings(BaseSettings):
 	model_config = SettingsConfigDict(env_file=DOTENV, extra="ignore")
 	
-	
+	NLP = spacy.load("fr_core_news_sm")
 	REDIS_HOST: str 
 	REDIS_PORT: int 
 	REDIS_DB: int 

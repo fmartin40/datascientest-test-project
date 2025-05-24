@@ -3,10 +3,10 @@ from app.workers.scrap.interfaces.itransformer import ITransformer
 import logging
 import spacy
 from spacy.matcher import PhraseMatcher
-
+from app.workers.scrap.entities.jobs import JobDetail
 logger = logging.getLogger(__name__)
 
-class ModeTransformer(ITransformer):
+class ModeTravailTransformer(ITransformer):
     def __init__(self):
         self.keywords: list[str] = []
         self._load_keywords()
@@ -31,16 +31,6 @@ class ModeTransformer(ITransformer):
         return found_keywords
 
 
-        # normalized_text: str = re.sub(
-        #     r"[^a-z0-9\s]", " ", text.lower()
-        # ).lower()
-        # keyword: str = ""
-        # for keyword in self.contract_types:
-        #     normalized_keyword = re.sub(r"[^a-z0-9\s]", " ", keyword.lower()).strip()
-        #     pattern = r"\b" + re.escape(normalized_keyword) + r"\b"
-        #     if re.search(pattern, normalized_text):
-        #         return keyword
-        # return ""
     
     def _extract_llm(self, text: str) -> set:
         raise NotImplementedError("LLM extraction not implemented")
@@ -57,8 +47,9 @@ class ModeTransformer(ITransformer):
         ]
         # return self.type_contrat
 
-    async def transform(self, text:str, llm:bool=False) -> str:
+    async def transform(self, job_detail:JobDetail, llm:bool=False) -> JobDetail:
         if llm:
-            return ""
+            job_detail.mode_travail = self._extract_keyword(job_detail.description)
         else:
-            return self._extract_keyword(text)
+            job_detail.mode_travail = self._extract_keyword(job_detail.description)
+        return job_detail
