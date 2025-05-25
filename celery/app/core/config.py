@@ -10,6 +10,9 @@ DOTENV = os.path.join(ROOT_DIR, '.env')
 class Settings(BaseSettings):
 	model_config = SettingsConfigDict(env_file=DOTENV, extra="ignore")
 	
+	API_SCRAP_PORT: int
+	API_ELASTIC_PORT: int
+	API_POST_PORT: int
 
 	REDIS_HOST: str 
 	REDIS_PORT: int 
