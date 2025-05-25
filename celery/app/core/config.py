@@ -10,7 +10,7 @@ DOTENV = os.path.join(ROOT_DIR, '.env')
 class Settings(BaseSettings):
 	model_config = SettingsConfigDict(env_file=DOTENV, extra="ignore")
 	
-	
+
 	REDIS_HOST: str 
 	REDIS_PORT: int 
 	REDIS_DB: int 
@@ -35,3 +35,4 @@ class Settings(BaseSettings):
 	
 
 settings = Settings()  # type: ignore
+

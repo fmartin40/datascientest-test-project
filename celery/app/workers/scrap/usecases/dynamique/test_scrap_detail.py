@@ -17,8 +17,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-@shared_task(name="test_extract_jobdetail")
-def extract_jobdetail_for_test(url: str, website: str):
+@shared_task(name="dynamique.test_extract_summaries", autoretry_for=(Exception,), retry_kwargs={'max_retries': 3, 'countdown': 60})
+def extract_summaries(url: str, website: str):
     try:
         logger.info(f"Début de l'extraction - url: {url}, website: {website}")
         

@@ -1,5 +1,5 @@
 import asyncio
-from typing import Dict, Optional
+from typing import Dict
 import logging
 from celery import shared_task, current_task
 from app.core.container import ContainerService
@@ -12,8 +12,7 @@ unstructured_db = container.unstructured_loader()
 
 logger = logging.getLogger(__name__)
 
-@shared_task(name="extract_jobdetail", queue="details_queue", 
-             autoretry_for=(Exception,), retry_kwargs={'max_retries': 3, 'countdown': 60})
+@shared_task(name="dynamique.extract_jobdetail", autoretry_for=(Exception,), retry_kwargs={'max_retries': 3, 'countdown': 60})
 def extract_jobdetail(url: str, website: str):
     """
     Tâche qui extrait les détails d'une offre d'emploi et les stocke en base.

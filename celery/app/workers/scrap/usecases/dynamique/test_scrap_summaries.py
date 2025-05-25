@@ -1,8 +1,7 @@
 import asyncio
 import logging
-from typing import Dict, List
+from typing import Dict
 from app.core.container import ContainerService
-from app.workers.scrap.entities.jobs import JobSummary
 from celery import shared_task, current_task
 
 container = ContainerService()
@@ -11,7 +10,7 @@ redis_loader = container.redis_loader()
 
 logger = logging.getLogger(__name__)
 
-@shared_task(name="test_extract_summaries")
+@shared_task(name="dynamique.test_extract_summaries", autoretry_for=(Exception,), retry_kwargs={'max_retries': 3, 'countdown': 60})
 def extract_summaries_for_test(website: str, query: str, location: str, loop: int = 1):
     try:
         # Ajouter des logs plus détaillés

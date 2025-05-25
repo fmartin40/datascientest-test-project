@@ -1,7 +1,7 @@
 from typing import Dict
 import time
 from app.workers.scrap.interfaces.iwebconfig import IWebsiteSettingsLoader
-from app.infrastructure.scrap.scraper import Scraper
+from app.infrastructure.dynamique.scraper import Scraper
 from app.workers.scrap.entities.settings import WebsiteSettings
 
 class ScraperRegistry:

@@ -2,6 +2,7 @@ from app.celery_app import celery_client
 import logging
 import logging.config
 
+
 # Configuration du logging
 logging.config.dictConfig({
     'version': 1,
@@ -21,7 +22,7 @@ logging.config.dictConfig({
             'level': 'INFO',
             'class': 'logging.FileHandler',
             'filename': '/logs/worker.log',
-            'formatter': 'standard',
+            'formatter': 'standard'
         },
     },
     'loggers': {
@@ -48,10 +49,14 @@ logger = logging.getLogger(__name__)
 logger.info("Démarrage de l'application Celery")
 
 celery_client.autodiscover_tasks([
-    "app.workers.scrap.usecases.test_scrap_detail",
-    "app.workers.scrap.usecases.test_scrap_summaries",
-    "app.workers.scrap.usecases.scrap_detail",
-    "app.workers.scrap.usecases.scrap_summaries",
+    "app.workers.scrap.usecases.dynamique.test_scrap_detail",
+    "app.workers.scrap.usecases.dynamique.test_scrap_summaries",
+    "app.workers.scrap.usecases.dynamique.scrap_detail",
+    "app.workers.scrap.usecases.dynamique.scrap_summaries",
+    "app.workers.scrap.usecases.statique.test_scrap_detail",
+    "app.workers.scrap.usecases.statique.test_scrap_summaries",
+    "app.workers.scrap.usecases.statique.scrap_detail",
+    "app.workers.scrap.usecases.statique.scrap_summaries",
 ])
 
 logger.info("Tâches découvertes et enregistrées")

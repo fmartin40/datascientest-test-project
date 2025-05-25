@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 from app.workers.scrap.entities.jobs import JobDetail
 from app.workers.scrap.entities.settings import ParserSettings, WebsiteInfo
 from app.workers.scrap.interfaces.iextractor import IExtractor
-from app.infrastructure.scrap.extract.fetchurl import FetchUrl
+from app.infrastructure.dynamique.extract.fetchurl import FetchUrl
 
 
 class JobDetailHTMLExtractor(IExtractor):

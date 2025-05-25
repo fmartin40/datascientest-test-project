@@ -1,5 +1,5 @@
 from typing import Any, Dict
-from app.workers.scrap.entities.jobs import JobDetail, JobDetailInfos
+from app.workers.scrap.entities.jobs import JobDetail
 from app.workers.scrap.entities.settings import ParserSettings, WebsiteInfo
 from app.workers.scrap.interfaces.itransformer import ITransformer
 import re
@@ -23,7 +23,7 @@ class KeywordTransformer(ITransformer):
                 found.add(keyword)
         return found
 
-    def _load_technologies(self) -> set[str]:
+    def _load_competences(self) -> set[str]:
         self.technologies: set[str] = {
             "airflow",
             "amazon s3",
@@ -103,7 +103,7 @@ class KeywordTransformer(ITransformer):
     async def transform(self, jobdetail: JobDetail) -> Dict[str, Any]:
         return {
             "technologies": self._extract_keyword(  # type: ignore
-                jobdetail.description, set(self._load_technologies())
+                jobdetail.description, set(self._load_competences())
             ),
             "contract_types": self._extract_keyword(  # type: ignore
                 jobdetail.description, set(self._load_contract_types())

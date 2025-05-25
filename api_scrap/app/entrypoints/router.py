@@ -1,5 +1,6 @@
 from fastapi import APIRouter
-from app.entrypoints.endpoint import scrap, profile
+from app.entrypoints.endpoint import scrap
+from app.entrypoints.endpoint import profile
 
 routeur_scrap = APIRouter(prefix="/scrap", tags=["scrap"] )
 routeur_profile = APIRouter(prefix="/profile", tags=["profile"] )

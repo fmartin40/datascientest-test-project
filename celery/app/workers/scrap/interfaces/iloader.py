@@ -11,3 +11,5 @@ class ILoader(ABC):
     @abstractmethod
     async def insert_many(self, jobs: List[Job], *args, **kwargs):
         raise NotImplementedError
+    
+    

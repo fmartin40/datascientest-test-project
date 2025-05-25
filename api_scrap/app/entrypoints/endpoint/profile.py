@@ -13,11 +13,13 @@ router = APIRouter()
 @inject
 async def list_jobs_summaries(
     input_dto: ScrapJobSummaryInputDto,
+    dynamique:bool = False,
     celery_client: Celery = Depends(Provide[ContainerService.celery_client]),
 ):
     try:
+        task_name = "dynamique.test_extract_summaries" if dynamique else "statique.test_extract_summaries"
         task = celery_client.send_task(
-            "test_extract_summaries",  # Nom exact de la tâche
+            task_name,  # Nom exact de la tâche
             kwargs=input_dto.model_dump()
         )
         
@@ -33,11 +35,13 @@ async def list_jobs_summaries(
 @inject
 async def get_job_detail(
     input_dto: ScrapJobDetailInputDto,
+    dynamique:bool = False,
     celery_client: Celery = Depends(Provide[ContainerService.celery_client]),
 ):
     try:
+        task_name = "dynamique.test_extract_jobdetail" if dynamique else "statique.test_extract_jobdetail"
         task = celery_client.send_task(
-            "test_extract_jobdetail",  # Nom exact de la tâche
+            task_name,  # Nom exact de la tâche
             kwargs=input_dto.model_dump(),
         )
         
@@ -50,7 +54,7 @@ async def get_job_detail(
 
 @router.get("/test/get-result/{task_id}")
 @inject
-async def get_result(task_id: str, job_repo: IJobRepo = Depends(Provide[ContainerService.job_repo])      ):
+async def get_result(task_id: str, job_repo: IJobRepo = Depends(Provide[ContainerService.job_repo])):
     try:
         result = await job_repo.get_job_detail(task_id)
         return result

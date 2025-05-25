@@ -2,8 +2,8 @@ from typing import List, Tuple
 
 from app.workers.scrap.entities.settings import ParserSettings, WebsiteInfo
 from app.workers.scrap.interfaces.iextractor import IExtractor
-from app.infrastructure.scrap.extract.extract_detail import JobDetailHTMLExtractor, JobDetailJSONExtractor
-from app.infrastructure.scrap.extract.extract_summaries import JobSummaryHTMLExtractor, JobSummaryJSONExtractor
+from app.infrastructure.dynamique.extract.extract_detail import JobDetailHTMLExtractor, JobDetailJSONExtractor
+from app.infrastructure.dynamique.extract.extract_summaries import JobSummaryHTMLExtractor, JobSummaryJSONExtractor
 
 class ExtractorsFactory:
 		
