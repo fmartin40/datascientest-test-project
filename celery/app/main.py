@@ -2,6 +2,7 @@ from app.celery_app import celery_client
 import logging
 import logging.config
 
+
 # Configuration du logging
 logging.config.dictConfig({
     'version': 1,

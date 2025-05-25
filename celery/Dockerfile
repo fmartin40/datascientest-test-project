@@ -14,8 +14,7 @@ RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
 # 3. (Multi-steps) Install and immediately uninstall the spaCy model
-RUN python -m spacy download xx_ent_wiki_sm && \
-    python -m pip uninstall -y xx_ent_wiki_sm
+RUN python -m spacy download fr_core_news_sm
 
 # 4. Copy the rest of your application code
 COPY . /app

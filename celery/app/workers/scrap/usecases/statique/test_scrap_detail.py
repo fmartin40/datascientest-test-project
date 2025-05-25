@@ -1,11 +1,12 @@
 import asyncio
-from typing import Dict
+from typing import Dict, List
 import logging
 from celery import shared_task, current_task
 from app.core.container import ContainerService
 from app.workers.scrap.entities.jobs import JobDetail, JobSummary
 from app.workers.scrap.interfaces.istatic_extractor import IStaticExtractor
 from app.workers.scrap.interfaces.itransformer import ITransformer
+from app.core.nlp import COMPETENCES, MODE_TRAVAIL, TYPE_CONTRAT, DUREE_TRAVAIL
 
 container = ContainerService()
 redis_loader = container.redis_loader()
@@ -37,20 +38,27 @@ def test_extract_jobdetail(summary: dict, source: str):
         )  # type: ignore
         logger.info(f"Détails extraits avec succès : {job_detail}")
 
+
         # ----- lancement des transformations
-        # job_detail = asyncio.run(
-        #     container.competence_transformer().transform(job_detail))
-        # job_detail = asyncio.run(
-        #     container.mode_travail_transformer().transform(job_detail))
-        # job_detail = asyncio.run(
-        #     container.type_contrat_transformer().transform(job_detail))
-        # logger.info("Transformations effectuées avec succès")
+        competences: List[str] = asyncio.run(
+            container.keyword_transformer(keywords=COMPETENCES).transform(text=job_detail.description, type="liste")) # type: ignore
+        mode_travail: str = asyncio.run(
+            container.keyword_transformer(keywords=MODE_TRAVAIL).transform(text=job_detail.description, type="keyword")) # type: ignore
+        type_contrat: str = asyncio.run(
+            container.keyword_transformer(keywords=TYPE_CONTRAT).transform(text=job_detail.description, type="keyword")) # type: ignore
+        duree_travail: str = asyncio.run(
+            container.keyword_transformer(keywords=DUREE_TRAVAIL).transform(text=job_detail.description, type="keyword")) # type: ignore
+        
+        job_detail.competence = competences
+        job_detail.mode_travail = mode_travail if mode_travail is not None else "presentiel"
+        job_detail.type_contrat = type_contrat if type_contrat is not None else "CDI"
+        job_detail.duree_travail = duree_travail if duree_travail is not None else "temps plein"
 
         # # ----- Insertion des données dans Redis
-        # redis_loader.insert(key=task_id, job=[job_detail.model_dump()], ttl=300)
-        # logger.info(f"job detail insérées dans Redis - task_id: {task_id}")
-        # return task_id
-        
+        redis_loader.insert(key=task_id, job=[job_detail.model_dump()], ttl=300)
+        logger.info(f"job detail insérées dans Redis - task_id: {task_id}")
+        logger.info(f"traitement terminé - job detail: {job_detail.model_dump()}")
+        return job_detail.model_dump()
 
     except Exception as e:
         logger.error(f"ERREUR dans extract_jobdetail: {e}", exc_info=True)

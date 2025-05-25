@@ -14,9 +14,9 @@ fi
 # Liste des fichiers docker-compose à lancer
 COMPOSE_FILES=(
   "docker-compose.postgres.yml"
-  "docker-compose.scrap.yml"
-  "docker-compose.celery.yml"
   "docker-compose.elastic.yml"
+  "docker-compose.celery.yml"
+  "docker-compose.scrap.yml"
 )
 
 # Démarrage de chaque docker-compose

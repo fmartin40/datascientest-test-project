@@ -1,29 +1,48 @@
 from app.workers.scrap.interfaces.itransformer import ITransformer
-import re
 from app.workers.scrap.entities.jobs import JobDetail
-from app.infrastructure.ressource import get_competences
+import spacy
+from spacy.matcher import PhraseMatcher
+
+import logging
+from app.core.nlp import get_nlp
+
+logger = logging.getLogger(__name__)
 
 class CompetencesTransformer(ITransformer):
     def __init__(self, container=None):
-        self.competences: list[str] = []
         self.container = container
         
+
+    async def transform(self, job_detail:JobDetail, llm:bool=False) -> JobDetail:
+        
+        if llm:
+            job_detail.competence = self._extract_keyword(job_detail.description)
+        else:
+            job_detail.competence = self._extract_keyword(job_detail.description)
+        return job_detail
+      
     def _extract_keyword(self, text: str) -> list[str]:
-        normalized_text: str = re.sub(
-            r"[^a-z0-9\s]", " ", text.lower()
-        ).lower()
-        found: set = set()
-        for keyword in self.competences:
-            pattern: str = r"\b" + re.escape(keyword.lower()) + r"\b"
-            if re.search(pattern, normalized_text):
-                found.add(keyword)
-        return list(found)
+        nlp = get_nlp()
+        doc = nlp(text)
+        competences: list[str] = self._load_competences()
+        # Préparation du PhraseMatcher
+        matcher = PhraseMatcher(nlp.vocab, attr="LOWER")
+        patterns = [nlp.make_doc(text) for text in competences]
+        matcher.add("CIBLES", patterns)
+
+        # Recherche des matches
+        matches = matcher(doc)
+        found_keywords = [doc[start:end].text for match_id, start, end in matches]
+
+        # Afficher les extraits trouvés
+        logger.info(f"Expressions trouvées : {found_keywords}")
+        return found_keywords
     
     def _extract_llm(self, text: str) -> set:
         raise NotImplementedError("LLM extraction not implemented")
 
-    def _load_competences(self) -> None:
-        self.competences: list[str] = [
+    def _load_competences(self) -> list[str]:
+        return [
             "airflow",
             "amazon s3",
             "ansible",
@@ -87,9 +106,3 @@ class CompetencesTransformer(ITransformer):
         # return self.competence
 
 
-    async def transform(self, job_detail:JobDetail, llm:bool=False) -> JobDetail:
-        if llm:
-            job_detail.competence = self._extract_keyword(job_detail.description)
-        else:
-            job_detail.competence = self._extract_keyword(job_detail.description)
-        return job_detail

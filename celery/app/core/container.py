@@ -10,7 +10,7 @@ from app.infrastructure.statique.extract.jobintree import JobInTreeExtractor
 from app.infrastructure.statique.transform.competence_transformer import CompetencesTransformer
 from app.infrastructure.statique.transform.type_contrat_transformer import TypeContratTransformer   
 from app.infrastructure.statique.transform.mode_transformer import ModeTravailTransformer
-
+from app.infrastructure.statique.transform.keyword_transformer import KeywordTransformer
 
 
 class ContainerService(containers.DeclarativeContainer):
@@ -31,7 +31,8 @@ class ContainerService(containers.DeclarativeContainer):
     scraper_factory = providers.Dict(
         jobintree=providers.Factory(JobInTreeExtractor)
     )
+
     competence_transformer = providers.Factory(CompetencesTransformer)
     type_contrat_transformer = providers.Factory(TypeContratTransformer)
     mode_travail_transformer = providers.Factory(ModeTravailTransformer)
-    
+    keyword_transformer = providers.Factory(KeywordTransformer)

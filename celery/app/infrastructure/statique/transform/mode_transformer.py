@@ -4,6 +4,7 @@ import logging
 import spacy
 from spacy.matcher import PhraseMatcher
 from app.workers.scrap.entities.jobs import JobDetail
+from app.core.nlp import get_nlp
 logger = logging.getLogger(__name__)
 
 class ModeTravailTransformer(ITransformer):
@@ -11,14 +12,22 @@ class ModeTravailTransformer(ITransformer):
         self.keywords: list[str] = []
         self._load_keywords()
 
-    def _extract_keyword(self, texte: str) -> Any:
-        # Traitement avec spaCy
-        nlp = spacy.load("fr_core_news_sm")
-        doc = nlp(texte)
 
+    async def transform(self, job_detail:JobDetail, llm:bool=False) -> JobDetail:
+        if llm:
+            job_detail.mode_travail = self._extract_keyword(job_detail.description)
+        else:
+            job_detail.mode_travail = self._extract_keyword(job_detail.description)
+        return job_detail
+
+
+    def _extract_keyword(self, text: str) -> Any:
+        nlp = get_nlp()
+        doc = nlp(text)
+        keywords: list[str] = self._load_keywords()
         # Préparation du PhraseMatcher
         matcher = PhraseMatcher(nlp.vocab, attr="LOWER")
-        patterns = [nlp.make_doc(text) for text in self.keywords]
+        patterns = [nlp.make_doc(text) for text in keywords]
         matcher.add("CIBLES", patterns)
 
         # Recherche des matches
@@ -26,8 +35,7 @@ class ModeTravailTransformer(ITransformer):
         found_keywords = [doc[start:end].text for match_id, start, end in matches]
 
         # Afficher les extraits trouvés
-        print("Expressions trouvées :", found_keywords)
-
+        logger.info(f"Expressions trouvées : {found_keywords}")
         return found_keywords
 
 
@@ -35,8 +43,8 @@ class ModeTravailTransformer(ITransformer):
     def _extract_llm(self, text: str) -> set:
         raise NotImplementedError("LLM extraction not implemented")
 
-    def _load_keywords(self) -> None:
-        self.contract_types: list[str] = [
+    def _load_keywords(self) -> list[str]:
+        return [
             "teletravail",
             "presentiel",
             "hybride",
@@ -45,11 +53,5 @@ class ModeTravailTransformer(ITransformer):
             "hybrid",
             "flexible",    
         ]
-        # return self.type_contrat
 
-    async def transform(self, job_detail:JobDetail, llm:bool=False) -> JobDetail:
-        if llm:
-            job_detail.mode_travail = self._extract_keyword(job_detail.description)
-        else:
-            job_detail.mode_travail = self._extract_keyword(job_detail.description)
-        return job_detail
+    

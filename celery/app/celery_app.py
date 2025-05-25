@@ -20,6 +20,6 @@ celery_client.conf.update(
     worker_hijack_root_logger=False,  # Important: ne pas détourner le logger racine
     worker_redirect_stdouts=False,    # Ne pas rediriger stdout/stderr
 )
-
+    
 # Configuration des limites de rate pour éviter de surcharger les sites
 celery_client.conf.task_default_rate_limit = '10/m'  # Limite globale par défaut
