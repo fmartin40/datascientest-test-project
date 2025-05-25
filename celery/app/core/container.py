@@ -1,16 +1,18 @@
 from dependency_injector import containers, providers
-from app.infrastructure.dynamique.load.elastic_loader import ElasticLoader
-from app.infrastructure.dynamique.load.postgres_loader import PostgresLoader
-from app.infrastructure.dynamique.load.redis_loader import RedisLoader
-from app.infrastructure.dynamique.config.webconfig_file import (
-    WebsiteSettingsFileLoader,
-)
-from app.infrastructure.dynamique.scrapers_registry import ScraperRegistry
-from app.infrastructure.statique.extract.jobintree import JobInTreeExtractor
-from app.infrastructure.statique.transform.competence_transformer import CompetencesTransformer
-from app.infrastructure.statique.transform.type_contrat_transformer import TypeContratTransformer   
-from app.infrastructure.statique.transform.mode_transformer import ModeTravailTransformer
-from app.infrastructure.statique.transform.keyword_transformer import KeywordTransformer
+
+# from app.workers.infrastructure.dynamique.config.webconfig_file import (
+#     WebsiteSettingsFileLoader,
+# )
+# from app.workers.infrastructure.dynamique.scrapers_registry import ScraperRegistry
+
+from app.workers.infrastructure.statique.load.elastic_loader import ElasticLoader
+from app.workers.infrastructure.statique.load.postgres_loader import PostgresLoader
+from app.workers.infrastructure.statique.load.redis_loader import RedisLoader
+from app.workers.infrastructure.statique.extract.jobintree import JobInTreeExtractor
+from app.workers.infrastructure.statique.transform.competence_transformer import CompetencesTransformer
+from app.workers.infrastructure.statique.transform.type_contrat_transformer import TypeContratTransformer   
+from app.workers.infrastructure.statique.transform.mode_transformer import ModeTravailTransformer
+from app.workers.infrastructure.statique.transform.keyword_transformer import KeywordTransformer
 
 
 class ContainerService(containers.DeclarativeContainer):
@@ -22,11 +24,11 @@ class ContainerService(containers.DeclarativeContainer):
     redis_loader = providers.Factory(RedisLoader)
 
    
-    website_settings_loader = providers.Singleton(WebsiteSettingsFileLoader)
+    # website_settings_loader = providers.Singleton(WebsiteSettingsFileLoader)
 
-    scraper_registry = providers.Singleton(
-        ScraperRegistry, config_loader=website_settings_loader
-    )
+    # scraper_registry = providers.Singleton(
+    #     ScraperRegistry, config_loader=website_settings_loader
+    # )
     
     scraper_factory = providers.Dict(
         jobintree=providers.Factory(JobInTreeExtractor)
