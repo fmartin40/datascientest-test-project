@@ -1,7 +1,7 @@
 from app.domain.job.entities.job_insert import JobCreate
 from app.domain.job.interfaces.ijob_writer import IJobWriter  
 from app.infrastructure.models.models import (
-    EntrepriseOrm, LangueOrm,
+    EntrepriseOrm,
     DureeTravailOrm, CompetenceOrm, ModeTravailOrm, TypeContratOrm,
     SourceOrm, OffreEmploiOrm, VilleOrm
 )
@@ -23,31 +23,24 @@ class JobWriter(IJobWriter):
             # Continuer avec l'insertion si l'offre n'existe pas
             entreprise_db = await self.add_entreprise(job.entreprise)
             ville_db = await self.add_ville(job.ville)
-            duree_travail_db = await self.add_duree_travail(job.duree_travail)
-            mode_travail_db = await self.add_mode_travail(job.mode_travail)
-            type_contrat_db = await self.add_type_contrat(job.type_contrat)
-
+            # duree_travail_db = await self.add_duree_travail(job.duree_travail)
+            # mode_travail_db = await self.add_mode_travail(job.mode_travail)
+            # type_contrat_db = await self.add_type_contrat(job.type_contrat)
+            logger.info(f"Entreprise: {entreprise_db.id}")
+            logger.info(f"Ville: {ville_db.id}")
+            
             offre = await OffreEmploiOrm.create(
                 job_id=job.job_id,
                 date_creation=job.date_creation,
                 libelle=job.libelle,
-                source=job.source,
-                
-                entreprise=entreprise_db.id,
-                ville=ville_db.id,
-                type_contrat=type_contrat_db.id,
-                duree_travail=duree_travail_db.id,
-                mode_travail=mode_travail_db.id,
+                source_id=job.source_id,
+                entreprise_id=entreprise_db.id,
+                ville_id=ville_db.id,
+                type_contrat_id=job.type_contrat_id,
+                duree_travail_id=job.duree_travail_id,
+                mode_travail_id=job.mode_travail_id,
             )
-            logger.info(f"Offre créée avec l'ID: {offre.id}")
-            
-            if job.langue and len(job.langue) > 0:
-                langues = []
-                for langue_libelle in job.langue:
-                    langue_obj = await self.add_langue(langue_libelle)
-                    langues.append(langue_obj)
-                await offre.langues.add(*langues)
-                logger.info(f"Ajout de {len(langues)} langues pour l'offre {offre.id}")
+            logger.info(f"Offre créée : {offre}")
             
             if job.competence and len(job.competence) > 0:
                 competences = []
@@ -88,13 +81,6 @@ class JobWriter(IJobWriter):
             logger.error(f"Erreur lors de l'ajout de la ville {ville}: {str(e)}")
             raise
 
-    async def add_langue(self, langue: str) -> LangueOrm:
-        try:
-            obj, _ = await LangueOrm.get_or_create(libelle=langue)
-            return obj
-        except Exception as e:
-            logger.error(f"Erreur lors de l'ajout de la langue {langue}: {str(e)}")
-            raise
 
 
     async def add_duree_travail(self, duree_travail: str) -> DureeTravailOrm:

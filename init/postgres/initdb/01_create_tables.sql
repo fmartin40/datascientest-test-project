@@ -9,11 +9,6 @@ CREATE TABLE IF NOT EXISTS "Ville" (
   "libelle" VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS "Langue" (
-  "id" SERIAL PRIMARY KEY,
-  "libelle" VARCHAR(255) UNIQUE NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS "Competence" (
   "id" SERIAL PRIMARY KEY,
   "libelle" VARCHAR(255)
@@ -82,11 +77,7 @@ CREATE TABLE IF NOT EXISTS "OffreEmploi" (
 );
 
 -- RELATIONS N:N
-CREATE TABLE IF NOT EXISTS "OffreEmploi_Langue" (
-  "offre_id" INT REFERENCES "OffreEmploi"("id") ON DELETE CASCADE,
-  "langue_id" INT REFERENCES "Langue"("id") ON DELETE CASCADE,
-  PRIMARY KEY ("offre_id", "langue_id")
-);
+
 
 CREATE TABLE IF NOT EXISTS "OffreEmploi_Competence" (
   "offre_id" INT REFERENCES "OffreEmploi"("id") ON DELETE CASCADE,
@@ -173,8 +164,6 @@ BEGIN
 END $$;
 
 -- Index sur les tables de jointure
-CREATE INDEX IF NOT EXISTS "idx_offreemploi_langue_offre_id" ON "OffreEmploi_Langue" ("offre_id");
-CREATE INDEX IF NOT EXISTS "idx_offreemploi_langue_langue_id" ON "OffreEmploi_Langue" ("langue_id");
 
 CREATE INDEX IF NOT EXISTS "idx_offreemploi_competence_offre_id" ON "OffreEmploi_Competence" ("offre_id");
 CREATE INDEX IF NOT EXISTS "idx_offreemploi_competence_competence_id" ON "OffreEmploi_Competence" ("competence_id");

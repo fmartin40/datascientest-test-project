@@ -6,7 +6,6 @@ from app.domain.job.interfaces.ijob_reader import IJobReader
 from app.infrastructure.models.models import (
     OffreEmploiOrm,
     EntrepriseOrm,
-    LangueOrm,
     CompetenceOrm,
     SourceOrm,
     ModeTravailOrm,
@@ -20,7 +19,6 @@ from app.domain.job.entities.jobs import (
     Ville,
     DureeTravail,
     ModeTravail,
-    Langue,
     Competence,
     TypeContrat,
     JobLight,
@@ -32,7 +30,6 @@ from tortoise.queryset import QuerySet
 
 EntreprisePydantic = pydantic_model_creator(EntrepriseOrm, name="Entreprise")
 VillePydantic = pydantic_model_creator(VilleOrm, name="Ville")
-LanguePydantic = pydantic_model_creator(LangueOrm, name="Langue")
 CompetencePydantic = pydantic_model_creator(CompetenceOrm, name="Competence")
 SourcePydantic = pydantic_model_creator(SourceOrm, name="Source")
 ModeTravailPydantic = pydantic_model_creator(ModeTravailOrm, name="ModeTravail")
@@ -48,7 +45,6 @@ OffreEmploiPydantic = pydantic_model_creator(
         "duree_travail",  # => duree_travail
         "mode_travail",  # => mode_travail
         "type_contrat",  # => type_contrat
-        "langues",  # M2M
         "competences",  # M2M
     ),
 )
@@ -70,7 +66,6 @@ class JobReader(IJobReader):
         limit: int,
         offset: int,
         competence: Optional[int] = None,
-        langue: Optional[int] = None,
         entreprise: Optional[int] = None,
         ville: Optional[int] = None,
         type_contrat: Optional[int] = None,
@@ -88,14 +83,11 @@ class JobReader(IJobReader):
                 "mode_travail",
                 "type_contrat",
                 "competences",
-                "langues",
             )
 
             filters = Q()
             if competence:
                 filters &= Q(competences__id=competence)
-            if langue:
-                filters &= Q(langues__id=langue)
             if entreprise:
                 filters &= Q(entreprise__id=entreprise)
             if ville:
@@ -214,7 +206,6 @@ class JobReader(IJobReader):
                     ville=ville,  # type: ignore
                     duree_travail=duree_travail,  # type: ignore
                     mode_travail=mode_travail,  # type: ignore
-                    langues=[Langue(**l.__dict__) for l in await offre.langues.all()],
                     competences=[
                         Competence(**c.__dict__) for c in await offre.competences.all()
                     ],
@@ -239,7 +230,6 @@ class JobReader(IJobReader):
                     "mode_travail",
                     "type_contrat",
                     "competences",
-                    "langues",
                 )
                 .first()
             )
@@ -270,12 +260,6 @@ class JobReader(IJobReader):
             logger.error(f"Erreur lors de la récupération des compétences : {e}")
             return []
 
-    async def list_langues(self) -> Sequence[BaseModel]:
-        try:
-            return await LanguePydantic.from_queryset(LangueOrm.all())
-        except Exception as e:
-            logger.error(f"Erreur lors de la récupération des langues : {e}")
-            return []
 
     async def list_entreprises(self) -> Sequence[BaseModel]:
         try:

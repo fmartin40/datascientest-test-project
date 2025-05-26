@@ -13,7 +13,6 @@ async def list_jobs(
     limit: int = Query(30, ge=1, le=30),
     offset: int = Query(0, ge=0),
     competence: Optional[int] = Query(None),
-    langue: Optional[int] = Query(None),
     entreprise: Optional[int] = Query(None),
     ville: Optional[int] = Query(None),
     type_contrat: Optional[int] = Query(None),
@@ -26,7 +25,6 @@ async def list_jobs(
     try:
         return await repo.list(
             competence=competence,
-            langue=langue,
             entreprise=entreprise,
             ville=ville,
             type_contrat=type_contrat,

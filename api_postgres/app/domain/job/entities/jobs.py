@@ -11,10 +11,6 @@ class Ville(BaseModel):
     libelle: Optional[str]
 
 
-class Langue(BaseModel):
-    id: int
-    libelle: Optional[str]
-
 class Competence(BaseModel):
     id: int
     libelle: Optional[str]
@@ -47,7 +43,6 @@ class Job(BaseModel):
     type_contrat: Optional[TypeContrat] = None
     duree_travail: Optional[DureeTravail] = None
     mode_travail: Optional[ModeTravail] = None
-    langues: Optional[List[Langue]] = None
     competences: Optional[List[Competence]] = None
 
 class JobLight(BaseModel):
