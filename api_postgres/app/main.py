@@ -3,18 +3,36 @@ from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 from tortoise.contrib.fastapi import register_tortoise
 from app.core.config import settings
+import logging
+import os
 
 from app.core.container import ContainerService
 from app.entrypoint.router import (
 	routeur_job_reader,
     routeur_job_writer,
+    routeur_mappings,
 )
 
+
+# Chemin absolu pour le fichier de log
+LOG_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "logs"))
+os.makedirs(LOG_DIR, exist_ok=True)
+LOG_PATH = os.path.join(LOG_DIR, "postgres.log")
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(name)s %(message)s",
+    handlers=[
+        logging.FileHandler(LOG_PATH, encoding="utf-8"),
+        logging.StreamHandler()
+    ]
+)
 
 # Instancier et configurer le container UNE SEULE FOIS
 endpoint = [
 	'app.entrypoint.endpoint.job_reader',
     'app.entrypoint.endpoint.job_writer',
+    'app.entrypoint.endpoint.mappings',
 ]
 container_service = ContainerService()
 container_service.wire(modules=endpoint)
@@ -27,6 +45,7 @@ app = FastAPI(
 # Ajouter les routeurs
 app.include_router(routeur_job_reader)
 app.include_router(routeur_job_writer)
+app.include_router(routeur_mappings)
 
 # midleware pour forcer https
 class HTTPSRedirectMiddleware(BaseHTTPMiddleware):

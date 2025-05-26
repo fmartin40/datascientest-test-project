@@ -86,6 +86,8 @@ TYPE_CONTRAT = [
             "stage",
             "temporaire",
             "alternance",
+            "contrat à durée déterminée",
+            "contrat à durée indéterminée",
         ]
 
 DUREE_TRAVAIL = [

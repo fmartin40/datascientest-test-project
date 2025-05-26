@@ -6,13 +6,10 @@ from app.domain.job.interfaces.ijob_reader import IJobReader
 from app.infrastructure.models.models import (
     OffreEmploiOrm,
     EntrepriseOrm,
-    SalaireOrm,
-    FormationOrm,
     LangueOrm,
     CompetenceOrm,
     SourceOrm,
     ModeTravailOrm,
-    ExperienceOrm,
     DureeTravailOrm,
     TypeContratOrm,
     VilleOrm,
@@ -21,11 +18,8 @@ from app.domain.job.entities.jobs import (
     Source,
     Entreprise,
     Ville,
-    Salaire,
-    Experience,
     DureeTravail,
     ModeTravail,
-    Formation,
     Langue,
     Competence,
     TypeContrat,
@@ -38,13 +32,10 @@ from tortoise.queryset import QuerySet
 
 EntreprisePydantic = pydantic_model_creator(EntrepriseOrm, name="Entreprise")
 VillePydantic = pydantic_model_creator(VilleOrm, name="Ville")
-SalairePydantic = pydantic_model_creator(SalaireOrm, name="Salaire")
-FormationPydantic = pydantic_model_creator(FormationOrm, name="Formation")
 LanguePydantic = pydantic_model_creator(LangueOrm, name="Langue")
 CompetencePydantic = pydantic_model_creator(CompetenceOrm, name="Competence")
 SourcePydantic = pydantic_model_creator(SourceOrm, name="Source")
 ModeTravailPydantic = pydantic_model_creator(ModeTravailOrm, name="ModeTravail")
-ExperiencePydantic = pydantic_model_creator(ExperienceOrm, name="Experience")
 DureeTravailPydantic = pydantic_model_creator(DureeTravailOrm, name="DureeTravail")
 TypeContratPydantic = pydantic_model_creator(TypeContratOrm, name="TypeContrat")
 
@@ -54,12 +45,9 @@ OffreEmploiPydantic = pydantic_model_creator(
     include=(
         "source",  # Tortoise le mappe à .source automatiquement
         "entreprise",  # => entreprise
-        "salaire",  # => salaire
-        "experience",  # => experience
         "duree_travail",  # => duree_travail
         "mode_travail",  # => mode_travail
         "type_contrat",  # => type_contrat
-        "formations",  # M2M
         "langues",  # M2M
         "competences",  # M2M
     ),
@@ -83,14 +71,11 @@ class JobReader(IJobReader):
         offset: int,
         competence: Optional[int] = None,
         langue: Optional[int] = None,
-        formation: Optional[int] = None,
         entreprise: Optional[int] = None,
         ville: Optional[int] = None,
         type_contrat: Optional[int] = None,
         duree_travail: Optional[int] = None,
         mode_travail: Optional[int] = None,
-        experience: Optional[int] = None,
-        salaire: Optional[int] = None,
         source: Optional[int] = None,
         light: bool = True,
     ) -> Sequence[Job | JobLight]:
@@ -98,14 +83,11 @@ class JobReader(IJobReader):
             query = OffreEmploiOrm.all().prefetch_related(
                 "entreprise",
                 "ville",
-                "salaire",
                 "source",
-                "experience",
                 "duree_travail",
                 "mode_travail",
                 "type_contrat",
                 "competences",
-                "formations",
                 "langues",
             )
 
@@ -114,8 +96,6 @@ class JobReader(IJobReader):
                 filters &= Q(competences__id=competence)
             if langue:
                 filters &= Q(langues__id=langue)
-            if formation:
-                filters &= Q(formations__id=formation)
             if entreprise:
                 filters &= Q(entreprise__id=entreprise)
             if ville:
@@ -126,13 +106,8 @@ class JobReader(IJobReader):
                 filters &= Q(duree_travail__id=duree_travail)
             if mode_travail:
                 filters &= Q(mode_travail__id=mode_travail)
-            if experience:
-                filters &= Q(experience__id=experience)
-            if salaire:
-                filters &= Q(salaire__id=salaire)
             if source:
                 filters &= Q(source__id=source)
-
             if filters:
                 query = query.filter(filters).limit(limit).offset(offset)
 
@@ -217,12 +192,7 @@ class JobReader(IJobReader):
                     else None
                 )  # type: ignore
                 source = Source(**offre.source.__dict__) if offre.source else None  # type: ignore
-                salaire = Salaire(**offre.salaire.__dict__) if offre.salaire else None  # type: ignore
-                experience = (
-                    Experience(**offre.experience.__dict__)
-                    if offre.experience
-                    else None
-                )  # type: ignore
+
                 duree_travail = (
                     DureeTravail(**offre.duree_travail.__dict__)
                     if offre.duree_travail
@@ -242,13 +212,8 @@ class JobReader(IJobReader):
                     source=source,  # type: ignore
                     entreprise=entreprise,  # type: ignore
                     ville=ville,  # type: ignore
-                    salaire=salaire,  # type: ignore
-                    experience=experience,  # type: ignore
                     duree_travail=duree_travail,  # type: ignore
                     mode_travail=mode_travail,  # type: ignore
-                    formations=[
-                        Formation(**f.__dict__) for f in await offre.formations.all()
-                    ],
                     langues=[Langue(**l.__dict__) for l in await offre.langues.all()],
                     competences=[
                         Competence(**c.__dict__) for c in await offre.competences.all()
@@ -269,14 +234,11 @@ class JobReader(IJobReader):
                 await OffreEmploiOrm.filter(id=job_id)
                 .prefetch_related(
                     "entreprise",
-                    "salaire",
                     "source",
-                    "experience",
                     "duree_travail",
                     "mode_travail",
                     "type_contrat",
                     "competences",
-                    "formations",
                     "langues",
                 )
                 .first()
@@ -308,13 +270,6 @@ class JobReader(IJobReader):
             logger.error(f"Erreur lors de la récupération des compétences : {e}")
             return []
 
-    async def list_formations(self) -> Sequence[BaseModel]:
-        try:
-            return await FormationPydantic.from_queryset(FormationOrm.all())
-        except Exception as e:
-            logger.error(f"Erreur lors de la récupération des formations : {e}")
-            return []
-
     async def list_langues(self) -> Sequence[BaseModel]:
         try:
             return await LanguePydantic.from_queryset(LangueOrm.all())
@@ -327,13 +282,6 @@ class JobReader(IJobReader):
             return await EntreprisePydantic.from_queryset(EntrepriseOrm.all())
         except Exception as e:
             logger.error(f"Erreur lors de la récupération des entreprises : {e}")
-            return []
-
-    async def list_salaires(self) -> Sequence[BaseModel]:
-        try:
-            return await SalairePydantic.from_queryset(SalaireOrm.all())
-        except Exception as e:
-            logger.error(f"Erreur lors de la récupération des salaires : {e}")
             return []
 
     async def list_type_contrat(self) -> Sequence[BaseModel]:
@@ -357,13 +305,7 @@ class JobReader(IJobReader):
             logger.error(f"Erreur lors de la récupération des modes de travail : {e}")
             return []
 
-    async def list_experience(self) -> Sequence[BaseModel]:
-        try:
-            return await ExperiencePydantic.from_queryset(ExperienceOrm.all())
-        except Exception as e:
-            logger.error(f"Erreur lors de la récupération des expériences : {e}")
-            return []
-
+    
     async def list_source(self) -> Sequence[BaseModel]:
         try:
             return await SourcePydantic.from_queryset(SourceOrm.all())
@@ -371,9 +313,4 @@ class JobReader(IJobReader):
             logger.error(f"Erreur lors de la récupération des sources : {e}")
             return []
 
-    async def list_salaire(self) -> Sequence[BaseModel]:
-        try:
-            return await SalairePydantic.from_queryset(SalaireOrm.all())
-        except Exception as e:
-            logger.error(f"Erreur lors de la récupération des salaires : {e}")
-            return []
+    

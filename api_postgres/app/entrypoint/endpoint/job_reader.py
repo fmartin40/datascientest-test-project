@@ -7,21 +7,18 @@ from app.infrastructure.job.job_reader import JobReader
 
 router = APIRouter(tags=["read job infos"])
 
-@router.get("/jobs")
+@router.get("/jobs", response_model=list[Job])
 @inject
 async def list_jobs(
     limit: int = Query(30, ge=1, le=30),
     offset: int = Query(0, ge=0),
     competence: Optional[int] = Query(None),
     langue: Optional[int] = Query(None),
-    formation: Optional[int] = Query(None),
     entreprise: Optional[int] = Query(None),
     ville: Optional[int] = Query(None),
     type_contrat: Optional[int] = Query(None),
     duree_travail: Optional[int] = Query(None),
     mode_travail: Optional[int] = Query(None),
-    experience: Optional[int] = Query(None),
-    salaire: Optional[int] = Query(None),
     source: Optional[int] = Query(None),
     light: bool = Query(True),
     repo: JobReader = Depends(Provide[ContainerService.job_reader]),
@@ -30,14 +27,11 @@ async def list_jobs(
         return await repo.list(
             competence=competence,
             langue=langue,
-            formation=formation,
             entreprise=entreprise,
             ville=ville,
             type_contrat=type_contrat,
             duree_travail=duree_travail,
             mode_travail=mode_travail,
-            experience=experience,
-            salaire=salaire,
             source=source,
             light=light,
             limit=limit,
@@ -74,31 +68,18 @@ async def list_competences(
             detail=f"Erreur lors de la récupération des compétences: {str(e)}"
         )
 
-@router.get("/formations")
-@inject
-async def list_formations(
-    repo: JobReader = Depends(Provide[ContainerService.job_reader]),
-):
-    try:
-        return await repo.list_formations()
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Erreur lors de la récupération des formations: {str(e)}"
-        )
-
-@router.get("/langues")
-@inject
-async def list_langues(
-    repo: JobReader = Depends(Provide[ContainerService.job_reader]),
-):
-    try:
-        return await repo.list_langues()
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Erreur lors de la récupération des langues: {str(e)}"
-        )
+# @router.get("/langues")
+# @inject
+# async def list_langues(
+#     repo: JobReader = Depends(Provide[ContainerService.job_reader]),
+# ):
+#     try:
+#         return await repo.list_langues()
+#     except Exception as e:
+#         raise HTTPException(
+#             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+#             detail=f"Erreur lors de la récupération des langues: {str(e)}"
+#         )
 
 @router.get("/entreprises")
 @inject
@@ -111,19 +92,6 @@ async def list_entreprises(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Erreur lors de la récupération des entreprises: {str(e)}"
-        )
-
-@router.get("/salaires")
-@inject
-async def list_salaires(
-    repo: JobReader = Depends(Provide[ContainerService.job_reader]),
-):
-    try:
-        return await repo.list_salaires()
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Erreur lors de la récupération des salaires: {str(e)}"
         )
 
 @router.get("/types-contrat")
@@ -163,19 +131,6 @@ async def list_mode_travail(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Erreur lors de la récupération des modes de travail: {str(e)}"
-        )   
-
-@router.get("/experiences")
-@inject
-async def list_experiences(
-    repo: JobReader = Depends(Provide[ContainerService.job_reader]),
-):
-    try:
-        return await repo.list_experience()
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Erreur lors de la récupération des expériences: {str(e)}"
         )   
 
 @router.get("/sources")

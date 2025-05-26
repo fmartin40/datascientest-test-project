@@ -18,12 +18,14 @@ services:
       - pgdatabase
     env_file: .env
     # En Prod
+    #  volumes:
+    #    - ./logs/api_postgres_logs:/app/logs  
     # command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "${API_POST_PORT}"]
     # En Dev
     volumes:
       - ./api_postgres/app:/app/app
+      - ./logs/api_postgres_logs:/app/logs  
     command: ["uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "${API_POST_PORT}"]
-
     environment:
       - ENVIRONMENT=prod
     networks:
@@ -38,7 +40,7 @@ services:
       - POSTGRES_DB=job_market
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./data/postgres/initdb:/docker-entrypoint-initdb.d
+      - ./init/postgres/initdb:/docker-entrypoint-initdb.d
     ports:
       - "5432:5432"
     networks:
@@ -66,6 +68,7 @@ services:
 volumes:
   postgres_data:
   pgadmin_data:
+  # logs:
   
 
 networks:
