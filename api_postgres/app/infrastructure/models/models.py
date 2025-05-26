@@ -18,14 +18,6 @@ class VilleOrm(Model):
         table = "Ville"
 
 
-class LangueOrm(Model):
-    id = fields.IntField(pk=True)
-    libelle = fields.CharField(max_length=255, unique=True, source_field="libelle")
-
-    class Meta:
-        table = "Langue"
-
-
 class DureeTravailOrm(Model):
     id = fields.IntField(pk=True)
     libelle = fields.CharField(max_length=255, null=True, source_field="libelle")
@@ -105,13 +97,7 @@ class OffreEmploiOrm(Model):
     source = fields.ForeignKeyField(
         "models.SourceOrm", related_name="offres", null=True, source_field="source_id"
     )
-    langues = fields.ManyToManyField(
-        "models.LangueOrm",
-        related_name="offres",
-        through="OffreEmploi_Langue",
-        forward_key="langue_id",
-        backward_key="offre_id",
-    )
+
     competences = fields.ManyToManyField(
         "models.CompetenceOrm",
         related_name="offres",
@@ -122,19 +108,6 @@ class OffreEmploiOrm(Model):
 
     class Meta:
         table = "OffreEmploi"
-
-
-class OffreEmploiLangueOrm(Model):
-    offre_id = fields.ForeignKeyField(
-        "models.OffreEmploiOrm", related_name="offre_langue", source_field="offre_id"
-    )
-    langue = fields.ForeignKeyField(
-        "models.LangueOrm", related_name="langue_offre", source_field="langue_id"
-    )
-
-    class Meta:
-        table = "OffreEmploi_Langue"
-        unique_together = (("offre", "langue"),)
 
 
 class OffreEmploiCompetenceOrm(Model):

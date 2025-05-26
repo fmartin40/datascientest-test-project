@@ -14,7 +14,7 @@ class IJobReader(ABC):
     limit: int,
     offset: int,
     competence: Optional[int] = None,
-    langue: Optional[int] = None,
+    
     formation: Optional[int] = None,
     entreprise: Optional[int] = None,
     type_contrat: Optional[int] = None,
@@ -39,15 +39,9 @@ class IJobReader(ABC):
     def list_competences(self) -> List[BaseModel]:
         raise NotImplementedError
 
-
-    @abstractmethod
-    def list_langues(self) -> List[BaseModel]:
-        raise NotImplementedError
-
     @abstractmethod
     def list_entreprises(self) -> List[BaseModel]:
         raise NotImplementedError
-
 
     @abstractmethod
     def list_type_contrat(self) -> List[BaseModel]:

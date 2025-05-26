@@ -18,9 +18,6 @@ class IJobWriter(ABC):
     async def add_competence(self, competence: str) -> BaseModel:
         raise NotImplementedError
 
-    @abstractmethod
-    async def add_langue(self, langue: str) -> BaseModel:
-        raise NotImplementedError
 
     @abstractmethod
     async def add_entreprise(self, entreprise: str) -> BaseModel:

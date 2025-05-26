@@ -1,7 +1,7 @@
 from app.domain.job.entities.job_insert import JobCreate
 from app.domain.job.interfaces.ijob_writer import IJobWriter  
 from app.infrastructure.models.models import (
-    EntrepriseOrm, LangueOrm,
+    EntrepriseOrm,
     DureeTravailOrm, CompetenceOrm, ModeTravailOrm, TypeContratOrm,
     SourceOrm, OffreEmploiOrm, VilleOrm
 )
@@ -41,14 +41,6 @@ class JobWriter(IJobWriter):
             )
             logger.info(f"Offre créée avec l'ID: {offre.id}")
             
-            if job.langue and len(job.langue) > 0:
-                langues = []
-                for langue_libelle in job.langue:
-                    langue_obj = await self.add_langue(langue_libelle)
-                    langues.append(langue_obj)
-                await offre.langues.add(*langues)
-                logger.info(f"Ajout de {len(langues)} langues pour l'offre {offre.id}")
-            
             if job.competence and len(job.competence) > 0:
                 competences = []
                 for competence_libelle in job.competence:
@@ -86,14 +78,6 @@ class JobWriter(IJobWriter):
             return obj
         except Exception as e:
             logger.error(f"Erreur lors de l'ajout de la ville {ville}: {str(e)}")
-            raise
-
-    async def add_langue(self, langue: str) -> LangueOrm:
-        try:
-            obj, _ = await LangueOrm.get_or_create(libelle=langue)
-            return obj
-        except Exception as e:
-            logger.error(f"Erreur lors de l'ajout de la langue {langue}: {str(e)}")
             raise
 
 
