@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from app.domain.job.entities.jobs import Job
 from pydantic import BaseModel
 
+
 class IJobWriter(ABC):
     @abstractmethod
     async def add(self, job: Job) -> None:
@@ -18,19 +19,11 @@ class IJobWriter(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def add_formation(self, formation: str) -> BaseModel:
-        raise NotImplementedError
-
-    @abstractmethod
     async def add_langue(self, langue: str) -> BaseModel:
         raise NotImplementedError
 
     @abstractmethod
     async def add_entreprise(self, entreprise: str) -> BaseModel:
-        raise NotImplementedError
-
-    @abstractmethod
-    async def add_salaire(self, salaire: str) -> BaseModel:
         raise NotImplementedError
 
     @abstractmethod
@@ -43,10 +36,6 @@ class IJobWriter(ABC):
 
     @abstractmethod
     async def add_mode_travail(self, mode_travail: str) -> BaseModel:
-        raise NotImplementedError
-
-    @abstractmethod
-    async def add_experience(self, experience: str) -> BaseModel:
         raise NotImplementedError
 
     @abstractmethod

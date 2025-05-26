@@ -1,7 +1,7 @@
 from app.domain.job.entities.job_insert import JobCreate
 from app.domain.job.interfaces.ijob_writer import IJobWriter  
 from app.infrastructure.models.models import (
-    EntrepriseOrm, SalaireOrm, FormationOrm, LangueOrm, ExperienceOrm,
+    EntrepriseOrm, LangueOrm,
     DureeTravailOrm, CompetenceOrm, ModeTravailOrm, TypeContratOrm,
     SourceOrm, OffreEmploiOrm, VilleOrm
 )
@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 
 class JobWriter(IJobWriter):
     async def add(self, job: JobCreate) -> None:
+        logger.error("Erreur d'intégrité lors de l'ajout de l'offre: ")
         try:
             # Vérifier si l'offre existe déjà
             existing_job = await OffreEmploiOrm.filter(job_id=job.job_id).first()
@@ -22,35 +23,23 @@ class JobWriter(IJobWriter):
             # Continuer avec l'insertion si l'offre n'existe pas
             entreprise_db = await self.add_entreprise(job.entreprise)
             ville_db = await self.add_ville(job.ville)
-            salaire_db = await self.add_salaire(str(job.salaire) if job.salaire is not None else "")
-            experience_db = await self.add_experience(job.experience)
             duree_travail_db = await self.add_duree_travail(job.duree_travail)
-            mode_travail_db = await self.add_mode_travail(str(job.mode_travail_id))
+            mode_travail_db = await self.add_mode_travail(job.mode_travail)
             type_contrat_db = await self.add_type_contrat(job.type_contrat)
-            
+
             offre = await OffreEmploiOrm.create(
                 job_id=job.job_id,
                 date_creation=job.date_creation,
-                source_id=job.source_id,
                 libelle=job.libelle,
-                entreprise=entreprise_db,
-                ville=ville_db,
-                salaire=salaire_db,
-                experience=experience_db,
-                duree_travail=duree_travail_db,
-                mode_travail=mode_travail_db,
-                type_contrat=type_contrat_db,
+                source=job.source,
+                
+                entreprise=entreprise_db.id,
+                ville=ville_db.id,
+                type_contrat=type_contrat_db.id,
+                duree_travail=duree_travail_db.id,
+                mode_travail=mode_travail_db.id,
             )
             logger.info(f"Offre créée avec l'ID: {offre.id}")
-            
-            # Gestion des relations many-to-many
-            if job.formation and len(job.formation) > 0:
-                formations = []
-                for formation_libelle in job.formation:
-                    formation_obj = await self.add_formation(formation_libelle)
-                    formations.append(formation_obj)
-                await offre.formations.add(*formations)
-                logger.info(f"Ajout de {len(formations)} formations pour l'offre {offre.id}")
             
             if job.langue and len(job.langue) > 0:
                 langues = []
@@ -99,22 +88,6 @@ class JobWriter(IJobWriter):
             logger.error(f"Erreur lors de l'ajout de la ville {ville}: {str(e)}")
             raise
 
-    async def add_salaire(self, salaire: str) -> SalaireOrm:
-        try:
-            obj, _ = await SalaireOrm.get_or_create(libelle=salaire)
-            return obj
-        except Exception as e:
-            logger.error(f"Erreur lors de l'ajout du salaire {salaire}: {str(e)}")
-            raise
-
-    async def add_formation(self, formation: str) -> FormationOrm:
-        try:
-            obj, _ = await FormationOrm.get_or_create(libelle=formation)
-            return obj
-        except Exception as e:
-            logger.error(f"Erreur lors de l'ajout de la formation {formation}: {str(e)}")
-            raise
-
     async def add_langue(self, langue: str) -> LangueOrm:
         try:
             obj, _ = await LangueOrm.get_or_create(libelle=langue)
@@ -123,13 +96,6 @@ class JobWriter(IJobWriter):
             logger.error(f"Erreur lors de l'ajout de la langue {langue}: {str(e)}")
             raise
 
-    async def add_experience(self, experience: str) -> ExperienceOrm:
-        try:
-            obj, _ = await ExperienceOrm.get_or_create(libelle=experience)
-            return obj
-        except Exception as e:
-            logger.error(f"Erreur lors de l'ajout de l'expérience {experience}: {str(e)}")
-            raise
 
     async def add_duree_travail(self, duree_travail: str) -> DureeTravailOrm:
         try:

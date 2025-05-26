@@ -39,9 +39,6 @@ class IJobReader(ABC):
     def list_competences(self) -> List[BaseModel]:
         raise NotImplementedError
 
-    @abstractmethod
-    def list_formations(self) -> List[BaseModel]:
-        raise NotImplementedError
 
     @abstractmethod
     def list_langues(self) -> List[BaseModel]:
@@ -51,9 +48,6 @@ class IJobReader(ABC):
     def list_entreprises(self) -> List[BaseModel]:
         raise NotImplementedError
 
-    @abstractmethod
-    def list_salaires(self) -> List[BaseModel]:
-        raise NotImplementedError 
 
     @abstractmethod
     def list_type_contrat(self) -> List[BaseModel]:
@@ -67,13 +61,6 @@ class IJobReader(ABC):
     def list_mode_travail(self) -> List[BaseModel]:
         raise NotImplementedError
 
-    @abstractmethod
-    def list_experience(self) -> List[BaseModel]:
-        raise NotImplementedError       
-
-    @abstractmethod
-    def list_salaire(self) -> List[BaseModel]:
-        raise NotImplementedError
 
     @abstractmethod
     def list_source(self) -> List[BaseModel]:

@@ -8,12 +8,6 @@ class EntrepriseCreate(BaseModel):
 class VilleCreate(BaseModel):
     libelle: str
 
-class SalaireCreate(BaseModel):
-    libelle: str
-
-class FormationCreate(BaseModel):
-    libelle: str
-
 class LangueCreate(BaseModel):
     libelle: str
 
@@ -26,9 +20,6 @@ class SourceCreate(BaseModel):
 class ModeTravailCreate(BaseModel):
     libelle: str
 
-class ExperienceCreate(BaseModel):
-    libelle: str
-
 class DureeTravailCreate(BaseModel):
     libelle: str
 
@@ -39,17 +30,12 @@ class JobCreate(BaseModel):
     job_id: str
     libelle: Optional[str] = None
     date_creation: Optional[date] = None
-
-    source_id: int
-    mode_travail_id: int
+    source: str
     entreprise: str
     ville: str
     type_contrat: str
-    experience: str
     duree_travail: str
-    salaire: Optional[int]
-
-    formation: Optional[List[str]] = None
+    mode_travail: str
     langue: Optional[List[str]] = None
     competence: Optional[List[str]] = None
 

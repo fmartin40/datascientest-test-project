@@ -10,13 +10,6 @@ class Ville(BaseModel):
     id: int
     libelle: Optional[str]
 
-class Salaire(BaseModel):
-    id: int
-    libelle: Optional[str]
-
-class Formation(BaseModel):
-    id: int
-    libelle: Optional[str]
 
 class Langue(BaseModel):
     id: int
@@ -34,9 +27,6 @@ class ModeTravail(BaseModel):
     id: int
     libelle: Optional[str]
 
-class Experience(BaseModel):
-    id: int
-    libelle: Optional[str]
 
 class DureeTravail(BaseModel):
     id: int
@@ -55,11 +45,8 @@ class Job(BaseModel):
     entreprise: Optional[Entreprise] = None
     ville: Optional[Ville] = None
     type_contrat: Optional[TypeContrat] = None
-    experience: Optional[Experience] = None
     duree_travail: Optional[DureeTravail] = None
     mode_travail: Optional[ModeTravail] = None
-    salaire: Optional[Salaire] = None
-    formations: Optional[List[Formation]] = None
     langues: Optional[List[Langue]] = None
     competences: Optional[List[Competence]] = None
 
