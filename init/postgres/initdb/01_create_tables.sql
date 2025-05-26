@@ -66,6 +66,7 @@ CREATE TABLE IF NOT EXISTS "MappingCompetence" (
 CREATE TABLE IF NOT EXISTS "OffreEmploi" (
   "id" SERIAL PRIMARY KEY,
   "jobId" VARCHAR(255) UNIQUE,
+  "url" VARCHAR(255) UNIQUE,
   "dateCreation" DATE DEFAULT CURRENT_DATE,
   "libelle" VARCHAR(255),
   "duree_travail_id" INT REFERENCES "DureeTravail"("id") ON DELETE SET NULL,

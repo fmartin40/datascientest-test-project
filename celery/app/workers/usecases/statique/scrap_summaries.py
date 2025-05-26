@@ -44,14 +44,10 @@ def extract_summaries(
         job_summaries: List[JobSummary] = run_async(
             scraper.extract_summaries(query=query, location=location, loop=loop)
         )
-        logger.info(f"Résumés extraits: {len(job_summaries)}")
-
-        job_summaries = job_summaries[:1]
-
-
+        
         # ---- lancement des tâches job details pour les job summaries avec URL valide
         launch_job_detail_tasks(
-            job_summaries=[s for s in job_summaries if s.url], source=source
+            job_summaries=[s for s in job_summaries[:1] if s.url], source=source
         )
 
         # ---- stockage des job_summary dans Redis

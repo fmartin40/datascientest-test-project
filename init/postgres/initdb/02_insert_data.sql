@@ -121,7 +121,7 @@ INSERT INTO "Source" (libelle) VALUES
 
 -- Types de contrat
 INSERT INTO "TypeContrat" (libelle) VALUES 
-('CDI'), ('CDD'), ('alternance');
+('CDI'), ('CDD'), ('alternance'), ('indépendant');
 
 -- Modes de travail
 INSERT INTO "ModeTravail" (libelle) VALUES 
@@ -136,20 +136,20 @@ INSERT INTO "DureeTravail" (libelle) VALUES
 -- =======================
 
 INSERT INTO "OffreEmploi" (
-    "jobId", "dateCreation", "libelle",
+    "jobId", "url", "dateCreation", "libelle",
     "duree_travail_id", "entreprise_id",
     "mode_travail_id", "type_contrat_id", "source_id", "ville_id"
 ) VALUES 
-('job-1', CURRENT_DATE, 'Ingénieur Data – Spécialiste Pipeline & Big Data', 1, 1, 1, 1, 1, 1),
-('job-2', CURRENT_DATE, 'Développeur Data – ETL & Traitement Distribué', 2, 3, 3, 2, 4, 2),
-('job-3', CURRENT_DATE, 'Architecte Données – Infrastructure Cloud & On-Prem', 1, 2, 2, 3, 3, 2),
-('job-4', CURRENT_DATE, 'Data Engineer Python – Stack Open Source', 2, 1, 2, 2, 2, 3),
-('job-5', CURRENT_DATE, 'Spécialiste Data Pipeline – Projet Retail Analytics', 1, 3, 1, 3, 1, 3),
-('job-6', CURRENT_DATE, 'Ingénieur Données – Temps Réel & Kafka', 2, 2, 3, 2, 3, 1),
-('job-7', CURRENT_DATE, 'Consultant Data Engineering – Cloud AWS', 1, 1, 1, 1, 4, 1),
-('job-8', CURRENT_DATE, 'Data Engineer Confirmé – Projets IoT & Smart City', 2, 3, 2, 2, 1, 2),
-('job-9', CURRENT_DATE, 'Expert Pipeline Données – Machine Learning Ready', 1, 2, 3, 3, 2, 3),
-('job-10', CURRENT_DATE, 'Développeur Data – Monitoring et Observabilité', 2, 1, 1, 2, 3, 1);
+('job-1', 'https://www.jobintree.com/offre-emploi/ingenieur-data-specialiste-pipeline-big-data', CURRENT_DATE, 'Ingénieur Data – Spécialiste Pipeline & Big Data', 1, 1, 1, 1, 1, 1),
+('job-2', 'https://www.jobintree.com/offre-emploi/developpeur-data-etl-traitement-distribue', CURRENT_DATE, 'Développeur Data – ETL & Traitement Distribué', 2, 3, 3, 2, 4, 2),
+('job-3', 'https://www.jobintree.com/offre-emploi/architecte-donnees-infrastructure-cloud-on-prem', CURRENT_DATE, 'Architecte Données – Infrastructure Cloud & On-Prem', 1, 2, 2, 3, 3, 2),
+('job-4', 'https://www.jobintree.com/offre-emploi/data-engineer-python-stack-open-source', CURRENT_DATE, 'Data Engineer Python – Stack Open Source', 2, 1, 2, 2, 2, 3),
+('job-5', 'https://www.jobintree.com/offre-emploi/specialiste-data-pipeline-projet-retail-analytics', CURRENT_DATE, 'Spécialiste Data Pipeline – Projet Retail Analytics', 1, 3, 1, 3, 1, 3),
+('job-6', 'https://www.jobintree.com/offre-emploi/ingenieur-donnees-temps-reel-kafka', CURRENT_DATE, 'Ingénieur Données – Temps Réel & Kafka', 2, 2, 3, 2, 3, 1),
+('job-7', 'https://www.jobintree.com/offre-emploi/consultant-data-engineering-cloud-aws', CURRENT_DATE, 'Consultant Data Engineering – Cloud AWS', 1, 1, 1, 1, 4, 1),
+('job-8', 'https://www.jobintree.com/offre-emploi/data-engineer-confirmé-projets-iot-smart-city', CURRENT_DATE, 'Data Engineer Confirmé – Projets IoT & Smart City', 2, 3, 2, 2, 1, 2),
+('job-9', 'https://www.jobintree.com/offre-emploi/expert-pipeline-donnees-machine-learning-ready', CURRENT_DATE, 'Expert Pipeline Données – Machine Learning Ready', 1, 2, 3, 3, 2, 3),
+('job-10', 'https://www.jobintree.com/offre-emploi/developpeur-data-monitoring-observabilite', CURRENT_DATE, 'Développeur Data – Monitoring et Observabilité', 2, 1, 1, 2, 3, 1);
 
 
 
@@ -202,6 +202,21 @@ UNION ALL SELECT 'stage', id FROM "TypeContrat" WHERE libelle = 'alternance'
 UNION ALL SELECT 'internship', id FROM "TypeContrat" WHERE libelle = 'alternance'
 UNION ALL SELECT 'trainee', id FROM "TypeContrat" WHERE libelle = 'alternance'
 UNION ALL SELECT 'intern', id FROM "TypeContrat" WHERE libelle = 'alternance'
+ON CONFLICT (libelle) DO NOTHING;
+
+-- Indépendant
+UNION ALL SELECT 'indépendant', id FROM "TypeContrat" WHERE libelle = 'indépendant'
+UNION ALL SELECT 'freelance', id FROM "TypeContrat" WHERE libelle = 'indépendant'
+UNION ALL SELECT 'auto-entrepreneur', id FROM "TypeContrat" WHERE libelle = 'indépendant'
+UNION ALL SELECT 'micro-entrepreneur', id FROM "TypeContrat" WHERE libelle = 'indépendant'
+UNION ALL SELECT 'independant', id FROM "TypeContrat" WHERE libelle = 'indépendant'
+UNION ALL SELECT 'consultant indépendant', id FROM "TypeContrat" WHERE libelle = 'indépendant'
+UNION ALL SELECT 'travailleur indépendant', id FROM "TypeContrat" WHERE libelle = 'indépendant'
+UNION ALL SELECT 'independent worker', id FROM "TypeContrat" WHERE libelle = 'indépendant'
+UNION ALL SELECT 'freelancer', id FROM "TypeContrat" WHERE libelle = 'indépendant'
+UNION ALL SELECT 'contractor', id FROM "TypeContrat" WHERE libelle = 'indépendant'
+UNION ALL SELECT 'portage salarial', id FROM "TypeContrat" WHERE libelle = 'indépendant'
+UNION ALL SELECT 'portage', id FROM "TypeContrat" WHERE libelle = 'indépendant'
 ON CONFLICT (libelle) DO NOTHING;
 
 -- =======================

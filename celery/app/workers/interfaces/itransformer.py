@@ -1,10 +1,9 @@
 from abc import ABC, abstractmethod
 
-from app.workers.entities.jobs import JobDetail
-
 class ITransformer(ABC):
     @abstractmethod
-    async def transform(self, jobdetail: JobDetail, *args, **kwargs):
+    async def transform(self, text: str, *args, **kwargs):
         raise NotImplementedError
     
-    
+    async def return_id(self, word: list[str] | str) -> list[int] | int | None:
+        raise NotImplementedError

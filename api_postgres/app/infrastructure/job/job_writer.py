@@ -21,33 +21,34 @@ class JobWriter(IJobWriter):
                 return
                 
             # Continuer avec l'insertion si l'offre n'existe pas
-            entreprise_db = await self.add_entreprise(job.entreprise)
-            ville_db = await self.add_ville(job.ville)
-            duree_travail_db = await self.add_duree_travail(job.duree_travail)
-            mode_travail_db = await self.add_mode_travail(job.mode_travail)
-            type_contrat_db = await self.add_type_contrat(job.type_contrat)
+            entreprise_db = await self.add_entreprise(job.entreprise) # type: ignore
+            ville_db = await self.add_ville(job.ville) # type: ignore
+            source_db = await self.add_source(job.source) # type: ignore
+            # duree_travail_db = await self.add_duree_travail(job.duree_travail)
+            # mode_travail_db = await self.add_mode_travail(job.mode_travail)
+            # type_contrat_db = await self.add_type_contrat(job.type_contrat)
 
             offre = await OffreEmploiOrm.create(
                 job_id=job.job_id,
                 date_creation=job.date_creation,
                 libelle=job.libelle,
-                source=job.source,
+                source_id=source_db.id,
                 
                 entreprise=entreprise_db.id,
                 ville=ville_db.id,
-                type_contrat=type_contrat_db.id,
-                duree_travail=duree_travail_db.id,
-                mode_travail=mode_travail_db.id,
+                type_contrat=job.type_contrat_id,
+                duree_travail=job.duree_travail_id,
+                mode_travail=job.mode_travail_id,
             )
             logger.info(f"Offre créée avec l'ID: {offre.id}")
             
-            if job.competence and len(job.competence) > 0:
-                competences = []
-                for competence_libelle in job.competence:
-                    competence_obj = await self.add_competence(competence_libelle)
-                    competences.append(competence_obj)
-                await offre.competences.add(*competences)
-                logger.info(f"Ajout de {len(competences)} compétences pour l'offre {offre.id}")
+            if job.competence_ids and len(job.competence_ids) > 0:
+                # competences = []
+                # for competence_libelle in job.competence:
+                #     competence_obj = await self.add_competence(competence_libelle)
+                #     competences.append(competence_obj)
+                await offre.competences.add(*job.competence_ids)
+                logger.info(f"Ajout de {len(job.competence_ids)} compétences pour l'offre {offre.id}")
 
         except IntegrityError as e:
             logger.error(f"Erreur d'intégrité lors de l'ajout de l'offre: {str(e)}")

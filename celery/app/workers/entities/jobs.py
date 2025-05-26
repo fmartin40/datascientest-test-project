@@ -12,23 +12,18 @@ class JobSummary(BaseModel):
     source: str | None = None
     entreprise: str | None = None
     ville: str | None = None
-    type_contrat: str | None = None
+    type_contrat: int | None = None
     
 class JobDetail(BaseModel):
     url: str
     source: str
     job_id: str
-    date_publication: str | None = date.today().strftime("%Y-%m-%d")
+    date_creation: date | None = date.today()
     libelle: str
-    description: str
-    entreprise: str | None = None
-    ville: str | None = None
-    type_contrat: str | None = None
-    mode_travail: str | None = None
-    duree_travail: str | None = None
-    salaire: str | None = None
-    formation: str | None = None
-    # experience: str | None = None 
-    # langue: list[str] | None = None
-    competence: list[str] | None = None
+    entreprise: str
+    ville: str
+    type_contrat: int
+    mode_travail: int
+    duree_travail: int
+    competence: list[int] | None = None
 
