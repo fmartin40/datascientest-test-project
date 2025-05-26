@@ -26,7 +26,6 @@ async def list_jobs(
     try:
         return await repo.list(
             competence=competence,
-            langue=langue,
             entreprise=entreprise,
             ville=ville,
             type_contrat=type_contrat,
@@ -68,18 +67,7 @@ async def list_competences(
             detail=f"Erreur lors de la récupération des compétences: {str(e)}"
         )
 
-# @router.get("/langues")
-# @inject
-# async def list_langues(
-#     repo: JobReader = Depends(Provide[ContainerService.job_reader]),
-# ):
-#     try:
-#         return await repo.list_langues()
-#     except Exception as e:
-#         raise HTTPException(
-#             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-#             detail=f"Erreur lors de la récupération des langues: {str(e)}"
-#         )
+
 
 @router.get("/entreprises")
 @inject

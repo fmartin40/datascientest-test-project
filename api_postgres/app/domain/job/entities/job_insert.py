@@ -8,9 +8,6 @@ class EntrepriseCreate(BaseModel):
 class VilleCreate(BaseModel):
     libelle: str
 
-class LangueCreate(BaseModel):
-    libelle: str
-
 class CompetenceCreate(BaseModel):
     libelle: str
 
@@ -36,6 +33,5 @@ class JobCreate(BaseModel):
     type_contrat: str
     duree_travail: str
     mode_travail: str
-    langue: Optional[List[str]] = None
     competence: Optional[List[str]] = None
 

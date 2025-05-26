@@ -2,9 +2,7 @@
 -- Données de référence
 -- =======================
 
--- Langues
-INSERT INTO "Langue" (libelle) VALUES 
-('fr'), ('de'), ('en');
+
 
 -- Compétences
 INSERT INTO "Competence" (libelle) VALUES
@@ -153,13 +151,7 @@ INSERT INTO "OffreEmploi" (
 ('job-9', CURRENT_DATE, 'Expert Pipeline Données – Machine Learning Ready', 1, 2, 3, 3, 2, 3),
 ('job-10', CURRENT_DATE, 'Développeur Data – Monitoring et Observabilité', 2, 1, 1, 2, 3, 1);
 
--- =======================
--- Relations Offre ↔ Langue
--- =======================
 
-INSERT INTO "OffreEmploi_Langue" (offre_id, langue_id) VALUES 
-(1, 1), (2, 2), (3, 3), (4, 1), (5, 2), 
-(6, 3), (7, 1), (8, 2), (9, 3), (10, 1);
 
 -- =======================
 -- Relations Offre ↔ Compétences
