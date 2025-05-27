@@ -2,6 +2,9 @@ import asyncio
 from typing import Dict, List, Optional, Union
 import aiohttp
 from pydantic import BaseModel
+import logging
+
+logger = logging.getLogger(__name__)
 
 class RequestConfig(BaseModel):
     method: str
@@ -39,31 +42,35 @@ class Fetch:
         Returns:
             Union[Dict, List[Dict]]: Single JSON response or list of JSON responses
         """
-        async with aiohttp.ClientSession() as session:
-            if isinstance(request_config, list):
-                # Multiple requests
-                tasks = [
-                    self._make_request(
+        try:
+            async with aiohttp.ClientSession() as session:
+                if isinstance(request_config, list):
+                    # Multiple requests
+                    tasks = [
+                        self._make_request(
+                            session,
+                            req.method,# type: ignore
+                            req.url,# type: ignore
+                            req.payload,# type: ignore
+                            req.params,# type: ignore
+                            req.headers# type: ignore
+                        ) 
+                        for req in request_config
+                    ]
+                    return await asyncio.gather(*tasks)
+                else:
+                    # Single request
+                    return await self._make_request(
                         session,
-                        req.method,# type: ignore
-                        req.url,# type: ignore
-                        req.payload,# type: ignore
-                        req.params,# type: ignore
-                        req.headers# type: ignore
-                    ) 
-                    for req in request_config
-                ]
-                return await asyncio.gather(*tasks)
-            else:
-                # Single request
-                return await self._make_request(
-                    session,
-                    request_config.method,# type: ignore
-                    request_config.url,# type: ignore
-                    request_config.payload,# type: ignore
-                    request_config.params,# type: ignore
-                    request_config.headers# type: ignore
-                )
+                        request_config.method,# type: ignore
+                        request_config.url,# type: ignore
+                        request_config.payload,# type: ignore
+                        request_config.params,# type: ignore
+                        request_config.headers# type: ignore
+                    )
+        except Exception as e:
+            logger.error(f"Erreur lors de l'exécution de fetch : {e}")
+            return {"error": str(e)}
 
     async def _make_request(
         self,
@@ -89,13 +96,17 @@ class Fetch:
             Dict: JSON response from the server
         """
         async with self.semaphore:
-            async with session.request(
-                method=method,
-                url=url,
-                json=payload,
-                params=params,
-                headers=headers
-            ) as response:
-                return await response.json()
+            try:
+                async with session.request(
+                    method=method,
+                    url=url,
+                    json=payload,
+                    params=params,
+                    headers=headers
+                ) as response:
+                    return await response.json()
+            except Exception as e:
+                logger.error(f"Erreur lors de la requête HTTP {method} {url} : {e}")
+                return {"error": str(e), "url": url, "method": method}
     
     

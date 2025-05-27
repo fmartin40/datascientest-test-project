@@ -10,7 +10,6 @@ services:
     build:
       context: ./celery/.
       dockerfile: Dockerfile 
-    container_name: celery
     command: ["celery", "-A", "app.main", "worker", "--loglevel=INFO", "--logfile=/logs/worker.log"]
     volumes:
       - ./logs:/logs
@@ -39,8 +38,8 @@ services:
     ports:
       - "5556:5555"
     depends_on:
-      celery: 
-        condition: service_started
+      # celery: 
+      #   condition: service_started
       rabbitmq:
         condition: service_started
     networks:

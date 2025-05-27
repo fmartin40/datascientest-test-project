@@ -63,9 +63,10 @@ class OffreEmploiOrm(Model):
     job_id = fields.CharField(max_length=255, null=True, source_field="jobId")
     date_creation = fields.DateField(null=True, source_field="dateCreation")
     libelle = fields.CharField(max_length=255, null=True, source_field="libelle")
-    type_contrat = fields.CharField(
-        max_length=255, null=True, source_field="typeContrat"
-    )
+    url = fields.CharField(max_length=255, null=True, source_field="url")
+    # type_contrat = fields.CharField(
+    #     max_length=255, null=True, source_field="typeContrat"
+    # )
 
     duree_travail = fields.ForeignKeyField(
         "models.DureeTravailOrm",

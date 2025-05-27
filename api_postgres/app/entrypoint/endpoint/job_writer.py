@@ -2,8 +2,8 @@ from fastapi import APIRouter, status, Depends
 from dependency_injector.wiring import inject, Provide
 from app.core.container import ContainerService
 from app.domain.job.entities.job_insert import (
-    JobCreate, 
-    # EntrepriseCreate, LangueCreate, DureeTravailCreate, 
+    JobCreate,
+    # EntrepriseCreate, LangueCreate, DureeTravailCreate,
     # CompetenceCreate, ModeTravailCreate, TypeContratCreate, SourceCreate
 )
 from app.infrastructure.job.job_writer import JobWriter
@@ -12,40 +12,63 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix="/jobs", tags=["write job infos"] )
+router = APIRouter(prefix="/jobs", tags=["write job infos"])
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+
+@router.post("/create", status_code=status.HTTP_201_CREATED)
 @inject
 async def create_job(
-    job: JobCreate,
-    job_writer: JobWriter = Depends(Provide[ContainerService.job_writer])
+    payload: JobCreate,
+    job_writer: JobWriter = Depends(Provide[ContainerService.job_writer]),
 ):
     try:
-        await job_writer.add(job)
+        logger.error(f"offre a creer: {payload.model_dump()}")
+        await job_writer.add(payload)
         return {"status": "success", "message": "Offre d'emploi créée avec succès"}
     except IntegrityError as e:
         logger.warning(f"Erreur d'intégrité ignorée: {str(e)}")
         if "duplicate key value violates unique constraint" in str(e):
-            return {"status": "success", "message": "L'offre existe déjà, aucune modification apportée"}
-        return {"status": "warning", "message": f"Problème d'intégrité des données: {str(e)}", "error": str(e)}
+            return {
+                "status": "success",
+                "message": "L'offre existe déjà, aucune modification apportée",
+            }
+        return {
+            "status": "warning",
+            "message": f"Problème d'intégrité des données: {str(e)}",
+            "error": str(e),
+        }
     except Exception as e:
         logger.error(f"Erreur lors de la création de l'offre: {str(e)}")
-        return {"status": "error", "message": f"Une erreur est survenue: {str(e)}", "error": str(e)}
+        return {
+            "status": "error",
+            "message": f"Une erreur est survenue: {str(e)}",
+            "error": str(e),
+        }
+
 
 @router.delete("/{job_id}", status_code=status.HTTP_200_OK)
 @inject
 async def delete_job(
-    job_id: str,
-    job_writer: JobWriter = Depends(Provide[ContainerService.job_writer])
+    job_id: str, job_writer: JobWriter = Depends(Provide[ContainerService.job_writer])
 ):
     try:
         deleted = await job_writer.delete(job_id)
         if not deleted:
-            return {"status": "success", "message": f"Aucune offre avec l'ID {job_id} n'a été trouvée, aucune suppression nécessaire"}
-        return {"status": "success", "message": f"Offre d'emploi {job_id} supprimée avec succès"}
+            return {
+                "status": "success",
+                "message": f"Aucune offre avec l'ID {job_id} n'a été trouvée, aucune suppression nécessaire",
+            }
+        return {
+            "status": "success",
+            "message": f"Offre d'emploi {job_id} supprimée avec succès",
+        }
     except Exception as e:
         logger.error(f"Erreur lors de la suppression de l'offre {job_id}: {str(e)}")
-        return {"status": "error", "message": f"Une erreur est survenue lors de la suppression: {str(e)}", "error": str(e)}
+        return {
+            "status": "error",
+            "message": f"Une erreur est survenue lors de la suppression: {str(e)}",
+            "error": str(e),
+        }
 
 
 # @router.post("/entreprises", status_code=status.HTTP_201_CREATED)

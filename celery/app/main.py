@@ -49,8 +49,6 @@ logger = logging.getLogger(__name__)
 logger.info("Démarrage de l'application Celery")
 
 celery_client.autodiscover_tasks([
-    "app.workers.usecases.statique.test_scrap_detail",
-    "app.workers.usecases.statique.test_scrap_summaries",
     "app.workers.usecases.statique.scrap_detail",
     "app.workers.usecases.statique.scrap_summaries",
 ])

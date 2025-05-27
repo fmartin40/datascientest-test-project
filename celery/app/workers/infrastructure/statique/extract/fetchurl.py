@@ -1,17 +1,30 @@
 import asyncio
 from typing import Dict, List, Union
-from aiohttp import ClientSession, ClientTimeout
+from aiohttp import ClientSession, ClientTimeout, ClientError
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class FetchUrl:
-	def __init__(self):
+	def __init__(self, timeout=10):
 		self.semaphore = asyncio.Semaphore(20)
-		self.timeout = ClientTimeout(total=5)
+		self.timeout = ClientTimeout(total=timeout)
 
 
-	async def fetch(self, url: str)-> str:
-		async with ClientSession(timeout=self.timeout) as session:
-			return await self._fetch_url(session=session, url=url)
+	async def fetch(self, url: str) -> str:
+		try:
+			async with ClientSession(timeout=self.timeout) as session:
+				return await self._fetch_url(session=session, url=url)
+		except asyncio.TimeoutError:
+			logger.error(f"Timeout lors de la requête pour url={url}")
+			return ""
+		except ClientError as e:
+			logger.error(f"Erreur réseau lors de la requête pour url={url} : {e}")
+			return ""
+		except Exception as e:
+			logger.error(f"Erreur inattendue lors de la requête pour url={url} : {e}")
+			return ""
 
 
 	async def multi_fetch(self, urls: List[str]) -> Union[str, List[Dict[str, str]]]:
