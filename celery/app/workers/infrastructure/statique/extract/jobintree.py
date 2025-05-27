@@ -104,7 +104,10 @@ class JobInTreeExtractor(IStaticExtractor):
             mode_travail: int = await self._transform(
                 parsed["description"], self.keywords_loader.load_mode_travail
             )  # type: ignore
-
+            if job_summary.ville:
+                job_summary.ville: str = await self._transform(  # type: ignore
+                    job_summary.ville, self.keywords_loader.load_ville
+                )  # type: ignore
             jobdetail = JobDetail(
                 job_id="1",
                 url=job_summary.url,
@@ -191,6 +194,22 @@ class JobInTreeExtractor(IStaticExtractor):
             for keyword in extracted_keywords
         ]  # type: ignore
         return mapped_to_id if multi else mapped_to_id[0]
+
+    async def _find_keyword(self, keyword: str, load_keywords: Callable) -> str:
+        """
+        Retrouve le mot d'origine a partir d'un mot clé ex: paris 1er -> paris
+        """
+        mapping: Dict[str, Dict[str, str]] = await load_keywords()
+        extracted_keywords: list[str] | None = self._extract_keywords(
+            keyword, mapping.get("mapping", {})  # type: ignore
+        )
+        logger.info(f"extracted_keywords: {extracted_keywords}")
+
+        if not extracted_keywords:
+            return mapping.get("default")  # type: ignore
+
+        found_keyword: str | None = mapping.get("mapping", {}).get(keyword.lower())
+        return found_keyword if found_keyword else keyword
 
     def _extract_keywords(self, text: str, mapping: Dict[str, int]) -> list[str] | None:
         nlp = get_nlp()
