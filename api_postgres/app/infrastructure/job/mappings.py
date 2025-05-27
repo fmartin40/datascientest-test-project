@@ -10,67 +10,100 @@ from app.infrastructure.models.models import (
     ModeTravailOrm,
     DureeTravailOrm,
     CompetenceOrm,
+    VilleOrm,
 )
 
 logger = logging.getLogger(__name__)
+
 
 class Mappings(IMappings):
     async def list_type_contrat(self) -> dict:
         try:
             mapping_dict: Dict = {
-                mapping.libelle.lower(): mapping.type_contrat.id if mapping.type_contrat else None
-                for mapping in await MappingTypeContratOrm.all().prefetch_related("type_contrat")
+                mapping.libelle.lower(): (
+                    mapping.type_contrat.id if mapping.type_contrat else None
+                )
+                for mapping in await MappingTypeContratOrm.all().prefetch_related(
+                    "type_contrat"
+                )
             }
             for tc in await TypeContratOrm.all():
                 if tc.libelle not in mapping_dict:
                     mapping_dict[tc.libelle] = tc.id
-            mapping: Dict = { "mapping": mapping_dict, "default":1}
+            mapping: Dict = {"mapping": mapping_dict, "default": 1}
             return mapping
         except Exception as e:
             logger.error(f"Erreur lors de la récupération des types de contrat : {e}")
             return {}
-    
+
     async def list_mode_travail(self) -> dict:
         try:
             mapping_dict: Dict = {
-                mapping.libelle.lower(): mapping.mode_travail.id if mapping.mode_travail else None
-                for mapping in await MappingModeTravailOrm.all().prefetch_related("mode_travail")
+                mapping.libelle.lower(): (
+                    mapping.mode_travail.id if mapping.mode_travail else None
+                )
+                for mapping in await MappingModeTravailOrm.all().prefetch_related(
+                    "mode_travail"
+                )
             }
             for mt in await ModeTravailOrm.all():
                 if mt.libelle not in mapping_dict:
                     mapping_dict[mt.libelle] = mt.id
-            mapping: Dict = { "mapping": mapping_dict, "default":1}
+            mapping: Dict = {"mapping": mapping_dict, "default": 1}
             return mapping
         except Exception as e:
             logger.error(f"Erreur lors de la récupération des modes de travail : {e}")
             return {}
-    
+
     async def list_duree_travail(self) -> dict:
         try:
             mapping_dict: Dict = {
-                mapping.libelle.lower(): mapping.duree_travail.id if mapping.duree_travail else None
-                for mapping in await MappingDureeTravailOrm.all().prefetch_related("duree_travail")
+                mapping.libelle.lower(): (
+                    mapping.duree_travail.id if mapping.duree_travail else None
+                )
+                for mapping in await MappingDureeTravailOrm.all().prefetch_related(
+                    "duree_travail"
+                )
             }
             for dt in await DureeTravailOrm.all():
                 if dt.libelle not in mapping_dict:
                     mapping_dict[dt.libelle] = dt.id
-            mapping: Dict = { "mapping": mapping_dict, "default":1}
+            mapping: Dict = {"mapping": mapping_dict, "default": 1}
             return mapping
         except Exception as e:
             logger.error(f"Erreur lors de la récupération des durées de travail : {e}")
             return {}
-    
+
     async def list_competence(self) -> dict:
         try:
             mapping_dict: Dict = {
-                mapping.libelle.lower(): mapping.competence.id if mapping.competence else None
-                for mapping in await MappingCompetenceOrm.all().prefetch_related("competence")
+                mapping.libelle.lower(): (
+                    mapping.competence.id if mapping.competence else None
+                )
+                for mapping in await MappingCompetenceOrm.all().prefetch_related(
+                    "competence"
+                )
             }
             for c in await CompetenceOrm.all():
                 if c.libelle not in mapping_dict:
                     mapping_dict[c.libelle] = c.id
-            mapping: Dict = { "mapping": mapping_dict, "default":[]}
+            mapping: Dict = {"mapping": mapping_dict, "default": []}
             return mapping
         except Exception as e:
             logger.error(f"Erreur lors de la récupération des compétences : {e}")
+            return {}
+
+    async def list_ville(self) -> dict:
+        try:
+            mapping_dict: Dict = {
+                ville.libelle.lower(): ville.libelle.lower() if ville else None
+                for ville in await VilleOrm.all()
+            }
+            for v in await VilleOrm.all():
+                if v.libelle not in mapping_dict:
+                    mapping_dict[v.libelle] = v.id
+            mapping: Dict = {"mapping": mapping_dict, "default": ""}
+            return mapping
+        except Exception as e:
+            logger.error(f"Erreur lors de la récupération des villes : {e}")
             return {}

@@ -3,7 +3,7 @@ import logging
 from typing import Dict, List
 from app.core.container import ContainerService
 from celery import shared_task, current_task
-from app.workers.usecases.statique.scrap_detail import extract_jobdetail
+from app.workers.tasks.statique.scrap_detail import extract_jobdetail
 from app.workers.entities.jobs import JobSummary
 from app.workers.interfaces.istatic_extractor import IStaticExtractor
 
@@ -44,16 +44,18 @@ def extract_summaries(
         job_summaries: List[JobSummary] = run_async(
             scraper.extract_summaries(query=query, location=location, loop=loop)
         )
-        
+
         # ---- lancement des tâches job details pour les job summaries avec URL valide
         launch_job_detail_tasks(
-            job_summaries=[s for s in job_summaries[:1] if s.url], source=source
+            job_summaries=[s for s in job_summaries if s.url], source=source
         )
 
         # ---- stockage des job_summary dans Redis
-        redis_loader.insert(key=task_id, job=[s.model_dump() for s in job_summaries], ttl=300)
+        redis_loader.insert(
+            key=task_id, job=[s.model_dump() for s in job_summaries], ttl=300
+        )
         logger.info(f"Résumés stockés dans Redis : {task_id}")
-        
+
         return {
             "task_id": task_id,
             "source": source,
@@ -68,11 +70,12 @@ def extract_summaries(
         logger.error(f"[FATAL] Erreur dans extract_summaries : {e}", exc_info=True)
         raise
 
+
 def launch_job_detail_tasks(job_summaries: List[JobSummary], source: str):
     try:
         task_ids = []
         print(f"job_summaries: {job_summaries}")
- 
+
         for i, job_summary in enumerate(job_summaries):
             detail_task = extract_jobdetail.apply_async(
                 kwargs={
@@ -95,4 +98,3 @@ def launch_job_detail_tasks(job_summaries: List[JobSummary], source: str):
         logger.error(
             f"Erreur tâche détail ({job_summary.url}): {task_error}", exc_info=True
         )
-

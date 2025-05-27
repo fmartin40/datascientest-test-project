@@ -130,6 +130,7 @@ class OffreEmploiCompetenceOrm(Model):
 
 # --- Mappings entre libellés et entités ---
 
+
 class MappingTypeContratOrm(Model):
     id = fields.IntField(pk=True)
     libelle = fields.CharField(max_length=100, unique=True, null=False)
@@ -189,3 +190,28 @@ class MappingCompetenceOrm(Model):
     class Meta:
         table = "MappingCompetence"
 
+
+class CompetenceDateAgg(Model):
+    id = fields.IntField(pk=True)
+    competence = fields.ForeignKeyField(
+        "models.CompetenceOrm", related_name="date_aggs"
+    )
+    date = fields.DateField()
+    count = fields.IntField(default=0)
+
+    class Meta:
+        table = "CompetenceDateAgg"
+        unique_together = (("competence", "date"),)
+        indexes = [("competence", "date")]
+
+
+class CompetenceDateBuffer(Model):
+    id = fields.IntField(pk=True)
+    competence = fields.ForeignKeyField(
+        "models.CompetenceOrm", related_name="date_buffers"
+    )
+    date = fields.DateField()
+
+    class Meta:
+        table = "CompetenceDateBuffer"
+        unique_together = (("competence", "date"),)

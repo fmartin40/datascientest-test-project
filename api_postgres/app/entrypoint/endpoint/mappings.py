@@ -7,6 +7,7 @@ import logging
 router = APIRouter(prefix="/mappings", tags=["mappings"])
 logger = logging.getLogger(__name__)
 
+
 @router.get("/types-contrat")
 @inject
 async def list_types_contrat(
@@ -52,3 +53,13 @@ async def list_competences(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erreur serveur: {str(e)}")
 
+
+@router.get("/villes")
+@inject
+async def list_villes(
+    repo: IMappings = Depends(Provide[ContainerService.mappings]),
+):
+    try:
+        return await repo.list_ville()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erreur serveur: {str(e)}")
