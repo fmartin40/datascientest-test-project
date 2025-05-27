@@ -1,19 +1,19 @@
 from fastapi import APIRouter, HTTPException, status, Depends, Query
 from dependency_injector.wiring import inject, Provide
-from app.domain.job.entities.jobs import Job
+from app.domain.job.entities.jobs import Job, JobLight
 from app.core.container import ContainerService
 from typing import Optional
 from app.infrastructure.job.job_reader import JobReader
 
 router = APIRouter(tags=["read job infos"])
 
-@router.get("/jobs", response_model=list[Job])
+
+@router.get("/jobs", response_model=list[Job] | list[JobLight])
 @inject
 async def list_jobs(
     limit: int = Query(30, ge=1, le=30),
     offset: int = Query(0, ge=0),
     competence: Optional[int] = Query(None),
-    langue: Optional[int] = Query(None),
     entreprise: Optional[int] = Query(None),
     ville: Optional[int] = Query(None),
     type_contrat: Optional[int] = Query(None),
@@ -40,10 +40,11 @@ async def list_jobs(
         print(e)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Erreur lors de la récupération des offres"
+            detail="Erreur lors de la récupération des offres",
         )
 
-@router.get("/jobs/{job_id}", response_model=Job)
+
+@router.get("/jobs/{job_id}")
 @inject
 async def get_job(
     job_id: str,
@@ -53,6 +54,7 @@ async def get_job(
     if not job:
         raise HTTPException(status_code=404, detail="Job not found")
     return job
+
 
 @router.get("/competences")
 @inject
@@ -64,9 +66,8 @@ async def list_competences(
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Erreur lors de la récupération des compétences: {str(e)}"
+            detail=f"Erreur lors de la récupération des compétences: {str(e)}",
         )
-
 
 
 @router.get("/entreprises")
@@ -79,8 +80,9 @@ async def list_entreprises(
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Erreur lors de la récupération des entreprises: {str(e)}"
+            detail=f"Erreur lors de la récupération des entreprises: {str(e)}",
         )
+
 
 @router.get("/types-contrat")
 @inject
@@ -92,8 +94,9 @@ async def list_types_contrat(
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Erreur lors de la récupération des types de contrat: {str(e)}"
+            detail=f"Erreur lors de la récupération des types de contrat: {str(e)}",
         )
+
 
 @router.get("/duree-travail")
 @inject
@@ -105,10 +108,11 @@ async def list_duree_travail(
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Erreur lors de la récupération des durées de travail: {str(e)}"
+            detail=f"Erreur lors de la récupération des durées de travail: {str(e)}",
         )
 
-@router.get("/mode-travail")    
+
+@router.get("/mode-travail")
 @inject
 async def list_mode_travail(
     repo: JobReader = Depends(Provide[ContainerService.job_reader]),
@@ -118,8 +122,9 @@ async def list_mode_travail(
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Erreur lors de la récupération des modes de travail: {str(e)}"
-        )   
+            detail=f"Erreur lors de la récupération des modes de travail: {str(e)}",
+        )
+
 
 @router.get("/sources")
 @inject
@@ -131,6 +136,5 @@ async def list_sources(
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Erreur lors de la récupération des sources: {str(e)}"
+            detail=f"Erreur lors de la récupération des sources: {str(e)}",
         )
-

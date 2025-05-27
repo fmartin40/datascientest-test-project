@@ -1,6 +1,8 @@
 import logging
 from typing import Optional, Sequence
+from datetime import date
 from pydantic import BaseModel
+from fastapi.encoders import jsonable_encoder
 from app.domain.job.entities.jobs import Job
 from app.domain.job.interfaces.ijob_reader import IJobReader
 from app.infrastructure.models.models import (
@@ -12,6 +14,7 @@ from app.infrastructure.models.models import (
     DureeTravailOrm,
     TypeContratOrm,
     VilleOrm,
+    CompetenceDateAgg,
 )
 from app.domain.job.entities.jobs import (
     Source,
@@ -40,6 +43,10 @@ OffreEmploiPydantic = pydantic_model_creator(
     OffreEmploiOrm,
     name="OffreEmploiPydantic",
     include=(
+        "job_id",
+        "libelle",
+        "date_creation",
+        "url",
         "source",  # Tortoise le mappe à .source automatiquement
         "entreprise",  # => entreprise
         "duree_travail",  # => duree_travail
@@ -124,27 +131,26 @@ class JobReader(IJobReader):
                 "source__id",
                 "source__libelle",
                 "type_contrat__id",
-                "type_contrat__libelle",               
+                "type_contrat__libelle",
             )
             for offre in offres:
-                print(offre)
                 entreprise = (
-                    Entreprise(id=offre.get("entreprise__id"), libelle=offre.get("entreprise__libelle")) # type: ignore
-                    if offre.get("entreprise__id") 
+                    Entreprise(id=offre.get("entreprise__id"), libelle=offre.get("entreprise__libelle"))  # type: ignore
+                    if offre.get("entreprise__id")
                     else None
-                )  
+                )
                 ville = (
-                    Ville(id=offre.get("ville__id"), libelle=offre.get("ville__libelle")) # type: ignore
+                    Ville(id=offre.get("ville__id"), libelle=offre.get("ville__libelle"))  # type: ignore
                     if offre.get("ville__id")
                     else None
                 )  # type: ignore
                 type_contrat = (
-                    TypeContrat(id=offre.get("type_contrat__id"), libelle=offre.get("type_contrat__libelle")) # type: ignore
+                    TypeContrat(id=offre.get("type_contrat__id"), libelle=offre.get("type_contrat__libelle"))  # type: ignore
                     if offre.get("type_contrat__id")
                     else None
                 )  # type: ignore
                 source = (
-                    Source(id=offre.get("source__id"), libelle=offre.get("source__libelle")) # type: ignore
+                    Source(id=offre.get("source__id"), libelle=offre.get("source__libelle"))  # type: ignore
                     if offre.get("source__id")
                     else None
                 )  # type: ignore
@@ -174,9 +180,7 @@ class JobReader(IJobReader):
                     else None
                 )  # type: ignore
                 ville = (
-                    Ville(**offre.ville.__dict__)
-                    if offre.ville
-                    else None
+                    Ville(**offre.ville.__dict__) if offre.ville else None
                 )  # type: ignore
                 type_contrat = (
                     TypeContrat(**offre.type_contrat.__dict__)
@@ -214,29 +218,74 @@ class JobReader(IJobReader):
 
             return result
         except Exception as e:
-            logger.error(
-                f"Erreur lors de la récupération des offres d'emploi : {e}"
-            )
+            logger.error(f"Erreur lors de la récupération des offres d'emploi : {e}")
             raise
 
     async def get(self, job_id: str) -> Optional[BaseModel]:
         try:
-            offre = (
-                await OffreEmploiOrm.filter(id=job_id)
-                .prefetch_related(
-                    "entreprise",
-                    "source",
-                    "duree_travail",
-                    "mode_travail",
-                    "type_contrat",
-                    "competences",
-                )
-                .first()
+            query = OffreEmploiOrm.all().prefetch_related(
+                "entreprise",
+                "ville",
+                "source",
+                "duree_travail",
+                "mode_travail",
+                "type_contrat",
+                "competences",
             )
+
+            offre = await query.filter(Q(job_id=job_id)).first()
+
             if not offre:
                 return None
-            job_pydantic = await OffreEmploiPydantic.from_tortoise_orm(offre)
-            return job_pydantic
+            entreprise = (
+                Entreprise(libelle=offre.entreprise.libelle, id=offre.entreprise.id)
+                if offre.entreprise
+                else None
+            )  # type: ignore
+            ville = (
+                Ville(libelle=offre.ville.libelle, id=offre.ville.id)
+                if offre.ville
+                else None
+            )  # type: ignore
+            type_contrat = (
+                TypeContrat(**offre.type_contrat.__dict__)
+                if offre.type_contrat
+                else None
+            )  # type: ignore
+            source = Source(libelle=offre.source.libelle, id=offre.source.id) if offre.source else None  # type: ignore
+
+            duree_travail = (
+                DureeTravail(
+                    libelle=offre.duree_travail.libelle, id=offre.duree_travail.id
+                )
+                if offre.duree_travail
+                else None
+            )  # type: ignore
+            mode_travail = (
+                ModeTravail(
+                    libelle=offre.mode_travail.libelle, id=offre.mode_travail.id
+                )
+                if offre.mode_travail
+                else None
+            )  # type: ignore
+
+            job = Job(
+                job_id=offre.job_id,
+                libelle=offre.libelle,
+                date_creation=offre.date_creation,
+                type_contrat=type_contrat,  # type: ignore
+                source=source,  # type: ignore
+                entreprise=entreprise,  # type: ignore
+                ville=ville,  # type: ignore
+                duree_travail=duree_travail,  # type: ignore
+                mode_travail=mode_travail,  # type: ignore
+                competences=[
+                    Competence(libelle=c.libelle, id=c.id)
+                    for c in await offre.competences.all()
+                ],
+            )
+
+            return job
         except Exception as e:
             logger.error(
                 f"Erreur lors de la récupération de l'offre d'emploi {job_id} : {e}"
@@ -244,14 +293,7 @@ class JobReader(IJobReader):
             return None
 
     async def delete(self, job_id: str) -> bool:
-        try:
-            deleted_count = await OffreEmploiOrm.filter(id=job_id).delete()
-            return deleted_count > 0
-        except Exception as e:
-            logger.error(
-                f"Erreur lors de la suppression de l'offre d'emploi {job_id} : {e}"
-            )
-            return False
+        raise NotImplementedError("Not implemented")
 
     async def list_competences(self) -> Sequence[BaseModel]:
         try:
@@ -259,7 +301,6 @@ class JobReader(IJobReader):
         except Exception as e:
             logger.error(f"Erreur lors de la récupération des compétences : {e}")
             return []
-
 
     async def list_entreprises(self) -> Sequence[BaseModel]:
         try:
@@ -289,7 +330,6 @@ class JobReader(IJobReader):
             logger.error(f"Erreur lors de la récupération des modes de travail : {e}")
             return []
 
-    
     async def list_source(self) -> Sequence[BaseModel]:
         try:
             return await SourcePydantic.from_queryset(SourceOrm.all())
@@ -297,4 +337,26 @@ class JobReader(IJobReader):
             logger.error(f"Erreur lors de la récupération des sources : {e}")
             return []
 
-    
+    async def get_competence_by_date(
+        self, competence_id: int, date_debut: date, date_fin: date
+    ):
+        try:
+            aggs = await CompetenceDateAgg.filter(
+                competence_id=competence_id, date__gte=date_debut, date__lte=date_fin
+            ).prefetch_related("competence")
+            result = []
+            for agg in aggs:
+                result.append(
+                    {
+                        "date": agg.date,
+                        "competence_id": agg.competence.id,
+                        "competence_libelle": agg.competence.libelle,
+                        "count": agg.count,
+                    }
+                )
+            return result
+        except Exception as e:
+            logger.error(
+                f"Erreur lors de la récupération de la compétence {competence_id} par date : {e}"
+            )
+            return []

@@ -12,6 +12,7 @@ from app.entrypoint.router import (
     routeur_job_reader,
     routeur_job_writer,
     routeur_mappings,
+    routeur_stats,
 )
 
 
@@ -35,6 +36,7 @@ endpoint = [
     "app.entrypoint.endpoint.job_reader",
     "app.entrypoint.endpoint.job_writer",
     "app.entrypoint.endpoint.mappings",
+    "app.entrypoint.endpoint.stats",
 ]
 container_service = ContainerService()
 container_service.wire(modules=endpoint)
@@ -46,6 +48,7 @@ app = FastAPI(title="Api postgres")
 app.include_router(routeur_job_reader)
 app.include_router(routeur_job_writer)
 app.include_router(routeur_mappings)
+app.include_router(routeur_stats)
 
 
 # midleware pour forcer https
