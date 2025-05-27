@@ -14,7 +14,7 @@ class PostgresLoader(ILoader):
         self.api = Fetch()
         self.query = RequestConfig(
             method="POST",
-            url=f"http://api-postgres:{settings.API_POST_PORT}/jobs",
+            url=f"http://api-postgres:{settings.API_POST_PORT}/jobs/create",
             payload=None,
             params=None,
             headers={"Content-Type": "application/json"},
@@ -31,14 +31,14 @@ class PostgresLoader(ILoader):
             "job_id": job.job_id,
             "libelle": job.libelle,
             "date_creation": job.date_creation,
-            "source_id": job.source,
+            "source": job.source,
             "url": job.url,
             "entreprise": job.entreprise,
             "ville": job.ville,
             "type_contrat_id": job.type_contrat,
             "mode_travail_id": job.mode_travail,
             "duree_travail_id": job.duree_travail,
-            "competence_id": job.competence,
+            "competence_ids": job.competence,
         }
         self.query.payload = payload
         logger.info(f"Insertion du job dans PostgreSQL: {self.query.model_dump()}")

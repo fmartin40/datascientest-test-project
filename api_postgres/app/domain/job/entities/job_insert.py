@@ -25,9 +25,10 @@ class TypeContratCreate(BaseModel):
 
 class JobCreate(BaseModel):
     job_id: str
-    libelle: Optional[str] = None
-    date_creation: Optional[date] = None
+    libelle: str
+    date_creation: date = date.today()
     source: str
+    url: str
     entreprise: str
     ville: str
     type_contrat_id: int

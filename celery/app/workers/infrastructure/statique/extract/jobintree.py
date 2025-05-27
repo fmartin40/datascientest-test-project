@@ -7,7 +7,7 @@ import json
 from html import unescape
 from bs4 import BeautifulSoup
 from spacy.matcher import PhraseMatcher
-from datetime import date
+from datetime import date, datetime
 from app.workers.infrastructure.statique.extract.fetchurl import FetchUrl
 from app.workers.entities.jobs import JobDetail, JobSummary
 from app.workers.interfaces.istatic_extractor import IStaticExtractor
@@ -43,26 +43,26 @@ class JobInTreeExtractor(IStaticExtractor):
                 a_tag = job_offer.select_one("h3.no-marg a")
                 if a_tag is None:
                     continue
+                libelle = a_tag.get_text(strip=True)
                 type_contrat = job_offer.select("li.job-criteria-label span")[
                     3
                 ].get_text(strip=True)
-
+                ville = job_offer.select("li.job-criteria-label span")[1].get_text(
+                    strip=True
+                )
+                entreprise = job_offer.select("li.job-criteria-label span")[5].get_text(
+                    strip=True
+                )
                 summaries.append(
                     JobSummary(
-                        libelle=a_tag.get_text(strip=True),  # type: ignore
+                        libelle=libelle if libelle else "nc",
                         url=urllib.parse.urljoin(self.base_url, a_tag.get("href")),  # type: ignore
                         source=self.source,
-                        ville=job_offer.select("li.job-criteria-label span")[
-                            1
-                        ].get_text(
-                            strip=True
+                        ville=ville if ville else location,
+                        type_contrat=await self._transform(
+                            type_contrat, self.keywords_loader.load_type_contrat
                         ),  # type: ignore
-                        type_contrat= await self._transform(type_contrat, self.keywords_loader.load_type_contrat), # type: ignore
-                        entreprise=job_offer.select("li.job-criteria-label span")[
-                            5
-                        ].get_text(
-                            strip=True
-                        ),  # type: ignore
+                        entreprise=entreprise if entreprise else "nc",
                     )  # type: ignore
                 )
             return summaries
@@ -75,34 +75,41 @@ class JobInTreeExtractor(IStaticExtractor):
     async def extract_details(self, job_summary: JobSummary) -> JobDetail | None:
         try:
             json_to_parse = await self.extract_json(job_summary)
-            
-            if json_to_parse :
+
+            if json_to_parse:
                 selectors: dict = {
-                    "date_creation": "datePosted",
                     "description": "description",
                 }
-                parsed : Dict = glom(json_to_parse, selectors)  # type: ignore
+                parsed: Dict = glom(json_to_parse, selectors)  # type: ignore
                 logger.info(f"Parsed from json: {parsed}")
             else:
                 content = await self.fetch.fetch(job_summary.url)
                 soup = BeautifulSoup(content, "html.parser")  # type: ignore
                 div = soup.find("div", class_="container-small")
                 description = div.get_text(strip=True) if div else ""
-                parsed : Dict = {
-                    "date_creation": date.today().strftime("%Y-%m-%d"),
+                parsed: Dict = {
                     "description": description,
                 }
                 logger.info(f"Parsed from html: {parsed}")
-            # type_contrat: int | None = await self._transform(parsed["type_contrat"], self.keywords_loader.load_type_contrat) # type: ignore
-            duree_travail: int | None = await self._transform(parsed["description"], self.keywords_loader.load_duree_travail) # type: ignore
-            competence: list[int] | None = await self._transform(parsed["description"], self.keywords_loader.load_competences, multi=True) # type: ignore
-            mode_travail: int | None = await self._transform(parsed["description"], self.keywords_loader.load_mode_travail) # type: ignore
+
+            # extraction des données depuis description
+            if not job_summary.type_contrat:
+                job_summary.type_contrat = await self._transform(parsed["description"], self.keywords_loader.load_type_contrat)  # type: ignore
+            duree_travail: int = await self._transform(
+                parsed["description"], self.keywords_loader.load_duree_travail
+            )  # type: ignore
+            competence: list[int] = await self._transform(
+                parsed["description"], self.keywords_loader.load_competences, multi=True
+            )  # type: ignore
+            mode_travail: int = await self._transform(
+                parsed["description"], self.keywords_loader.load_mode_travail
+            )  # type: ignore
 
             jobdetail = JobDetail(
                 job_id="1",
                 url=job_summary.url,
                 libelle=job_summary.libelle,  # type: ignore
-                date_creation=parsed["date_creation"],
+                date_creation=date.today().strftime("%Y-%m-%d"),
                 ville=job_summary.ville,
                 entreprise=job_summary.entreprise,
                 description=self._clean_description(parsed["description"]),
@@ -119,7 +126,7 @@ class JobInTreeExtractor(IStaticExtractor):
         except Exception as exc:
             print("Erreur dans extract_details", exc)
             raise
-    
+
     async def extract_json(self, job_summary: JobSummary) -> Dict | None:
         try:
             if not job_summary.url.startswith(self.base_url):
@@ -130,20 +137,19 @@ class JobInTreeExtractor(IStaticExtractor):
             jsons = BeautifulSoup(content, "html.parser").find_all(
                 "script", {"type": "application/ld+json"}
             )  # type: ignore
-            
+
             if not jsons:
                 return None
-            
+
             for js in jsons:
                 json_to_parse: Dict = json.loads(js.string)  # type: ignore
                 if set(["description", "title"]).issubset(json_to_parse.keys()):
                     return json_to_parse
-            
+
             return None
         except Exception as exc:
             logger.error(f"Erreur dans extract_json: {exc}", exc_info=True)
             raise
-
 
     def _clean_description(self, description: str) -> str:
         try:
@@ -165,21 +171,27 @@ class JobInTreeExtractor(IStaticExtractor):
             logger.error(f"Erreur dans _clean_description: {exc}", exc_info=True)
             raise
 
-    async def _transform(self, text: str, load_keywords: Callable, multi: bool = False ) -> list[int] | int :
-        """ 
+    async def _transform(
+        self, text: str, load_keywords: Callable, multi: bool = False
+    ) -> list[int] | int:
+        """
         Extrait les mots clés d'un texte
         """
-        mapping:Dict[str, Dict[str, int]] = await load_keywords()
-        extracted_keywords: list[str] | None = self._extract_keywords(text, mapping.get("mapping",{}))
+        mapping: Dict[str, Dict[str, int]] = await load_keywords()
+        extracted_keywords: list[str] | None = self._extract_keywords(
+            text, mapping.get("mapping", {})
+        )
         logger.info(f"extracted_keywords: {extracted_keywords}")
 
         if not extracted_keywords:
-            return mapping.get("default") # type: ignore
-        
-        mapped_to_id: list[int] = [mapping.get("mapping",{}).get(keyword.lower()) for keyword in extracted_keywords] # type: ignore
+            return mapping.get("default")  # type: ignore
+
+        mapped_to_id: list[int] = [
+            mapping.get("mapping", {}).get(keyword.lower())
+            for keyword in extracted_keywords
+        ]  # type: ignore
         return mapped_to_id if multi else mapped_to_id[0]
-    
-    
+
     def _extract_keywords(self, text: str, mapping: Dict[str, int]) -> list[str] | None:
         nlp = get_nlp()
         doc = nlp(text)
@@ -187,10 +199,10 @@ class JobInTreeExtractor(IStaticExtractor):
         matcher = PhraseMatcher(nlp.vocab, attr="LOWER")
         patterns = [nlp.make_doc(text) for text in list(mapping.keys())]
         matcher.add("CIBLES", patterns)
-        matches = matcher(doc) # type: ignore
-       
+        matches = matcher(doc)  # type: ignore
+
         if not matches:
             return None
-        
-        found_keywords = [doc[start:end].text for match_id, start, end in matches] # type: ignore
+
+        found_keywords = [doc[start:end].text for match_id, start, end in matches]  # type: ignore
         return found_keywords

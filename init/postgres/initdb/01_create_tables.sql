@@ -88,16 +88,16 @@ CREATE TABLE IF NOT EXISTS "OffreEmploi_Competence" (
 
 -- Ajout de contraintes supplémentaires
 
-DO $$
-BEGIN
-    IF NOT EXISTS (
-        SELECT 1
-        FROM pg_constraint
-        WHERE conname = 'offreemploi_jobid_key'
-    ) THEN
-        ALTER TABLE "OffreEmploi" ADD CONSTRAINT "offreemploi_entreprise_libelle_key" UNIQUE ("entreprise_id", "libelle");
-    END IF;
-END $$;
+-- DO $$
+-- BEGIN
+--     IF NOT EXISTS (
+--         SELECT 1
+--         FROM pg_constraint
+--         WHERE conname = 'offreemploi_jobid_key'
+--     ) THEN
+--         ALTER TABLE "OffreEmploi" ADD CONSTRAINT "offreemploi_entreprise_libelle_key" UNIQUE ("entreprise_id", "libelle");
+--     END IF;
+-- END $$;
 
 -- Index sur jobId
 CREATE INDEX IF NOT EXISTS "idx_offreemploi_jobid" ON "OffreEmploi" ("jobId");

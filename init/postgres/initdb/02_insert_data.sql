@@ -173,26 +173,31 @@ INSERT INTO "OffreEmploi_Competence" (offre_id, competence_id) VALUES
 -- Relations Offre ↔ Type de contrat
 -- =======================
 
-INSERT INTO "MappingTypeContrat" (libelle, type_contrat_id)
+
 
 -- CDI (Contrat à durée indéterminée)
+INSERT INTO "MappingTypeContrat" (libelle, type_contrat_id)
 SELECT 'CDI', id FROM "TypeContrat" WHERE libelle = 'CDI'
 UNION ALL SELECT 'contrat à durée indéterminée', id FROM "TypeContrat" WHERE libelle = 'CDI'
 UNION ALL SELECT 'contrat durée indéterminée', id FROM "TypeContrat" WHERE libelle = 'CDI'
 UNION ALL SELECT 'permanent contract', id FROM "TypeContrat" WHERE libelle = 'CDI'
 UNION ALL SELECT 'full-time permanent', id FROM "TypeContrat" WHERE libelle = 'CDI'
 UNION ALL SELECT 'permanent', id FROM "TypeContrat" WHERE libelle = 'CDI'
+ON CONFLICT (libelle) DO NOTHING;
 
 -- CDD (Contrat à durée déterminée)
-UNION ALL SELECT 'CDD', id FROM "TypeContrat" WHERE libelle = 'CDD'
+INSERT INTO "MappingTypeContrat" (libelle, type_contrat_id)
+SELECT 'CDD', id FROM "TypeContrat" WHERE libelle = 'CDD'
 UNION ALL SELECT 'contrat à durée déterminée', id FROM "TypeContrat" WHERE libelle = 'CDD'
 UNION ALL SELECT 'contrat durée déterminée', id FROM "TypeContrat" WHERE libelle = 'CDD'
 UNION ALL SELECT 'fixed-term contract', id FROM "TypeContrat" WHERE libelle = 'CDD'
 UNION ALL SELECT 'short-term contract', id FROM "TypeContrat" WHERE libelle = 'CDD'
 UNION ALL SELECT 'contractuel', id FROM "TypeContrat" WHERE libelle = 'CDD'
+ON CONFLICT (libelle) DO NOTHING;
 
 -- Alternance
-UNION ALL SELECT 'alternance', id FROM "TypeContrat" WHERE libelle = 'alternance'
+INSERT INTO "MappingTypeContrat" (libelle, type_contrat_id)
+SELECT 'alternance', id FROM "TypeContrat" WHERE libelle = 'alternance'
 UNION ALL SELECT 'contrat en alternance', id FROM "TypeContrat" WHERE libelle = 'alternance'
 UNION ALL SELECT 'contrat alternance', id FROM "TypeContrat" WHERE libelle = 'alternance'
 UNION ALL SELECT 'apprentissage', id FROM "TypeContrat" WHERE libelle = 'alternance'
@@ -205,7 +210,8 @@ UNION ALL SELECT 'intern', id FROM "TypeContrat" WHERE libelle = 'alternance'
 ON CONFLICT (libelle) DO NOTHING;
 
 -- Indépendant
-UNION ALL SELECT 'indépendant', id FROM "TypeContrat" WHERE libelle = 'indépendant'
+INSERT INTO "MappingTypeContrat" (libelle, type_contrat_id)
+SELECT 'indépendant', id FROM "TypeContrat" WHERE libelle = 'indépendant'
 UNION ALL SELECT 'freelance', id FROM "TypeContrat" WHERE libelle = 'indépendant'
 UNION ALL SELECT 'auto-entrepreneur', id FROM "TypeContrat" WHERE libelle = 'indépendant'
 UNION ALL SELECT 'micro-entrepreneur', id FROM "TypeContrat" WHERE libelle = 'indépendant'
