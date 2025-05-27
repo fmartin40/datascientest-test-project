@@ -1,16 +1,17 @@
-
-
 services:
- 
-# --------------------  
-#       API SCRAP 
-#  -------------------
-    
   celery:
     build:
       context: ./celery/.
-      dockerfile: Dockerfile 
-    command: ["celery", "-A", "app.main", "worker", "--loglevel=INFO", "--logfile=/logs/worker.log"]
+      dockerfile: Dockerfile
+    command:
+      [
+        "celery",
+        "-A",
+        "app.main",
+        "worker",
+        "--loglevel=INFO",
+        "--logfile=/logs/worker.log",
+      ]
     volumes:
       - ./logs:/logs
     env_file: .env
@@ -20,43 +21,33 @@ services:
       redis:
         condition: service_started
     networks:
-      - jobsearch_network 
+      - jobsearch_network
     healthcheck:
       test: ["CMD", "celery", "-A", "app.main", "status"]
       interval: 15s
       timeout: 10s
       retries: 5
-    
-    
+
   flower:
     image: mher/flower
     container_name: flower
     env_file: .env
-    
     environment:
       - CELERY_BROKER_URL=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@${RABBITMQ_URL}:5672//
     ports:
       - "5556:5555"
     depends_on:
-      # celery: 
-      #   condition: service_started
       rabbitmq:
         condition: service_started
     networks:
       - jobsearch_network
-    # healthcheck:
-    #   test: ["CMD", "wget", "--spider", "-q", "http://localhost:5555/"]
-    #   interval: 10s
-    #   timeout: 5s
-    #   retries: 5 
-    
 
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq
     ports:
-      - "5672:5672"  # RabbitMQ
-      - "15672:15672"  # Management interface
+      - "5672:5672" # RabbitMQ
+      - "15672:15672" # Management interface
     env_file: .env
     restart: always
     healthcheck:
@@ -65,8 +56,7 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - jobsearch_network 
-    
+      - jobsearch_network
 
   redis:
     image: redis:latest
@@ -80,17 +70,13 @@ services:
       retries: 50
     restart: always
     networks:
-      - jobsearch_network 
+      - jobsearch_network
 
-    
 # ---------- VOLUMES ----------
 volumes:
   logs:
-
 
 networks:
   jobsearch_network:
     external: true
     name: jobsearch_network
-
-
