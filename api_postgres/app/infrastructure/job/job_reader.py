@@ -1,5 +1,6 @@
 import logging
 from typing import Optional, Sequence
+from datetime import date
 from pydantic import BaseModel
 from fastapi.encoders import jsonable_encoder
 from app.domain.job.entities.jobs import Job
@@ -13,6 +14,7 @@ from app.infrastructure.models.models import (
     DureeTravailOrm,
     TypeContratOrm,
     VilleOrm,
+    CompetenceDateAgg,
 )
 from app.domain.job.entities.jobs import (
     Source,
@@ -333,4 +335,28 @@ class JobReader(IJobReader):
             return await SourcePydantic.from_queryset(SourceOrm.all())
         except Exception as e:
             logger.error(f"Erreur lors de la récupération des sources : {e}")
+            return []
+
+    async def get_competence_by_date(
+        self, competence_id: int, date_debut: date, date_fin: date
+    ):
+        try:
+            aggs = await CompetenceDateAgg.filter(
+                competence_id=competence_id, date__gte=date_debut, date__lte=date_fin
+            ).prefetch_related("competence")
+            result = []
+            for agg in aggs:
+                result.append(
+                    {
+                        "date": agg.date,
+                        "competence_id": agg.competence.id,
+                        "competence_libelle": agg.competence.libelle,
+                        "count": agg.count,
+                    }
+                )
+            return result
+        except Exception as e:
+            logger.error(
+                f"Erreur lors de la récupération de la compétence {competence_id} par date : {e}"
+            )
             return []
