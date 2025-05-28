@@ -1,0 +1,83 @@
+x-airflow-common: &airflow-common
+  image: apache/airflow:2.8.1
+  env_file: .env
+  environment:
+    AIRFLOW__CORE__EXECUTOR: CeleryExecutor
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+    AIRFLOW__CELERY__BROKER_URL: amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@${RABBITMQ_URL}:5672//
+    AIRFLOW__CELERY__RESULT_BACKEND: redis://${REDIS_HOST}:${REDIS_PORT}/0
+    AIRFLOW__CORE__FERNET_KEY: ""
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "false"
+    AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+    AIRFLOW__API__AUTH_BACKEND: airflow.api.auth.backend.basic_auth
+    PYTHONPATH: /opt/airflow/app
+  volumes:
+    - ./dags:/opt/airflow/dags
+    - ./logs:/opt/airflow/logs
+    - ./app:/opt/airflow/app
+  networks:
+    - jobsearch_network
+  # depends_on:
+  #   rabbitmq:
+  #     condition: service_healthy
+  #   redis:
+  #     condition: service_healthy
+
+services:
+  airflow-webserver:
+    <<: *airflow-common
+    command: webserver
+    env_file: .env
+    ports:
+      - "${AIRFLOW_WEB_PORT}:${AIRFLOW_WEB_PORT}"
+    healthcheck:
+      test:
+        ["CMD", "curl", "--fail", "http://localhost:${AIRFLOW_WEB_PORT}/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  airflow-scheduler:
+    <<: *airflow-common
+    command: scheduler
+
+  airflow-worker:
+    <<: *airflow-common
+    command: celery worker
+
+  airflow-init:
+    image: apache/airflow:2.8.1
+    env_file: .env
+    environment:
+      AIRFLOW__CORE__EXECUTOR: CeleryExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${AIRFLOW_DB}
+      AIRFLOW__CELERY__BROKER_URL: amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@${RABBITMQ_URL}:5672//
+      AIRFLOW__CELERY__RESULT_BACKEND: redis://${REDIS_HOST}:${REDIS_PORT}/0
+      AIRFLOW__CORE__FERNET_KEY: ""
+      AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "false"
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__API__AUTH_BACKEND: airflow.api.auth.backend.basic_auth
+      PYTHONPATH: /opt/airflow/app
+
+      # Variables utilisateur d'init
+      AIRFLOW_USER: ${AIRFLOW_USERNAME}
+      AIRFLOW_PASSWORD: ${AIRFLOW_PASSWORD}
+      AIRFLOW_FIRSTNAME: ${AIRFLOW_FIRSTNAME}
+      AIRFLOW_LASTNAME: ${AIRFLOW_LASTNAME}
+      AIRFLOW_ROLE: ${AIRFLOW_ROLE}
+      AIRFLOW_EMAIL: ${AIRFLOW_EMAIL}
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./app:/opt/airflow/app
+    networks:
+      - jobsearch_network
+    command: >
+      bash -c "airflow db upgrade && airflow users create --username $AIRFLOW_USERNAME --password $AIRFLOW_PASSWORD --firstname $AIRFLOW_FIRSTNAME --lastname $AIRFLOW_LASTNAME --role $AIRFLOW_ROLE --email $AIRFLOW_EMAIL"
+
+networks:
+  jobsearch_network:
+    external: true
+
+volumes:
+  logs:

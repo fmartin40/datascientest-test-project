@@ -3,17 +3,18 @@
 
 # Liste des fichiers docker-compose à lancer
 COMPOSE_FILES=(
-  "docker-compose.postgres.yml"
+  "docker-compose.airflow.yml"
   "docker-compose.scrap.yml"
   "docker-compose.celery.yml"
   "docker-compose.elastic.yml"
+  "docker-compose.postgres.yml"
 )
 
 # Démarrage de chaque docker-compose
 for FILE in "${COMPOSE_FILES[@]}"; do
   if [ -f "$FILE" ]; then
     echo " Arrêt de $FILE"
-    docker-compose -f "$FILE" down
+    docker compose -f "$FILE" down
   else
     echo " Fichier introuvable : $FILE"
   fi
