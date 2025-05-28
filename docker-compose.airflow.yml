@@ -173,6 +173,6 @@ volumes:
   postgres-db-volume:
 
 
-AIRFLOW_IMAGE_NAMEetworks:
+networks:
   jobsearch_network:
     external: true
