@@ -7,10 +7,11 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-class JobReader(IJobReader):
+
+class JobReaderElastic(IJobReader):
     def __init__(self, es: AsyncElasticsearch):
         self.es = es
-        self.index = settings.JOB_INDEX
+        self.index = settings.ELASTIC_JOB_INDEX
 
     async def list(self) -> List[Job]:
         resp = await self.es.search(index=self.index, query={"match_all": {}})
@@ -23,6 +24,3 @@ class JobReader(IJobReader):
         except Exception as e:
             logger.error(f"Erreur lors de la récupération du job {job_id} : {e}")
             raise
- 
-    
-

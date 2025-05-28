@@ -31,8 +31,8 @@ services:
         "--port",
         "${API_POST_PORT}",
       ]
-    environment:
-      - ENVIRONMENT=prod
+    # environment:
+    #   - ENVIRONMENT=prod
     networks:
       - jobsearch_network
 
