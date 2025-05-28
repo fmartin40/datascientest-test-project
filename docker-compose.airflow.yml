@@ -1,11 +1,13 @@
+version: "3.8"
+
 x-airflow-common: &airflow-common
-  image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.8.1}
+  image: apache/airflow:2.8.1
   environment: &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
     AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://root:root@pgdatabase/airflow
     AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://root:root@pgdatabase/airflow
     AIRFLOW__CELERY__BROKER_URL: redis://:@redis:6379/0
-    AIRFLOW__CORE__FERNET_KEY: ""
+    AIRFLOW__CORE__FERNET_KEY: ${FERNET_KEY}
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "true"
     AIRFLOW__CORE__LOAD_EXAMPLES: "true"
     AIRFLOW__API__AUTH_BACKEND: "airflow.api.auth.backend.basic_auth"
@@ -14,13 +16,11 @@ x-airflow-common: &airflow-common
     AIRFLOW__SMTP__SMTP_USER: "de.airflow@gmail.com"
     AIRFLOW__SMTP__SMTP_PASSWORD: "cfsrvkongsobheta"
     AIRFLOW__SMTP__SMTP_MAIL_FROM: "de.airflow@gmail.com"
-
-    # _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- pymongo}
   volumes:
     - ./airflow_project/dags:/opt/airflow/dags
     - ./airflow_project/logs:/opt/airflow/logs
     - ./airflow_project/plugins:/opt/airflow/plugins
-  user: "${AIRFLOW_UID:-50000}:${AIRFLOW_GID:-50000}"
+  user: "${AIRFLOW_UID}:${AIRFLOW_GID}"
   networks:
     - jobsearch_network
 
@@ -36,24 +36,16 @@ services:
       timeout: 10s
       retries: 5
     restart: always
-    networks:
-      - jobsearch_network
 
   airflow-scheduler:
     <<: *airflow-common
     command: scheduler
     healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          'airflow jobs check --job-type SchedulerJob --hostname "$${HOSTNAME}"',
-        ]
+      test: ["CMD-SHELL", "airflow jobs check --job-type SchedulerJob"]
       interval: 10s
       timeout: 10s
       retries: 5
     restart: always
-    networks:
-      - jobsearch_network
 
   airflow-worker:
     <<: *airflow-common
@@ -61,13 +53,11 @@ services:
     healthcheck:
       test:
         - "CMD-SHELL"
-        - 'celery --app airflow.executors.celery_executor.app inspect ping -d "celery@$${HOSTNAME}"'
+        - 'celery --app airflow.executors.celery_executor.app inspect ping -d "celery@$$HOSTNAME"'
       interval: 10s
       timeout: 10s
       retries: 5
     restart: always
-    networks:
-      - jobsearch_network
 
   airflow-init:
     <<: *airflow-common
@@ -76,10 +66,8 @@ services:
       <<: *airflow-common-env
       _AIRFLOW_DB_UPGRADE: "true"
       _AIRFLOW_WWW_USER_CREATE: "true"
-      _AIRFLOW_WWW_USER_USERNAME: ${_AIRFLOW_WWW_USER_USERNAME:-root}
-      _AIRFLOW_WWW_USER_PASSWORD: ${_AIRFLOW_WWW_USER_PASSWORD:-root}
-    networks:
-      - jobsearch_network
+      _AIRFLOW_WWW_USER_USERNAME: ${_AIRFLOW_WWW_USER_USERNAME}
+      _AIRFLOW_WWW_USER_PASSWORD: ${_AIRFLOW_WWW_USER_PASSWORD}
 
 networks:
   jobsearch_network:

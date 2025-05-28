@@ -41,7 +41,6 @@
 #
 # Feel free to modify this file to suit your needs.
 ---
-
 x-airflow-common: &airflow-common
   image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.8.1}
   environment: &airflow-common-env
@@ -49,7 +48,7 @@ x-airflow-common: &airflow-common
     AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-postgres/airflow
     AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@airflow-postgres/airflow
     AIRFLOW__CELERY__BROKER_URL: redis://:@redis:6379/0
-    AIRFLOW__CORE__FERNET_KEY: ""
+    AIRFLOW__CORE__FERNET_KEY: "7T512UXSSmBOkpWimFHIVb8jK6lfmSAvx4mO6Arehnc="
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "true"
     AIRFLOW__CORE__LOAD_EXAMPLES: "true"
     AIRFLOW__API__AUTH_BACKEND: "airflow.api.auth.backend.basic_auth"
@@ -107,11 +106,7 @@ services:
     <<: *airflow-common
     command: scheduler
     healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          'airflow jobs check --job-type SchedulerJob --hostname "$${HOSTNAME}"',
-        ]
+      test: ["CMD-SHELL", "airflow jobs check --job-type SchedulerJob"]
       interval: 10s
       timeout: 10s
       retries: 5
@@ -151,15 +146,11 @@ services:
   #     retries: 5
   #   restart: always
 
-
 # ---------- VOLUMES ----------
 volumes:
   airflow-postgres-db-volume:
-
 
 networks:
   jobsearch_network:
     external: true
     name: jobsearch_network
-
-
