@@ -12,7 +12,7 @@ class Settings(BaseSettings):
 	
 	# cette variable est utilisée pour déterminer si l'environnement est local ou en production
 	# elle est mise a jour dans le docker-compose.yml
-	ENVIRONMENT:str ="local"  # "local" ou "prod"
+	# ENVIRONMENT:str ="local"  # "local" ou "prod"
 
 	POSTGRES_USER: str
 	POSTGRES_PASSWORD: str
@@ -20,11 +20,11 @@ class Settings(BaseSettings):
 	POSTGRES_PORT: int
 	POSTGRES_HOST: str = "localhost"
 
-	@property
-	def POSTGRES_HOST_DB(self):
-		if self.ENVIRONMENT == "prod":
-			return self.POSTGRES_HOST
-		return "localhost"
+	# @property
+	# def POSTGRES_HOST_DB(self):
+	# 	if self.ENVIRONMENT == "prod":
+	# 		return self.POSTGRES_HOST
+	# 	return "localhost"
 
 @lru_cache
 def get_settings():

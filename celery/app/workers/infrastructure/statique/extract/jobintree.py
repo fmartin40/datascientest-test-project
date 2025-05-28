@@ -72,7 +72,9 @@ class JobInTreeExtractor(IStaticExtractor):
             logger.error(f"Erreur dans extract_summaries: {exc}", exc_info=True)
             raise
 
-    async def extract_details(self, job_summary: JobSummary) -> JobDetail | None:
+    async def extract_details(
+        self, job_summary: JobSummary, location: str
+    ) -> JobDetail | None:
         try:
             json_to_parse = await self.extract_json(job_summary)
 
@@ -104,10 +106,15 @@ class JobInTreeExtractor(IStaticExtractor):
             mode_travail: int = await self._transform(
                 parsed["description"], self.keywords_loader.load_mode_travail
             )  # type: ignore
-            if job_summary.ville:
+            logger.info(f"voici la ville: {job_summary.ville}")
+            logger.info(f"voici la location: {location}")
+            if not job_summary.ville:
                 job_summary.ville: str = await self._transform(  # type: ignore
                     job_summary.ville, self.keywords_loader.load_ville
                 )  # type: ignore
+            else:
+                job_summary.ville = location
+
             jobdetail = JobDetail(
                 job_id="1",
                 url=job_summary.url,
@@ -122,7 +129,7 @@ class JobInTreeExtractor(IStaticExtractor):
                 competence=competence,
                 duree_travail=duree_travail,
             )
-            logger.info(f"JobDetail: {jobdetail}")
+            logger.info(f"JobDetail à insérer en base: {jobdetail}")
             return jobdetail
         except asyncio.TimeoutError:
             raise Exception(f"Timeout lors de la requête pour url={job_summary.url}")

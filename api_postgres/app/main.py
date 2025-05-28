@@ -86,7 +86,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 # Connexion à MySQL via Tortoise
 register_tortoise(
     app,
-    db_url=f"asyncpg://{settings.POSTGRES_USER}:{settings.POSTGRES_PASSWORD}@{settings.POSTGRES_HOST_DB}:{settings.POSTGRES_PORT}/{settings.POSTGRES_DB}",
+    db_url=f"asyncpg://{settings.POSTGRES_USER}:{settings.POSTGRES_PASSWORD}@{settings.POSTGRES_HOST}:{settings.POSTGRES_PORT}/{settings.POSTGRES_DB}",
     modules={"models": ["app.infrastructure.models.models"]},
     generate_schemas=False,
     add_exception_handlers=True,

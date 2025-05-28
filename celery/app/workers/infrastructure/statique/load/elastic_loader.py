@@ -8,29 +8,32 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class ElasticLoader(ILoader):
     def __init__(self):
         self.api = Fetch()
         self.query = RequestConfig(
-            method = "POST",
-            url = f"http://api-elastic:{settings.API_ELASTIC_PORT}/jobs",
-            payload = None,
-            params = None,
-            headers = {"Content-Type": "application/json"}
+            method="POST",
+            url=settings.ENDPOINT_ELASTIC_JOBCREATE,
+            payload=None,
+            params=None,
+            headers={"Content-Type": "application/json"},
         )
 
-    async def insert(self, job:JobDetail):
+    async def insert(self, job: JobDetail):
         """
         Stocke un document JSON dans Elasticsearch.
         :param job_data: Dictionnaire contenant les données de l'offre d'emploi.
         :param doc_id: (Optionnel) ID du document dans Elasticsearch.
         :return: Résultat de l'insertion.
         """
-        self.query.payload = job.model_dump(include={"job_id", "libelle", "date_creation", "description"})
+        self.query.payload = job.model_dump(
+            include={"job_id", "libelle", "date_creation", "description", "url"}
+        )
         logger.info(f"Insertion du job dans Elasticsearch: {self.query.model_dump()}")
         response = await self.api.fetch(self.query)
         return response
-    
+
     async def insert_many(self, jobs: List[JobDetail]):
         raise NotImplementedError
 

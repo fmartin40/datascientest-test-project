@@ -14,7 +14,7 @@ class PostgresLoader(ILoader):
         self.api = Fetch()
         self.query = RequestConfig(
             method="POST",
-            url=f"http://{settings.POSTGRES_HOST}:{settings.API_POST_PORT}/jobs/create",
+            url=settings.ENDPOINT_POSTGRES_JOBCREATE,
             payload=None,
             params=None,
             headers={"Content-Type": "application/json"},

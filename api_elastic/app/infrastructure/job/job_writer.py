@@ -6,6 +6,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class JobWriter(IJobWriter):
     def __init__(self, es: AsyncElasticsearch):
         self.es = es
@@ -13,7 +14,12 @@ class JobWriter(IJobWriter):
 
     async def add(self, job: Job) -> None:
         try:
-            await self.es.index(index=self.index, id=job.job_id, document=job.model_dump())
+            if await self.es.exists(index=self.index, id=job.job_id):
+                logger.error(f"L'offre d'emploi {job.job_id} existe déjà")
+            else:
+                await self.es.index(
+                    index=self.index, id=job.job_id, document=job.model_dump()
+                )
         except Exception as e:
             logger.error(f"Erreur lors de l'ajout du job {job.job_id} : {e}")
             raise
@@ -32,7 +38,3 @@ class JobWriter(IJobWriter):
         except Exception as e:
             logger.error(f"Erreur lors de la suppression du job {job_id} : {e}")
             raise
- 
-    
-
-
