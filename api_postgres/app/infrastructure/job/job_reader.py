@@ -2,7 +2,6 @@ import logging
 from typing import Optional, Sequence
 from datetime import date
 from pydantic import BaseModel
-from fastapi.encoders import jsonable_encoder
 from app.domain.job.entities.jobs import Job
 from app.domain.job.interfaces.ijob_reader import IJobReader
 from app.infrastructure.models.models import (
@@ -91,6 +90,8 @@ class JobReader(IJobReader):
                 "type_contrat",
                 "competences",
             )
+
+            query = query.order_by("job_id")
 
             filters = Q()
             if competence:

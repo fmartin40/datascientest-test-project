@@ -45,9 +45,7 @@ class MappingsFromPostgres(IKeywordLoader):
         return await self._load_keywords("villes")
 
     async def _load_keywords(self, cache_key: str) -> Dict[str, str]:
-        self.request.url = (
-            f"http://api-postgres:{settings.API_POST_PORT}/mappings/{cache_key}"
-        )
+        self.request.url = f"{settings.ENDPOINT_MAPPING}/{cache_key}"
         data: Dict = self.redis.get(cache_key)  # type: ignore
         if data:
             if isinstance(data, bytes):

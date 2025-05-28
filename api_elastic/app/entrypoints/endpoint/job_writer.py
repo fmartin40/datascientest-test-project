@@ -8,7 +8,7 @@ from app.domain.job.interfaces.ijob_writer import IJobWriter
 router = APIRouter(prefix="/jobs")
     
 
-@router.post("/", response_model=Job, status_code=201)
+@router.post("/create", response_model=Job, status_code=201)
 @inject
 async def add_job(
     job: Job,

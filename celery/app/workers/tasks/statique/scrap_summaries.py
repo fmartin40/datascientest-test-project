@@ -47,7 +47,9 @@ def extract_summaries(
 
         # ---- lancement des tâches job details pour les job summaries avec URL valide
         launch_job_detail_tasks(
-            job_summaries=[s for s in job_summaries if s.url], source=source
+            job_summaries=[s for s in job_summaries[:1] if s.url],
+            source=source,
+            location=location,
         )
 
         # ---- stockage des job_summary dans Redis
@@ -71,7 +73,9 @@ def extract_summaries(
         raise
 
 
-def launch_job_detail_tasks(job_summaries: List[JobSummary], source: str):
+def launch_job_detail_tasks(
+    job_summaries: List[JobSummary], source: str, location: str
+):
     try:
         task_ids = []
         print(f"job_summaries: {job_summaries}")
@@ -81,6 +85,7 @@ def launch_job_detail_tasks(job_summaries: List[JobSummary], source: str):
                 kwargs={
                     "summary": job_summary.model_dump(),
                     "source": source,
+                    "location": location,
                 },
                 countdown=2 * i,
                 expires=3600,

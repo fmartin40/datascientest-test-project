@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
     autoretry_for=(Exception,),
     retry_kwargs={"max_retries": 3, "countdown": 60},
 )
-def extract_jobdetail(summary: dict, source: str):
+def extract_jobdetail(summary: dict, source: str, location: str):
     try:
         task_id: str = current_task.request.id  # type: ignore
         logger.info(
@@ -37,7 +37,9 @@ def extract_jobdetail(summary: dict, source: str):
         # ----- lancement du process de scrap
         scraper: IStaticExtractor = container.scraper_factory()[source]  # type: ignore
         job_detail: JobDetail = asyncio.run(
-            scraper.extract_details(job_summary=JobSummary(**summary))
+            scraper.extract_details(
+                job_summary=JobSummary(**summary), location=location
+            )
         )  # type: ignore
         logger.info(f"Détails extraits avec succès : {job_detail}")
 

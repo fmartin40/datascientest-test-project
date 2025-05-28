@@ -20,7 +20,7 @@ services:
     # En Dev
     volumes:
       - ./api_postgres/app:/app/app
-      - ./logs/api_postgres_logs:/app/logs
+      # - ./logs/api_postgres_logs:/app/logs
     command:
       [
         "uvicorn",
@@ -51,27 +51,27 @@ services:
   #   networks:
   #     - jobsearch_network
 
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin
-    # depends_on:
-    #   pgdatabase:
-    #     condition: service_started
-    volumes:
-      - pgadmin_data:/var/lib/pgadmin
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
-      - PGADMIN_DEFAULT_PASSWORD=root
-    ports:
-      - "8081:80"
-    # networks:
-    #   - jobsearch_network
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   container_name: pgadmin
+  #   # depends_on:
+  #   #   pgdatabase:
+  #   #     condition: service_started
+  #   volumes:
+  #     - pgadmin_data:/var/lib/pgadmin
+  #   environment:
+  #     - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+  #     - PGADMIN_DEFAULT_PASSWORD=root
+  #   ports:
+  #     - "8081:80"
+  # networks:
+  #   - jobsearch_network
 
 # ---------- VOLUMES ----------
-volumes:
-  # postgres_data:
-  pgadmin_data:
-  # logs:
+# volumes:
+# postgres_data:
+# pgadmin_data:
+# logs:
 
 networks:
   jobsearch_network:
