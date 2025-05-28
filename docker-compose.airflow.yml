@@ -58,12 +58,15 @@ x-airflow-common: &airflow-common
     AIRFLOW__SMTP__SMTP_USER: "de.airflow@gmail.com"
     AIRFLOW__SMTP__SMTP_PASSWORD: "cfsrvkongsobheta"
     AIRFLOW__SMTP__SMTP_MAIL_FROM: "de.airflow@gmail.com"
-
-    _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- pymongo}
+    PYTHONPATH: /opt/airflow/app
+    _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- requests psycopg2-binary python-dotenv}
   volumes:
     - ./dags:/opt/airflow/dags
+    - ./data:/opt/airflow/data
     - ./logs:/opt/airflow/logs
     - ./plugins:/opt/airflow/plugins
+    - ./app:/opt/airflow/app
+    - ./.env:/opt/airflow/.env
   user: "${AIRFLOW_UID:-50000}:${AIRFLOW_GID:-50000}"
   depends_on:
     redis:
