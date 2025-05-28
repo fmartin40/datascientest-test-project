@@ -10,8 +10,8 @@ services:
     ports:
       - "${API_POST_PORT}:${API_POST_PORT}"
     restart: always
-    depends_on:
-      - pgdatabase
+    # depends_on:
+    #   - pgdatabase
     env_file: .env
     # En Prod
     #  volumes:
@@ -36,20 +36,20 @@ services:
     networks:
       - jobsearch_network
 
-  pgdatabase:
-    image: postgres:13
-    container_name: pgdatabase
-    environment:
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=job_market
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./init/postgres/initdb:/docker-entrypoint-initdb.d
-    ports:
-      - "5432:5432"
-    networks:
-      - jobsearch_network
+  # pgdatabase:
+  #   image: postgres:13
+  #   container_name: pgdatabase
+  #   environment:
+  #     - POSTGRES_USER=root
+  #     - POSTGRES_PASSWORD=root
+  #     - POSTGRES_DB=job_market
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #     - ./init/postgres/initdb:/docker-entrypoint-initdb.d
+  #   ports:
+  #     - "5432:5432"
+  #   networks:
+  #     - jobsearch_network
 
   pgadmin:
     image: dpage/pgadmin4
@@ -69,7 +69,7 @@ services:
 
 # ---------- VOLUMES ----------
 volumes:
-  postgres_data:
+  # postgres_data:
   pgadmin_data:
   # logs:
 
