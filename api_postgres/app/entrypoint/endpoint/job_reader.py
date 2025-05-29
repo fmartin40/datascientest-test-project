@@ -126,6 +126,20 @@ async def list_mode_travail(
         )
 
 
+@router.get("/ville")
+@inject
+async def list_ville(
+    repo: JobReader = Depends(Provide[ContainerService.job_reader]),
+):
+    try:
+        return await repo.list_ville()
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Erreur lors de la récupération des villes: {str(e)}",
+        )
+
+
 @router.get("/sources")
 @inject
 async def list_sources(
