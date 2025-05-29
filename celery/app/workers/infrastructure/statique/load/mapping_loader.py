@@ -44,14 +44,14 @@ class MappingsFromPostgres(IKeywordLoader):
     async def load_ville(self):
         return await self._load_keywords("villes")
 
-    async def _load_keywords(self, cache_key: str) -> Dict[str, str]:
+    async def _load_keywords(self, cache_key: str) -> Dict:
         self.request.url = f"{settings.ENDPOINT_MAPPING}/{cache_key}"
         data: Dict = self.redis.get(cache_key)  # type: ignore
         if data:
             if isinstance(data, bytes):
                 data: str = data.decode("utf-8")  # type: ignore
-            dico: Dict[str, str] = json.loads(data)  # type: ignore
-            return dico
+            mapping: Dict[str, str] = json.loads(data)  # type: ignore
+            return mapping.get("data", {})  # type: ignore
 
         response: Dict[str, str] = await self.api.fetch(self.request)  # type: ignore
         keywords: Dict[str, str] = response

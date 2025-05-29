@@ -1,41 +1,49 @@
-from decorators import dag, task
-from utils.dates import days_ago
+from airflow import DAG
+from airflow.decorators import task
+from airflow.utils.dates import days_ago
 import requests
-import logging
+from celery import Celery
 
-
-@task
-def fetch_sources():
-    url = "http://localhost:8003/sources"
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-        data = response.json()
-        libelles = [item["libelle"] for item in data if "libelle" in item]
-        logging.info(f"Libellés récupérés : {libelles}")
-        return libelles
-    except Exception as e:
-        logging.error(f"Erreur API : {e}")
-        raise
-
-
-@task
-def print_libelles(libelles):
-    print("Libellés extraits :")
-    for libelle in libelles:
-        print(f" - {libelle}")
-
-
-@dag(
-    dag_id="job_market_import_sources",
-    tags=["job_market", "postgres", "jobs"],
-    schedule_interval=None,
-    start_date=days_ago(1),
-    catchup=False,
+# Configuration Celery
+celery_app = Celery(
+    "jobmarket", broker="amqp://admin:admin@rabbitmq:5672//", backend="rpc://"
 )
-def dag_main():
-    result = fetch_sources()
-    print_libelles(result)
 
+VILLES = ["paris", "lyon", "marseille"]
+METIER = "data engineer"
+API_SOURCES = "http://api-postgres:8003/sources"
+CELERY_TASK = "statique.extract_summaries"
 
-dag_instance = dag_main()
+default_args = {
+    "owner": "airflow",
+    "start_date": days_ago(1),
+}
+
+with DAG(
+    dag_id="scrap_data_engineer_jobs",
+    default_args=default_args,
+    schedule=None,
+    catchup=False,
+    tags=["datascientest", "jobmarket"],
+) as dag:
+
+    @task
+    def get_sources() -> list:
+        response = requests.get(API_SOURCES)
+        response.raise_for_status()
+        sources = response.json()
+        return [source["libelle"] for source in sources]
+
+    @task
+    def send_scrap_tasks(sites: list):
+        for site in sites:
+            if site == "jobintree":
+                for ville in VILLES:
+                    celery_app.send_task(
+                        CELERY_TASK,
+                        kwargs={"source": site, "query": METIER, "location": ville},
+                    )
+
+    # Pipeline
+    sites = get_sources()
+    send_scrap_tasks(sites)  # type: ignore

@@ -24,12 +24,23 @@ class JobInTreeExtractor(IStaticExtractor):
         self.base_url: str = "https://www.jobintree.com"
         self.request_url: str = "/emploi/recherche.html?k={query}&l={location}"
         self.keywords_loader: IKeywordLoader = keywords_loader
+        self.type_contrat: Dict = {}
+        self.duree_travail: Dict = {}
+        self.competences: Dict = {}
+        self.mode_travail: Dict = {}
+        self.ville: Dict = {}
         # self.transformer: ITransformer = transformer
 
     async def extract_summaries(
         self, query: str, location: str, loop: int
     ) -> List[JobSummary]:
         try:
+            await self._load_mappings()
+            logger.info(f"type_contrat: {self.type_contrat}")
+            logger.info(f"duree_travail: {self.duree_travail}")
+            logger.info(f"competences: {self.competences}")
+            logger.info(f"mode_travail: {self.mode_travail}")
+            logger.info(f"ville: {self.ville}")
             url = urllib.parse.urljoin(
                 self.base_url, self.request_url.format(query=query, location=location)
             )
@@ -60,7 +71,7 @@ class JobInTreeExtractor(IStaticExtractor):
                         source=self.source,
                         ville=ville if ville else location,
                         type_contrat=await self._transform(
-                            type_contrat, self.keywords_loader.load_type_contrat
+                            type_contrat, self.type_contrat
                         ),  # type: ignore
                         entreprise=entreprise if entreprise else "nc",
                     )  # type: ignore
@@ -98,19 +109,19 @@ class JobInTreeExtractor(IStaticExtractor):
             if not job_summary.type_contrat:
                 job_summary.type_contrat = await self._transform(parsed["description"], self.keywords_loader.load_type_contrat)  # type: ignore
             duree_travail: int = await self._transform(
-                parsed["description"], self.keywords_loader.load_duree_travail
+                parsed["description"], self.duree_travail
             )  # type: ignore
             competence: list[int] = await self._transform(
-                parsed["description"], self.keywords_loader.load_competences, multi=True
+                parsed["description"], self.competences, multi=True
             )  # type: ignore
             mode_travail: int = await self._transform(
-                parsed["description"], self.keywords_loader.load_mode_travail
+                parsed["description"], self.mode_travail
             )  # type: ignore
             logger.info(f"voici la ville: {job_summary.ville}")
             logger.info(f"voici la location: {location}")
             if not job_summary.ville:
                 job_summary.ville: str = await self._transform(  # type: ignore
-                    job_summary.ville, self.keywords_loader.load_ville
+                    job_summary.ville, self.ville
                 )  # type: ignore
             else:
                 job_summary.ville = location
@@ -136,6 +147,13 @@ class JobInTreeExtractor(IStaticExtractor):
         except Exception as exc:
             print("Erreur dans extract_details", exc)
             raise
+
+    async def _load_mappings(self) -> None:
+        self.type_contrat = await self.keywords_loader.load_type_contrat()
+        self.duree_travail = await self.keywords_loader.load_duree_travail()
+        self.competences = await self.keywords_loader.load_competences()
+        self.mode_travail = await self.keywords_loader.load_mode_travail()
+        self.ville = await self.keywords_loader.load_ville()
 
     async def extract_json(self, job_summary: JobSummary) -> Dict | None:
         try:
@@ -182,12 +200,14 @@ class JobInTreeExtractor(IStaticExtractor):
             raise
 
     async def _transform(
-        self, text: str, load_keywords: Callable, multi: bool = False
+        self, text: str, mapping: Dict, multi: bool = False
     ) -> list[int] | int:
         """
         Extrait les mots clés d'un texte
         """
-        mapping: Dict[str, Dict[str, int]] = await load_keywords()
+        logger.info(f"mapping fourni pour transform: {mapping}")
+        if not mapping:
+            return mapping.get("default")  # type: ignore
         extracted_keywords: list[str] | None = self._extract_keywords(
             text, mapping.get("mapping", {})
         )
