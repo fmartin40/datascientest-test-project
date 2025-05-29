@@ -6,15 +6,12 @@ from datetime import date
 
 class IStatsReader(ABC):
     @abstractmethod
-    async def list_competences_by_date(
-        self, date_debut: date, date_fin: date
+    async def list_competences_by_day(
+        self, from_date: date, to_date: date
     ) -> List[BaseModel]:
         raise NotImplementedError
 
-    async def get_competence_by_date(
-        self, competence_id: int, date_debut: date, date_fin: date
+    async def sum_competences_by_date(
+        self, from_date: date, to_date: date, competence_id: int | None = None
     ) -> Any:
-        raise NotImplementedError
-
-    async def sum_competences_by_date(self, date_debut: date, date_fin: date) -> Any:
         raise NotImplementedError

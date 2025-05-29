@@ -3,47 +3,40 @@ from datetime import date
 from dependency_injector.wiring import inject, Provide
 from app.core.container import ContainerService
 from app.domain.job.interfaces.istat_reader import IStatsReader
+import logging
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(tags=["stats"])
 
 
-@router.get("/competences-by-date")
+@router.get("/competences/daily")
 @inject
-def list_competences_by_date(
-    date_debut: date = Query(..., description="Date de début au format YYYY-MM-DD"),
-    date_fin: date = Query(..., description="Date de fin au format YYYY-MM-DD"),
+async def list_competences_by_day(
+    from_date: date = Query(..., description="Date de début au format YYYY-MM-DD"),
+    to_date: date = Query(..., description="Date de fin au format YYYY-MM-DD"),
     stats_reader: IStatsReader = Depends(Provide[ContainerService.stats_reader]),
 ):
     try:
-        return stats_reader.list_competences_by_date(date_debut, date_fin)
+        return await stats_reader.list_competences_by_day(from_date, to_date)
     except Exception as e:
+        logger.error(f"Erreur lors de la récupération des compétences par date: {e}")
         raise HTTPException(status_code=500, detail=f"Erreur serveur: {str(e)}")
 
 
-@router.get("/competence-by-date/{competence_id}")
+@router.get("/competences/sum")
 @inject
 async def get_competence_by_date(
-    competence_id: int,
-    date_debut: date = Query(..., description="Date de début au format YYYY-MM-DD"),
-    date_fin: date = Query(..., description="Date de fin au format YYYY-MM-DD"),
+    competence_id: int | None = Query(None, description="ID de la compétence"),
+    from_date: date = Query(..., description="Date de début au format YYYY-MM-DD"),
+    to_date: date = Query(..., description="Date de fin au format YYYY-MM-DD"),
     stats_reader: IStatsReader = Depends(Provide[ContainerService.stats_reader]),
 ):
     try:
-        return await stats_reader.get_competence_by_date(
-            competence_id, date_debut, date_fin
+        return await stats_reader.sum_competences_by_date(
+            from_date, to_date, competence_id
         )
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Erreur serveur: {str(e)}")
 
-
-@router.get("/sum-competences-by-date")
-@inject
-async def sum_competences_by_date(
-    date_debut: date = Query(..., description="Date de début au format YYYY-MM-DD"),
-    date_fin: date = Query(..., description="Date de fin au format YYYY-MM-DD"),
-    stats_reader: IStatsReader = Depends(Provide[ContainerService.stats_reader]),
-):
-    try:
-        return await stats_reader.sum_competences_by_date(date_debut, date_fin)
     except Exception as e:
+        logger.error(f"Erreur lors de la récupération des compétences par date: {e}")
         raise HTTPException(status_code=500, detail=f"Erreur serveur: {str(e)}")
