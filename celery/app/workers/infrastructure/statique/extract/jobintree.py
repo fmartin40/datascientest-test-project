@@ -35,8 +35,10 @@ class JobInTreeExtractor(IStaticExtractor):
         self, query: str, location: str, loop: int
     ) -> List[JobSummary]:
         try:
-            await self._load_mappings()
-            logger.info(f"type_contrat: {self.type_contrat}")
+            # await self._load_mappings()
+            logger.info(
+                f"type_contrat: {await self.keywords_loader.load_type_contrat()}"
+            )
             logger.info(f"duree_travail: {self.duree_travail}")
             logger.info(f"competences: {self.competences}")
             logger.info(f"mode_travail: {self.mode_travail}")
@@ -71,7 +73,7 @@ class JobInTreeExtractor(IStaticExtractor):
                         source=self.source,
                         ville=ville if ville else location,
                         type_contrat=await self._transform(
-                            type_contrat, self.type_contrat
+                            type_contrat, await self.keywords_loader.load_type_contrat()
                         ),  # type: ignore
                         entreprise=entreprise if entreprise else "nc",
                     )  # type: ignore
@@ -107,21 +109,23 @@ class JobInTreeExtractor(IStaticExtractor):
 
             # extraction des données depuis description
             if not job_summary.type_contrat:
-                job_summary.type_contrat = await self._transform(parsed["description"], self.keywords_loader.load_type_contrat)  # type: ignore
+                job_summary.type_contrat = await self._transform(parsed["description"], self.keywords_loader.load_type_contrat())  # type: ignore
             duree_travail: int = await self._transform(
-                parsed["description"], self.duree_travail
+                parsed["description"], await self.keywords_loader.load_duree_travail()
             )  # type: ignore
             competence: list[int] = await self._transform(
-                parsed["description"], self.competences, multi=True
+                parsed["description"],
+                await self.keywords_loader.load_competences(),
+                multi=True,
             )  # type: ignore
             mode_travail: int = await self._transform(
-                parsed["description"], self.mode_travail
+                parsed["description"], await self.keywords_loader.load_mode_travail()
             )  # type: ignore
             logger.info(f"voici la ville: {job_summary.ville}")
             logger.info(f"voici la location: {location}")
             if not job_summary.ville:
                 job_summary.ville: str = await self._transform(  # type: ignore
-                    job_summary.ville, self.ville
+                    job_summary.ville, await self.keywords_loader.load_ville()
                 )  # type: ignore
             else:
                 job_summary.ville = location
@@ -145,7 +149,7 @@ class JobInTreeExtractor(IStaticExtractor):
         except asyncio.TimeoutError:
             raise Exception(f"Timeout lors de la requête pour url={job_summary.url}")
         except Exception as exc:
-            print("Erreur dans extract_details", exc)
+            logger.error(f"Erreur dans extract_details: {exc}", exc_info=True)
             raise
 
     async def _load_mappings(self) -> None:
@@ -206,7 +210,9 @@ class JobInTreeExtractor(IStaticExtractor):
         Extrait les mots clés d'un texte
         """
         logger.info(f"mapping fourni pour transform: {mapping}")
-        if not mapping:
+        logger.info(f"text fourni pour transform: {text}")
+        logger.info(f"valeur par defaut: {mapping.get('default')}")
+        if not text:
             return mapping.get("default")  # type: ignore
         extracted_keywords: list[str] | None = self._extract_keywords(
             text, mapping.get("mapping", {})

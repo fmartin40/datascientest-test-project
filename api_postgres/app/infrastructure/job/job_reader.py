@@ -331,6 +331,13 @@ class JobReader(IJobReader):
             logger.error(f"Erreur lors de la récupération des modes de travail : {e}")
             return []
 
+    async def list_ville(self) -> Sequence[BaseModel]:
+        try:
+            return await VillePydantic.from_queryset(VilleOrm.all())
+        except Exception as e:
+            logger.error(f"Erreur lors de la récupération des villes : {e}")
+            return []
+
     async def list_source(self) -> Sequence[BaseModel]:
         try:
             return await SourcePydantic.from_queryset(SourceOrm.all())
