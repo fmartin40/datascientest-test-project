@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 class Job(BaseModel):
     job_id: str
-    url: str
-    libelle: Optional[str]
+    url: str | None = None
+    libelle: str | None = None
     date_creation: Optional[date] = date.today()
     description: str
