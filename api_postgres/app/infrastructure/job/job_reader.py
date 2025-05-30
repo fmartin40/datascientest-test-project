@@ -71,7 +71,7 @@ class JobReader(IJobReader):
         self,
         limit: int,
         offset: int,
-        competence: Optional[int] = None,
+        competence: Optional[int] | Optional[str] = None,
         entreprise: Optional[int] = None,
         ville: Optional[int] = None,
         type_contrat: Optional[int] = None,
@@ -95,7 +95,10 @@ class JobReader(IJobReader):
 
             filters = Q()
             if competence:
-                filters &= Q(competences__id=competence)
+                if isinstance(competence, int):
+                    filters &= Q(competences__id=competence)
+                else:
+                    filters &= Q(competences__libelle__icontains=competence)
             if entreprise:
                 filters &= Q(entreprise__id=entreprise)
             if ville:

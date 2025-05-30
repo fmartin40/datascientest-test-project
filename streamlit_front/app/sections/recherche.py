@@ -98,6 +98,7 @@ def afficher_recherche():
     # ----------------------------
     if st.button("🔎 Rechercher les offres"):
         params = {}
+
         if ville_id:
             params["ville"] = ville_id
         if entreprise_id:
@@ -108,6 +109,9 @@ def afficher_recherche():
             params["duree_travail"] = duree_travail_id
         if mode_travail_id:
             params["mode_travail"] = mode_travail_id
+
+        if search_query:
+            params["competence"] = search_query
         # Ajout du paramètre light à False par défaut
         params["light"] = False
         # Tu peux ajouter d'autres filtres ici si besoin
@@ -116,104 +120,112 @@ def afficher_recherche():
         with st.spinner("Recherche des offres en cours..."):
             try:
                 response = requests.get(jobs_url, params=params)
+                print("Status Code:", params)
+                print("Status Code:", response.status_code)
+                # print("Response Text:", response.text)
                 response.raise_for_status()
+                # jobs = response.json()
                 jobs = response.json()
+
                 if jobs:
                     st.success(f"{len(jobs)} offre(s) trouvée(s)")
-                    col1, col2 = st.columns([2, 3])
-                    with col1:
-                        st.markdown("#### Offres d'emploi")
-                        # Affichage en grille (2 colonnes)
-                        n_col = 2
-                        rows = [jobs[i : i + n_col] for i in range(0, len(jobs), n_col)]
-                        for row in rows:
-                            cols = st.columns(n_col)
-                            for idx, job in enumerate(row):
-                                with cols[idx]:
-                                    job_id = job.get("job_id") or job.get("id")
-                                    titre = job.get("libelle", "Sans titre")
-                                    entreprise = job.get("entreprise", {}).get(
-                                        "libelle", ""
-                                    )
-                                    type_contrat = job.get("type_contrat", {}).get(
-                                        "libelle", ""
-                                    )
-                                    mode_travail = job.get("mode_travail", {}).get(
-                                        "libelle", ""
-                                    )
-                                    duree_travail = job.get("duree_travail", {}).get(
-                                        "libelle", ""
-                                    )
-                                    # Nom entreprise
-                                    st.markdown(
-                                        f"<span style='font-size:16px'>🏢 {entreprise}</span>",
-                                        unsafe_allow_html=True,
-                                    )
-                                    # Titre de l'offre en lien hypertexte (sous le nom de l'entreprise)
-                                    link_clicked = st.markdown(
-                                        f"<a href='#{job_id}' style='text-decoration:underline;color:#2222aa;font-weight:bold;font-size:16px;' id='job_{job_id}'>{titre}</a>",
-                                        unsafe_allow_html=True,
-                                    )
-                                    # Gestion du clic sur le lien (hack Streamlit)
-                                    if "clicked_job_id" not in st.session_state:
-                                        st.session_state["clicked_job_id"] = None
-                                    if st.session_state.get("clicked_job_id") != job_id:
-                                        if (
-                                            st.session_state.get("last_url_hash")
-                                            != job_id
-                                        ):
-                                            import streamlit as st2
-                                            import urllib.parse
 
-                                            url_hash = st.query_params.get(
-                                                "job", [None]
-                                            )[0]
-                                            if url_hash == job_id:
-                                                st.session_state["selected_job_id"] = (
-                                                    job_id
-                                                )
-                                                st.session_state["clicked_job_id"] = (
-                                                    job_id
-                                                )
-                                    # Badges
-                                    badges = []
-                                    if type_contrat:
-                                        badges.append(
-                                            f'<span style="background-color:#e0e0e0;border-radius:8px;padding:2px 8px;margin-right:4px;">{type_contrat}</span>'
-                                        )
-                                    if mode_travail:
-                                        badges.append(
-                                            f'<span style="background-color:#e0e0e0;border-radius:8px;padding:2px 8px;margin-right:4px;">{mode_travail}</span>'
-                                        )
-                                    if duree_travail:
-                                        badges.append(
-                                            f'<span style="background-color:#e0e0e0;border-radius:8px;padding:2px 8px;margin-right:4px;">{duree_travail}</span>'
-                                        )
-                                    if badges:
-                                        st.markdown(
-                                            " ".join(badges), unsafe_allow_html=True
-                                        )
-                                    st.markdown("---")
-                    with col2:
-                        selected_job_id = st.session_state.get("selected_job_id")
-                        if selected_job_id:
-                            detail_url = f"http://localhost:8003/jobs/{selected_job_id}"
-                            try:
-                                detail_resp = requests.get(detail_url)
-                                detail_resp.raise_for_status()
-                                job_detail = detail_resp.json()
-                                st.markdown(
-                                    f"### {job_detail.get('libelle', 'Sans titre')}"
+                    offres_par_page = 4
+                    total_pages = (len(jobs) + offres_par_page - 1) // offres_par_page
+
+                    # Initialiser la page active
+                    if "page_offre" not in st.session_state:
+                        st.session_state.page_offre = 1
+
+                    # Sélectionner les offres de la page en cours
+                    start = (st.session_state.page_offre - 1) * offres_par_page
+                    end = start + offres_par_page
+                    page_jobs = jobs[start:end]
+
+                    rows = [page_jobs[i : i + 2] for i in range(0, len(page_jobs), 2)]
+
+                    for row in rows:
+                        cols = st.columns(2)
+                        for idx, job in enumerate(row):
+                            with cols[idx]:
+                                job_id = job.get("job_id") or job.get("id")
+                                titre = job.get("libelle", "Sans titre")
+                                entreprise = job.get("entreprise", {}).get(
+                                    "libelle", ""
                                 )
-                                st.write(job_detail)
-                            except Exception as e:
-                                st.error(
-                                    f"Erreur lors de la récupération du détail : {e}"
+                                ville = job.get("ville", {}).get("libelle", "")
+                                type_contrat = job.get("type_contrat", {}).get(
+                                    "libelle", ""
                                 )
-                        else:
-                            st.info(
-                                "Cliquez sur une offre à gauche pour voir le détail."
-                            )
+                                mode_travail = job.get("mode_travail", {}).get(
+                                    "libelle", ""
+                                )
+                                duree_travail = job.get("duree_travail", {}).get(
+                                    "libelle", ""
+                                )
+                                description = job.get("description", "")
+
+                                competences = job.get("competences", [])
+                                competences_text = (
+                                    ", ".join(c["libelle"] for c in competences)
+                                    if competences
+                                    else "Non spécifiées"
+                                )
+
+                                # Affichage
+                                st.markdown(f"### {titre}")
+
+                                infos = (
+                                    f"<b>Entreprise :</b> {entreprise} &nbsp;&nbsp; "
+                                    f"<b>Ville :</b> {ville} &nbsp;&nbsp; "
+                                    f"<b>Contrat :</b> {type_contrat} &nbsp;&nbsp; "
+                                    f"<b>Mode :</b> {mode_travail} &nbsp;&nbsp; "
+                                    f"<b>Durée :</b> {duree_travail} &nbsp;&nbsp; "
+                                    f"<b>Compétences :</b> {competences_text}"
+                                )
+                                st.markdown(infos, unsafe_allow_html=True)
+
+                                st.markdown("**Description :**")
+                                st.write(description or "Aucune description.")
+
+                                if job.get("url"):
+                                    st.markdown(
+                                        f"[🔗 Voir l'offre]({job['url']})",
+                                        unsafe_allow_html=True,
+                                    )
+
+                    # Pagination discrète alignée à droite
+                    st.markdown(
+                        """
+                        <style>
+                        .pagination {
+                            display: flex;
+                            justify-content: flex-end;
+                            gap: 6px;
+                            margin-top: 30px;
+                            margin-bottom: 10px;
+                        }
+                        .pagination button {
+                            background: none;
+                            border: 1px solid #ccc;
+                            padding: 4px 10px;
+                            font-size: 14px;
+                            border-radius: 5px;
+                            cursor: pointer;
+                        }
+                        </style>
+                        """,
+                        unsafe_allow_html=True,
+                    )
+
+                    pag_cols = st.columns(total_pages)
+                    st.markdown('<div class="pagination">', unsafe_allow_html=True)
+                    for i in range(total_pages):
+                        if pag_cols[i].button(str(i + 1), key=f"page_{i+1}"):
+                            st.session_state.page_offre = i + 1
+                            st.experimental_rerun()
+                    st.markdown("</div>", unsafe_allow_html=True)
+
                 else:
                     st.info("Aucune offre trouvée pour ces critères.")
             except Exception as e:

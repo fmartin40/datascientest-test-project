@@ -1,61 +1,90 @@
 import streamlit as st
 import pandas as pd
+import requests
+
+# ---------------------------------------------
+# Mapping ville libellé -> identifiant API
+# ---------------------------------------------
+VILLE_ID = {
+    "Paris": 2,
+    "Lyon": 3,
+    "Marseille": 4,
+}
+
+API_ENDPOINT = "http://localhost:8003/competences/ville?ville_id={vid}"
+
+
+@st.cache_data(show_spinner=False)
+def fetch_skills(ville: str) -> pd.DataFrame:
+    """Interroge l'API et renvoie un DataFrame normalisé."""
+    if ville not in VILLE_ID:
+        return pd.DataFrame()
+
+    vid = VILLE_ID[ville]
+    try:
+        resp = requests.get(API_ENDPOINT.format(vid=vid), timeout=30)
+        resp.raise_for_status()
+        data = pd.DataFrame(resp.json())
+    except Exception as e:
+        st.error(f"Erreur lors de la récupération des données : {e}")
+        return pd.DataFrame()
+
+    if data.empty:
+        return data
+
+    data["pct_cat"] = data["pct_cat"].astype(float)
+    data["nb_offres"] = data["nb_offres"].astype(int)
+    return data
 
 
 def afficher_competences_globales():
     # ----------------------------
-    # Simuler les filtres (menu haut)
+    # Filtres utilisateur (menu haut)
     # ----------------------------
-    job_title = st.selectbox(
-        "Job Title:", ["Select All", "Data Engineer", "Data Analyst", "Data Scientist"]
-    )
-    country = st.selectbox("Country:", ["Select All", "France", "USA", "Germany"])
+    ville = st.selectbox("Ville:", ["Paris", "Marseille", "Lyon"])
+
     skill_category = st.radio(
         "Skills:",
         options=[
-            "All",
             "Languages",
             "Tools",
             "Databases",
             "Cloud",
             "Libraries",
             "Frameworks",
+            "Orchestrateur",
+            "DevOps",
+            "Monitoring",
         ],
         horizontal=True,
     )
 
     # ----------------------------
-    # Simuler des données de compétence globales
+    # Chargement des données API
     # ----------------------------
-    @st.cache_data
-    def fetch_skills(job_title, country, category):
-        data = [
-            {"skill": "Python", "percentage": 55.2},
-            {"skill": "SQL", "percentage": 53.8},
-            {"skill": "AWS", "percentage": 24.7},
-            {"skill": "Azure", "percentage": 21.2},
-            {"skill": "Spark", "percentage": 19.8},
-            {"skill": "Tableau", "percentage": 16.6},
-            {"skill": "R", "percentage": 16.5},
-            {"skill": "Java", "percentage": 14.5},
-            {"skill": "Excel", "percentage": 13.0},
-            {"skill": "Power BI", "percentage": 12.2},
-            {"skill": "Snowflake", "percentage": 11.7},
-            {"skill": "Scala", "percentage": 11.2},
-            {"skill": "Hadoop", "percentage": 11.0},
-        ]
-        return pd.DataFrame(data)
+    df = fetch_skills(ville)
 
-    df_bar = fetch_skills(job_title, country, skill_category)
+    if df.empty:
+        st.warning("Aucune compétence trouvée.")
+        return
+
+    # Filtrer selon la catégorie sélectionnée
+    df_filtered = df[df["categorie"].str.lower() == skill_category.lower()]
+    df_filtered = df_filtered.sort_values("pct_cat", ascending=False)
 
     # ----------------------------
-    # Affichage des barres horizontales
+    # Affichage graphique
     # ----------------------------
-    st.markdown("### 📊 Compétences globales")
-    if not df_bar.empty:
-        for _, row in df_bar.iterrows():
+    st.markdown(f"### 📊 Compétences — {skill_category}")
+    if not df_filtered.empty:
+        for _, row in df_filtered.iterrows():
             st.progress(
-                int(row["percentage"]), text=f"{row['skill']} — {row['percentage']}%"
+                int(row["pct_cat"]),
+                text=f"{row['libelle'].title()} — {row['pct_cat']}%",
             )
     else:
-        st.warning("Aucune compétence trouvée.")
+        st.warning("Aucune compétence dans cette catégorie.")
+
+
+if __name__ == "__main__":
+    afficher_competences_globales()
