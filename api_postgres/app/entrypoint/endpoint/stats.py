@@ -40,3 +40,16 @@ async def get_competence_by_date(
     except Exception as e:
         logger.error(f"Erreur lors de la récupération des compétences par date: {e}")
         raise HTTPException(status_code=500, detail=f"Erreur serveur: {str(e)}")
+
+
+@router.get("/competences/ville")
+@inject
+async def get_competence_by_ville(
+    ville_id: int = Query(..., description="ID de la ville"),
+    stats_reader: IStatsReader = Depends(Provide[ContainerService.stats_reader]),
+):
+    try:
+        return await stats_reader.get_competence_by_ville(ville_id)
+    except Exception as e:
+        logger.error(f"Erreur lors de la récupération des compétences par ville: {e}")
+        raise HTTPException(status_code=500, detail=f"Erreur serveur: {str(e)}")

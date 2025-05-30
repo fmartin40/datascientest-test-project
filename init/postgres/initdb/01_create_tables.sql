@@ -11,7 +11,8 @@ CREATE TABLE IF NOT EXISTS "Ville" (
 
 CREATE TABLE IF NOT EXISTS "Competence" (
     "id" SERIAL PRIMARY KEY,
-    "libelle" VARCHAR(255)
+    "libelle" VARCHAR(255),
+    "categorie" VARCHAR(255)
 );
 
 CREATE TABLE IF NOT EXISTS "DureeTravail" (

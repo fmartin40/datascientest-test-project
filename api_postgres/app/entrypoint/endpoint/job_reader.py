@@ -13,7 +13,7 @@ router = APIRouter(tags=["read job infos"])
 async def list_jobs(
     limit: int = Query(30, ge=1, le=30),
     offset: int = Query(0, ge=0),
-    competence: Optional[int] = Query(None),
+    competence: Optional[int] | Optional[str] = Query(None),
     entreprise: Optional[int] = Query(None),
     ville: Optional[int] = Query(None),
     type_contrat: Optional[int] = Query(None),

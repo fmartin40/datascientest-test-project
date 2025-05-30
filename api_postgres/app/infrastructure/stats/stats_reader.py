@@ -1,9 +1,14 @@
 from logging import getLogger
 from datetime import date
+from tortoise.expressions import Q
+from tortoise.functions import Sum, Count
 from app.domain.job.interfaces.istat_reader import IStatsReader
 from app.domain.job.entities.stats import CompetenceByDateStats
-from app.infrastructure.models.models import CompetenceDateAgg, CompetenceOrm
-from tortoise.functions import Sum
+from app.infrastructure.models.models import (
+    CompetenceDateAgg,
+    CompetenceOrm,
+)
+
 from collections import defaultdict
 
 logger = getLogger(__name__)
@@ -89,4 +94,44 @@ class StatsReader(IStatsReader):
                 return result
         except Exception as e:
             logger.error(f"Erreur lors de l'agrégation des compétences par date : {e}")
+            raise
+
+    async def get_competence_by_ville(self, ville_id: int):
+        """
+        Retourne la somme globale par compétence pour toutes les offres d'emploi associées à la ville demandée.
+        """
+        try:
+            # 1) nombre d’offres par compétence (filtré sur la ville)
+            comp_raw = await (
+                CompetenceOrm.annotate(
+                    nb_offres=Count("offres", _filter=Q(offres__ville_id=ville_id))
+                )
+                .filter(nb_offres__gt=0)  # on ignore celles à 0
+                .values("id", "libelle", "categorie", "nb_offres")
+            )
+
+            if not comp_raw:  # aucune offre pour la ville
+                return []
+
+            # 2) total d’offres par catégorie
+            totaux = {}
+            for c in comp_raw:
+                cat = c["categorie"]
+                totaux[cat] = totaux.get(cat, 0) + c["nb_offres"]
+
+            # 3) calcul du pourcentage dans la catégorie
+            competences = []
+            for c in comp_raw:
+                total_cat = totaux[c["categorie"]]
+                c["pct_cat"] = round(c["nb_offres"] / total_cat * 100, 2)
+                competences.append(c)
+
+            # 4) tri : catégorie (A-Z) puis pourcentage décroissant
+            competences.sort(key=lambda x: (x["categorie"], -x["pct_cat"]))
+
+            return competences
+        except Exception as e:
+            logger.error(
+                f"Erreur lors de l'agrégation des compétences pour la ville {ville_id} (SQL pur) : {e}"
+            )
             raise

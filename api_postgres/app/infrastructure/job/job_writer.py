@@ -188,17 +188,6 @@ class JobWriter(IJobWriter):
             )
             raise
 
-    # async def _buffer_competences(self, competences: list[int], date: date) -> None:
-    #     async with in_transaction() as conn:
-    #         for cid in competences:
-    #             await conn.execute_query(
-    #                 """
-    #                 INSERT INTO "CompetenceDateBuffer" (competence_id, date)
-    #                 VALUES ($1, $2)
-    #                 """,
-    #                 [cid, date],
-    #             )
-
     async def add_mode_travail(self, mode_travail_id: int) -> ModeTravailOrm:
         try:
             return await self._add_relation_by_id(ModeTravailOrm, mode_travail_id)  # type: ignore

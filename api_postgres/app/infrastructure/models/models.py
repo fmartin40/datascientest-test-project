@@ -29,6 +29,7 @@ class DureeTravailOrm(Model):
 class CompetenceOrm(Model):
     id = fields.IntField(pk=True)
     libelle = fields.CharField(max_length=255, null=True, source_field="libelle")
+    categorie = fields.CharField(max_length=255, null=True, source_field="categorie")
 
     class Meta:
         table = "Competence"

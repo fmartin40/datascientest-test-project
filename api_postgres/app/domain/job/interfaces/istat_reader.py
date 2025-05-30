@@ -15,3 +15,7 @@ class IStatsReader(ABC):
         self, from_date: date, to_date: date, competence_id: int | None = None
     ) -> Any:
         raise NotImplementedError
+
+    @abstractmethod
+    def get_competence_by_ville(self, ville_id: int) -> Any:
+        raise NotImplementedError
