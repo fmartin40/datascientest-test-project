@@ -1,30 +1,30 @@
-# Datascientest | Test Project
+# Datascientest | Job Market Project
 
-## Introduction
-This project is carried out as part of the Data Engineer (Datascientest) training program.
-
-## Technology Used
-1. Programming Language - Python
-2. Scripting Language - SQL
+**This project was carried out as part of the Data Engineer program at DataScientest.**
 
 ## Code Structure
 The project architecture is organized as follows:
 
 ```plaintext
-datascientest-test-project/
+datascientest-project/
 │
-├── env/                  # Virtual environment folder
+├── venv/                 # Virtual environment folder
 │
-├── src/                  # Source code of the application
-│   ├── __init__.py       # File to mark the folder as a Python package
-│   ├── main.py           # Main file of the application
-│   ├── config.py         # Configuring and loading environment variables
-│   ├── auth.py           # Authentication functions (for access token)
-│   └── job_search.py     # Functions to interact with the Job Postings API
+├── airflow_project/      # Airflow DAGs and configurations
 │
-├── tests/                # Folder for unit tests
-│   ├── __init__.py       # File to mark the folder as a package
-│   └── test_main.py      # Test file for the code in main.py
+├── api_elastic/          # API to interact with Elasticsearch
+│
+├── api_postgres/         # API to interact with PostgreSQL
+│
+├── api_reporting/        # Reporting API to aggregate data
+│
+├── celery/               # Celery workers and configuration
+│
+├── grafana/              # Grafana dashboards configuration
+│
+├── prometheus/           # Prometheus monitoring configuration
+│
+├── streamlit_front/      # Streamlit app for interactive data visualization
 │
 ├── requirements.txt      # List of project dependencies
 │
