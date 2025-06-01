@@ -47,7 +47,7 @@ def extract_summaries(
 
         # ---- lancement des tâches job details pour les job summaries avec URL valide
         launch_job_detail_tasks(
-            job_summaries=[s for s in job_summaries[:1] if s.url],
+            job_summaries=[s for s in job_summaries if s.url],
             source=source,
             location=location,
         )

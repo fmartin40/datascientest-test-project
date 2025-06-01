@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import requests
+from api.functions import fetch_skills
 
 # ---------------------------------------------
 # Mapping ville libellé -> identifiant API
@@ -11,20 +11,19 @@ VILLE_ID = {
     "Marseille": 4,
 }
 
-API_ENDPOINT = "http://localhost:8003/competences/ville?ville_id={vid}"
-
 
 @st.cache_data(show_spinner=False)
-def fetch_skills(ville: str) -> pd.DataFrame:
+def display_skills(ville: str) -> pd.DataFrame:
     """Interroge l'API et renvoie un DataFrame normalisé."""
     if ville not in VILLE_ID:
         return pd.DataFrame()
 
-    vid = VILLE_ID[ville]
+    # vid = VILLE_ID[ville]
     try:
-        resp = requests.get(API_ENDPOINT.format(vid=vid), timeout=30)
-        resp.raise_for_status()
-        data = pd.DataFrame(resp.json())
+        # resp = requests.get(API_ENDPOINT.format(vid=vid), timeout=30)
+        # resp.raise_for_status()
+        data = fetch_skills(VILLE_ID[ville])
+        data = pd.DataFrame(data)
     except Exception as e:
         st.error(f"Erreur lors de la récupération des données : {e}")
         return pd.DataFrame()
@@ -62,7 +61,7 @@ def afficher_competences_globales():
     # ----------------------------
     # Chargement des données API
     # ----------------------------
-    df = fetch_skills(ville)
+    df = display_skills(ville)
 
     if df.empty:
         st.warning("Aucune compétence trouvée.")

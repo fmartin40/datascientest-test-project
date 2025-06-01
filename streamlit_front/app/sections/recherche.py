@@ -8,6 +8,7 @@ from ressources import (
     fetch_durees_travail,
     fetch_modes_travail,
 )
+from api.functions import fetch_jobs
 
 
 def afficher_recherche():
@@ -116,17 +117,17 @@ def afficher_recherche():
         params["light"] = False
         # Tu peux ajouter d'autres filtres ici si besoin
 
-        jobs_url = "http://localhost:8003/jobs"
+        # jobs_url = "http://localhost:8003/jobs"
         with st.spinner("Recherche des offres en cours..."):
             try:
-                response = requests.get(jobs_url, params=params)
-                print("Status Code:", params)
-                print("Status Code:", response.status_code)
-                # print("Response Text:", response.text)
-                response.raise_for_status()
+                # response = requests.get(jobs_url, params=params)
+                # print("Status Code:", params)
+                # print("Status Code:", response.status_code)
+                # # print("Response Text:", response.text)
+                # response.raise_for_status()
+                # # jobs = response.json()
                 # jobs = response.json()
-                jobs = response.json()
-
+                jobs = fetch_jobs(params)
                 if jobs:
                     st.success(f"{len(jobs)} offre(s) trouvée(s)")
 
