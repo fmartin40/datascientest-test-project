@@ -13,9 +13,28 @@ class JobReaderOpenSearch(IJobReader):
         self.es = es
         self.index = settings.OPENSEARCH_JOB_INDEX
 
-    def list(self) -> List[Job] | None:
+    def list(self, offset: int = 0, limit: int = 10) -> List[Job] | None:
         try:
-            resp = self.es.search(index=self.index, body={"query": {"match_all": {}}})
+            resp = self.es.search(
+                index=self.index,
+                body={"query": {"match_all": {}}},
+                from_=offset,
+                size=limit,
+            )
+            if resp:
+                return [Job(**hit["_source"]) for hit in resp["hits"]["hits"]]
+            else:
+                return None
+        except Exception as e:
+            logger.error(f"Erreur lors de la recherche des jobs : {e}")
+            raise
+
+    def list_by_ids(self, ids: List[str]) -> List[Job] | None:
+        try:
+            resp = self.es.search(
+                index=self.index,
+                body={"query": {"ids": {"values": ids}}},
+            )
             if resp:
                 return [Job(**hit["_source"]) for hit in resp["hits"]["hits"]]
             else:
@@ -34,3 +53,21 @@ class JobReaderOpenSearch(IJobReader):
         except Exception as e:
             logger.error(f"Erreur lors de la récupération du job {job_id} : {e}")
             return None  # ou `raise` selon ta logique métier
+
+    async def search_by_description(self, text: str) -> List[Job]:
+        """
+        Recherche textuelle dans la description des offres d'emploi.
+        """
+        try:
+            print("opensearch")
+            resp = self.es.search(
+                index=self.index,
+                body={"query": {"match_phrase": {"description": text}}},
+            )
+            print("DEBUG:", resp)
+            return [Job(**hit["_source"]) for hit in resp["hits"]["hits"]]
+        except Exception as e:
+            logger.error(
+                f"Erreur lors de la recherche textuelle dans la description : {e}"
+            )
+            raise

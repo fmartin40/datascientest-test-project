@@ -3,7 +3,6 @@ from datetime import date
 from tortoise.expressions import Q
 from tortoise.functions import Sum, Count
 from app.domain.job.interfaces.istat_reader import IStatsReader
-from app.domain.job.entities.stats import CompetenceByDateStats
 from app.infrastructure.models.models import (
     CompetenceDateAgg,
     CompetenceOrm,
@@ -25,6 +24,7 @@ class StatsReader(IStatsReader):
                 result.append(
                     {
                         "competence": agg.competence.libelle,
+                        "categorie": agg.competence.categorie,
                         "date": agg.date,
                         "count": agg.count,
                     }
@@ -32,12 +32,16 @@ class StatsReader(IStatsReader):
             # Regroupement par libellé
             grouped = defaultdict(list)
             for item in result:
-                grouped[item["competence"]].append(
+                grouped[(item["competence"], item["categorie"])].append(
                     {"date": item["date"], "count": item["count"]}
                 )
             return [
-                {"competence": libelle, "values": values}
-                for libelle, values in grouped.items()
+                {
+                    "competence": libelle,
+                    "categorie": categorie,
+                    "values": sorted(values, key=lambda v: v["date"]),
+                }
+                for (libelle, categorie), values in grouped.items()
             ]
         except Exception as e:
             logger.error(
@@ -56,12 +60,13 @@ class StatsReader(IStatsReader):
                 result = []
                 for agg in aggs:
                     result.append(
-                        CompetenceByDateStats(
-                            date=agg.date,
-                            competence_id=agg.competence.id,
-                            competence_libelle=agg.competence.libelle,
-                            count=agg.count,
-                        )
+                        {
+                            "date": agg.date,
+                            "competence_id": agg.competence.id,
+                            "competence_libelle": agg.competence.libelle,
+                            "categorie": agg.competence.categorie,
+                            "count": agg.count,
+                        }
                     )
                 return result
             else:
@@ -77,17 +82,21 @@ class StatsReader(IStatsReader):
                 result = []
                 for agg in aggs:
                     libelle = None
+                    categorie = None
                     competence_id_val = getattr(agg, "competence_id", None)
                     total = getattr(agg, "total", None)
                     if hasattr(agg, "competence") and agg.competence:
                         libelle = agg.competence.libelle
+                        categorie = agg.competence.categorie
                     else:
                         comp = await CompetenceOrm.get(id=competence_id_val)
                         libelle = comp.libelle
+                        categorie = comp.categorie
                     result.append(
                         {
                             "competence_id": competence_id_val,
                             "competence": libelle,
+                            "categorie": categorie,
                             "total": total,
                         }
                     )
@@ -101,7 +110,7 @@ class StatsReader(IStatsReader):
         Retourne la somme globale par compétence pour toutes les offres d'emploi associées à la ville demandée.
         """
         try:
-            # 1) nombre d’offres par compétence (filtré sur la ville)
+            # 1) nombre d'offres par compétence (filtré sur la ville)
             comp_raw = await (
                 CompetenceOrm.annotate(
                     nb_offres=Count("offres", _filter=Q(offres__ville_id=ville_id))
@@ -113,7 +122,7 @@ class StatsReader(IStatsReader):
             if not comp_raw:  # aucune offre pour la ville
                 return []
 
-            # 2) total d’offres par catégorie
+            # 2) total d'offres par catégorie
             totaux = {}
             for c in comp_raw:
                 cat = c["categorie"]

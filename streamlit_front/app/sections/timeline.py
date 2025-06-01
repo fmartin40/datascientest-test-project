@@ -2,120 +2,91 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.express as px
-
+import requests
+from api.functions import fetch_timeline_data
 
 # ----------------------------
 # Visualisation temporelle des compétences
 # ----------------------------
+
+
 def afficher_timeline():
-    categories = {
-        "Langages": ["python", "java", "scala", "sql", "bash", "go", "shell"],
-        "Librairies Python": ["pandas", "numpy", "pyarrow", "polars", "fastapi"],
-        "Orchestrateurs & ETL": [
-            "airflow",
-            "luigi",
-            "dagster",
-            "prefect",
-            "dbt",
-            "talend",
-            "nifi",
-            "informatica",
-            "matillion",
-            "stitch",
-            "fivetran",
-        ],
-        "Cloud & Stockage": [
-            "aws",
-            "gcp",
-            "azure",
-            "s3",
-            "gcs",
-            "bigquery",
-            "redshift",
-            "snowflake",
-            "databricks",
-            "synapse",
-            "data lake",
-            "data warehouse",
-        ],
-        "Bases de Données": [
-            "postgresql",
-            "mysql",
-            "sql server",
-            "clickhouse",
-            "mongodb",
-            "cassandra",
-            "dynamodb",
-            "redis",
-            "elasticsearch",
-            "neo4j",
-        ],
-        "Streaming & Big Data": [
-            "kafka",
-            "kinesis",
-            "flink",
-            "spark",
-            "beam",
-            "hadoop",
-        ],
-        "CI/CD & DevOps": [
-            "git",
-            "github",
-            "gitlab",
-            "ci/cd",
-            "jenkins",
-            "github actions",
-            "gitlab ci/cd",
-            "terraform",
-            "ansible",
-            "vault",
-            "docker",
-            "kubernetes",
-            "helm",
-        ],
-        "Monitoring & Sécurité": ["grafana", "prometheus", "datadog", "iam", "oauth2"],
-        "Data Viz & Qualité": [
-            "superset",
-            "looker",
-            "tableau",
-            "powerbi",
-            "soda",
-            "great expectations",
-        ],
-    }
+    # Récupération des données depuis l'API
+    try:
+        data = fetch_timeline_data()
+    except Exception as e:
+        st.error(f"Erreur lors de la récupération des données : {e}")
+        return
+    if not data:
+        st.warning("Aucune donnée à afficher.")
+        return
 
-    dates = pd.date_range("2025-05-01", "2025-05-10")
+    # Construction du DataFrame
+    records = []
+    for item in data:
+        competence = item["competence"]
+        categorie = item["categorie"]
+        for v in item["values"]:
+            records.append(
+                {
+                    "date": v["date"],
+                    "competence": competence,
+                    "categorie": categorie,
+                    "count": v["count"],
+                    "pct_offres": v.get("pct_offres", 0),
+                }
+            )
+    df_time = pd.DataFrame(records)
+    if df_time.empty:
+        st.warning("Aucune donnée à afficher.")
+        return
 
-    @st.cache_data
-    def generate_time_data():
-        data = []
-        for cat, skills in categories.items():
-            for skill in skills:
-                counts = np.random.randint(10, 40, size=len(dates))
-                for date, count in zip(dates, counts):
-                    data.append(
-                        {
-                            "date": date,
-                            "competence": skill,
-                            "categorie": cat,
-                            "count": count,
-                        }
-                    )
-        return pd.DataFrame(data)
+    # Liste des catégories disponibles
+    categories = df_time["categorie"].unique().tolist()
+    categories.sort()
 
-    df_time = generate_time_data()
+    # Interface sélection de groupe (catégorie)
+    st.markdown("### Évolution des compétences dans le temps")
+    selected_group = st.radio(
+        "Choisissez une catégorie :",
+        options=categories,
+        horizontal=True,
+    )
 
-    # Interface sélection de groupe
-    st.markdown("### 📈 Évolution des compétences dans le temps")
-    selected_group = st.radio("Choisissez une catégorie :", list(categories.keys()))
+    # Filtrer les compétences de la catégorie sélectionnée
+    competences = (
+        df_time[df_time["categorie"] == selected_group]["competence"].unique().tolist()
+    )
+    competences.sort()
 
-    # Filtrer et afficher
-    df_group = df_time[df_time["categorie"] == selected_group]
+    # Ne garder que les compétences qui ont au moins une date (présentes dans df_time pour la catégorie sélectionnée)
+    competences_with_dates = df_time[
+        (df_time["categorie"] == selected_group) & (df_time["competence"].notnull())
+    ]["competence"].value_counts()
+    competences = [c for c in competences if competences_with_dates[c] > 0]
+
+    selected_competences = st.multiselect(
+        "Filtrer les compétences :",
+        options=competences,
+        default=competences[:2],
+    )
+
+    # Filtrer le DataFrame selon la sélection
+    df_group = df_time[
+        (df_time["categorie"] == selected_group)
+        & (df_time["competence"].isin(selected_competences))
+    ]
+
+    # Conversion de la date
+    df_group["date"] = pd.to_datetime(df_group["date"])
+
+    # Tri par date
+    df_group = df_group.sort_values(by="date")
 
     fig = px.line(
         df_group,
         x="date",
-        y="count",
+        y="pct_offres",
         color="competence",
         markers=True,
         title=f"Tendance quotidienne – {selected_group}",
@@ -123,7 +94,7 @@ def afficher_timeline():
 
     fig.update_layout(
         xaxis_title="Date",
-        yaxis_title="Occurrences",
+        yaxis_title="% d'offres contenant la compétence",
         legend_title="Compétence",
         template="plotly_white",
     )
