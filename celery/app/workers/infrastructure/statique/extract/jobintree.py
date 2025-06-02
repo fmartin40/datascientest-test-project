@@ -204,7 +204,7 @@ class JobInTreeExtractor(IStaticExtractor):
             raise
 
     async def _transform(
-        self, text: str, mapping: Dict, multi: bool = False
+        self, text: str | None = None, mapping: Dict = {}, multi: bool = False
     ) -> list[int] | int:
         """
         Extrait les mots clés d'un texte

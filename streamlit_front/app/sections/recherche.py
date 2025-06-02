@@ -22,9 +22,9 @@ def afficher_recherche():
     with col1:
         search_query = st.text_input("🔍 Recherche de compétence", "")
     with col2:
-        start_date = st.date_input("Date de début", value=datetime(2025, 5, 1))
+        from_date = st.date_input("Date de début", value=datetime(2025, 5, 1))
     with col3:
-        end_date = st.date_input("Date de fin", value=datetime(2025, 5, 10))
+        to_date = st.date_input("Date de fin", value=datetime(2025, 5, 10))
 
     # ----------------------------
     # Menus déroulants supplémentaires (nouvelle ligne)
@@ -110,7 +110,10 @@ def afficher_recherche():
             params["duree_travail"] = duree_travail_id
         if mode_travail_id:
             params["mode_travail"] = mode_travail_id
-
+        if from_date:
+            params["from_date"] = from_date
+        if to_date:
+            params["to_date"] = to_date
         if search_query:
             params["competence"] = search_query
         # Ajout du paramètre light à False par défaut
