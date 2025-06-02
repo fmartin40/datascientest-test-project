@@ -15,6 +15,7 @@ events==0.5
 fastapi==0.115.12
 frozenlist==1.6.0
 h11==0.16.0
+httpx==0.28.1
 idna==3.10
 multidict==6.4.3
 opensearch-py==2.8.0

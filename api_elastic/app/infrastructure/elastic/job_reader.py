@@ -30,6 +30,20 @@ class JobReaderElastic(IJobReader):
             logger.error(f"Erreur lors de la récupération du job {job_id} : {e}")
             raise
 
+    async def list_by_ids(self, ids: List[str]) -> List[Job]:
+        """
+        Recherche des jobs par liste d'IDs.
+        """
+        try:
+            resp = await self.es.search(
+                index=self.index,
+                query={"ids": {"values": ids}},
+            )
+            return [Job(**hit["_source"]) for hit in resp["hits"]["hits"]]
+        except Exception as e:
+            logger.error(f"Erreur lors de la recherche des jobs par IDs : {e}")
+            raise
+
     async def search_by_description(
         self, text: str, offset: int = 0, limit: int = 10
     ) -> List[Job]:
@@ -37,10 +51,9 @@ class JobReaderElastic(IJobReader):
         Recherche textuelle dans la description des offres d'emploi.
         """
         try:
-            print("Ellllaaasstic")
             resp = await self.es.search(
                 index=self.index,
-                query={"match": {"description": {"query": text, "operator": "and"}}},
+                query={"match_phrase": {"description": text}},
                 from_=offset,
                 size=limit,
             )

@@ -1,18 +1,24 @@
 import requests
+import logging
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 def fetch_jobs(params: dict, limit: int = 4):
+
     try:
         postgres_jobs_url = "http://localhost:8003/jobs"
         elastic_jobs_url = "http://localhost:8002/jobs/ids"
         postgres_jobs_response = requests.get(postgres_jobs_url, params=params)
         postgres_jobs_response.raise_for_status()
         postgres_jobs = postgres_jobs_response.json()
+        if not len(postgres_jobs) > 0:
+            print("No jobs found")
+            return postgres_jobs
 
         postgres_jobs = postgres_jobs[:limit]
         job_ids = [job["job_id"] for job in postgres_jobs]
-        if not len(job_ids) > 0:
-            return postgres_jobs
 
         elastic_response = requests.get(
             elastic_jobs_url, params={"job_ids": ",".join(job_ids)}

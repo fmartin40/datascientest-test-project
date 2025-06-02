@@ -4,7 +4,8 @@ echo ">>> insert_data.sh bien lancé"
 
 ELASTIC_USER="elastic"
 ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-MasterKeyData45!}
-ES_URL="https://search-jobmarketfree-ulvi6zimwplnsg6qmwnjevhx2q.aos.us-east-1.on.aws"
+# ES_URL="https://search-jobmarketfree-ulvi6zimwplnsg6qmwnjevhx2q.aos.us-east-1.on.aws"
+ES_URL="https://search-jobmarket2-ndcsqjlg3ytqvfv4pcns577f24.aos.us-east-1.on.aws"
 NDJSON_FILE="./bulk_payload.ndjson"
 
 echo "=== DÉMARRAGE INSERTION DONNÉES ==="
