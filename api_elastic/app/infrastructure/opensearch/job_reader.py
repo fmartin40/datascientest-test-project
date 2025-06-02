@@ -4,6 +4,7 @@ from app.core.config import settings
 from app.domain.job.entities.jobs import Job
 from app.domain.job.interfaces.ijob_reader import IJobReader
 import logging
+import httpx
 
 logger = logging.getLogger(__name__)
 
@@ -12,6 +13,9 @@ class JobReaderOpenSearch(IJobReader):
     def __init__(self, es: OpenSearch):
         self.es = es
         self.index = settings.OPENSEARCH_JOB_INDEX
+        self.elastic_host = settings.OPENSEARCH_HOST
+        self.elastic_user = settings.OPENSEARCH_USERNAME
+        self.elastic_password = settings.OPENSEARCH_PASSWORD
 
     def list(self, offset: int = 0, limit: int = 10) -> List[Job] | None:
         try:
@@ -58,16 +62,4 @@ class JobReaderOpenSearch(IJobReader):
         """
         Recherche textuelle dans la description des offres d'emploi.
         """
-        try:
-            print("opensearch")
-            resp = self.es.search(
-                index=self.index,
-                body={"query": {"match_phrase": {"description": text}}},
-            )
-            print("DEBUG:", resp)
-            return [Job(**hit["_source"]) for hit in resp["hits"]["hits"]]
-        except Exception as e:
-            logger.error(
-                f"Erreur lors de la recherche textuelle dans la description : {e}"
-            )
-            raise
+        pass

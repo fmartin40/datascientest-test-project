@@ -1,13 +1,31 @@
 from fastapi import APIRouter, HTTPException, status, Depends, Query
 from dependency_injector.wiring import inject, Provide
 import asyncio
-from app.infrastructure.opensearch.job_reader import JobReaderOpenSearch
+
+# from app.infrastructure.opensearch.job_reader import JobReaderOpenSearch
 from app.domain.job.entities.jobs import Job
 from app.core.container import ContainerService
 from app.domain.job.interfaces.ijob_reader import IJobReader
-from app.infrastructure.sessions.opensearch_session import get_opensearch_client
+
+# from app.infrastructure.sessions.opensearch_session import get_opensearch_client
 
 router = APIRouter(prefix="/jobs")
+
+
+@router.get("/search")
+@inject
+async def search_jobs_by_description(
+    q: str = Query(..., description="Texte à rechercher dans la description"),
+    repo: IJobReader = Depends(Provide[ContainerService.job_reader_opensearch]),
+):
+    try:
+        # loop = asyncio.get_running_loop()
+        print("eeeeeeeeeeeeee")
+        return "eeeeeeeeeeeeee"
+        #   job = await repo.search_by_description(q)
+        # return job
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.get("/")
@@ -52,22 +70,3 @@ async def get_job(
     if not job:
         raise HTTPException(status_code=404, detail="Job not found")
     return job
-
-
-@router.get("/search_description", response_model=list[Job])
-@inject
-async def search_jobs_by_description(
-    q: str = Query(..., description="Texte à rechercher dans la description"),
-    repo: IJobReader = Depends(Provide[ContainerService.job_reader_opensearch]),
-):
-    try:
-
-        jobs = await JobReaderOpenSearch(get_opensearch_client()).search_by_description(
-            q
-        )
-        print("jobs ", jobs)
-        # loop = asyncio.get_running_loop()
-        # job = await loop.run_in_executor(None, repo.search_by_description, q)
-        # return job
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
