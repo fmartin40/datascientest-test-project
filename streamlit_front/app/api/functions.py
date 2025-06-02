@@ -19,12 +19,13 @@ def fetch_jobs(params: dict, limit: int = 4):
         )
         elastic_response.raise_for_status()
         elastic_jobs = elastic_response.json()
-        print("elastic_jobs ", elastic_jobs)
 
         for postgres_job in postgres_jobs:
             for elastic_job in elastic_jobs:
                 if postgres_job["job_id"] == elastic_job["job_id"]:
-                    postgres_job["description"] = elastic_job["description"]
+                    postgres_job["description"] = (
+                        f"{elastic_job['description'][:400]}..."
+                    )
 
         return postgres_jobs
     except Exception as e:

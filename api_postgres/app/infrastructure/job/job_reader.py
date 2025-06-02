@@ -78,6 +78,8 @@ class JobReader(IJobReader):
         duree_travail: Optional[int] = None,
         mode_travail: Optional[int] = None,
         source: Optional[int] = None,
+        from_date: Optional[date] = None,
+        to_date: Optional[date] = None,
         light: bool = True,
     ) -> Sequence[Job | JobLight]:
         try:
@@ -111,6 +113,10 @@ class JobReader(IJobReader):
                 filters &= Q(mode_travail__id=mode_travail)
             if source:
                 filters &= Q(source__id=source)
+            if from_date:
+                filters &= Q(date_creation__gte=from_date)
+            if to_date:
+                filters &= Q(date_creation__lte=to_date)
             if filters:
                 query = query.filter(filters).limit(limit).offset(offset)
 

@@ -4,6 +4,7 @@ from app.domain.job.entities.jobs import Job, JobLight
 from app.core.container import ContainerService
 from typing import Optional
 from app.infrastructure.job.job_reader import JobReader
+from datetime import date
 
 router = APIRouter(tags=["read job infos"])
 
@@ -20,6 +21,8 @@ async def list_jobs(
     duree_travail: Optional[int] = Query(None),
     mode_travail: Optional[int] = Query(None),
     source: Optional[int] = Query(None),
+    from_date: Optional[date] = Query(None),
+    to_date: Optional[date] = Query(None),
     light: bool = Query(True),
     repo: JobReader = Depends(Provide[ContainerService.job_reader]),
 ):
@@ -32,6 +35,8 @@ async def list_jobs(
             duree_travail=duree_travail,
             mode_travail=mode_travail,
             source=source,
+            from_date=from_date,
+            to_date=to_date,
             light=light,
             limit=limit,
             offset=offset,
