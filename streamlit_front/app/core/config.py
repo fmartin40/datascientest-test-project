@@ -19,11 +19,31 @@ class Settings(BaseSettings):
     REDIS_PORT: int
     REDIS_DB: int
 
-    LISTE_VILLE: str = "http://localhost:8003/ville"
-    LISTE_ENTREPRISE: str = "http://localhost:8003/entreprises"
-    LISTE_CONTRAT: str = "http://localhost:8003/types-contrat"
-    LISTE_DUREE: str = "http://localhost:8003/duree-travail"
-    LISTE_MODE: str = "http://localhost:8003/mode-travail"
+    # LISTE_VILLE: str = "http://localhost:8003/ville"
+    # LISTE_ENTREPRISE: str = "http://localhost:8003/entreprises"
+    # LISTE_CONTRAT: str = "http://localhost:8003/types-contrat"
+    # LISTE_DUREE: str = "http://localhost:8003/duree-travail"
+    # LISTE_MODE: str = "http://localhost:8003/mode-travail"
+
+    @property
+    def LISTE_VILLE(self) -> str:
+        return f"{self.API_POSTGRES_URL}/ville"
+
+    @property
+    def LISTE_ENTREPRISE(self) -> str:
+        return f"{self.API_POSTGRES_URL}/entreprises"
+
+    @property
+    def LISTE_CONTRAT(self) -> str:
+        return f"{self.API_POSTGRES_URL}/types-contrat"
+
+    @property
+    def LISTE_DUREE(self) -> str:
+        return f"{self.API_POSTGRES_URL}/duree-travail"
+
+    @property
+    def LISTE_MODE(self) -> str:
+        return f"{self.API_POSTGRES_URL}/mode-travail"
 
     @property
     def ENDPOINT_ELASTIC_JOB(self) -> str:

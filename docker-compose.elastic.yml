@@ -27,96 +27,96 @@ services:
         "--port",
         "${API_ELASTIC_PORT}",
       ]
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "curl",
-          "-u",
-          "elastic:${ELASTIC_PASSWORD}",
-          "-f",
-          "http://elasticsearch:9200/_cluster/health",
-        ]
-      interval: 10s
-      timeout: 5s
-      retries: 6
+    # healthcheck:
+    #   test:
+    #     [
+    #       "CMD",
+    #       "curl",
+    #       "-u",
+    #       "elastic:${ELASTIC_PASSWORD}",
+    #       "-f",
+    #       "http://elasticsearch:9200/_cluster/health",
+    #     ]
+    # interval: 10s
+    # timeout: 5s
+    # retries: 6
     # depends_on:
     #   elasticsearch:
     #     condition: service_healthy
     networks:
       - jobsearch_network
 
-  # elasticsearch:
-  #   image: docker.elastic.co/elasticsearch/elasticsearch-wolfi:9.0.0
-  #   container_name: elasticsearch
-  #   volumes:
-  #     - elasticsearch_data:/usr/share/elasticsearch/data
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch-wolfi:9.0.0
+    container_name: elasticsearch
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
 
-  #     # Chargement de données dans elasticsearch
-  #     - ./init/elasticsearch/emplois.ndjson:/emplois.ndjson:ro
-  #     - ./init/elasticsearch/insert_data.sh:/insert_data.sh:ro
-  #     - ./init/elasticsearch/entrypoint.sh:/entrypoint.sh:ro
+    # Chargement de données dans elasticsearch
+    # - ./init/elasticsearch/emplois.ndjson:/emplois.ndjson:ro
+    # - ./init/elasticsearch/insert_data.sh:/insert_data.sh:ro
+    # - ./init/elasticsearch/entrypoint.sh:/entrypoint.sh:ro
 
-  #     # Si le répertoire init_elasticsearch.sh existe, le monter également
-  #     - ./init/elasticsearch/init_elasticsearch.sh:/init_elasticsearch.sh:ro
-  #   ports:
-  #     - "9200:9200"
-  #   restart: always
-  #   env_file: .env
-  #   environment:
-  #     discovery.type: single-node
-  #     xpack.security.enabled: true
-  #     ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+    # Si le répertoire init_elasticsearch.sh existe, le monter également
+    # - ./init/elasticsearch/init_elasticsearch.sh:/init_elasticsearch.sh:ro
+    ports:
+      - "9200:9200"
+    restart: always
+    env_file: .env
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: true
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
 
-  #   ulimits:
-  #     memlock:
-  #       soft: -1
-  #       hard: -1
-  #   # changement du mot de passe kibana_system
-  #   # en appelant le bash passé en volume
-  #   command: ["/bin/bash", "/entrypoint.sh"]
-  #   healthcheck:
-  #     test:
-  #       [
-  #         "CMD",
-  #         "curl",
-  #         "-u",
-  #         "elastic:${ELASTIC_PASSWORD}",
-  #         "-f",
-  #         "http://localhost:9200/_cluster/health",
-  #       ]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 6
-  #   networks:
-  #     - jobsearch_network
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    # changement du mot de passe kibana_system
+    # en appelant le bash passé en volume
+    # command: ["/bin/bash", "/entrypoint.sh"]
+    # healthcheck:
+    #   test:
+    #     [
+    #       "CMD",
+    #       "curl",
+    #       "-u",
+    #       "elastic:${ELASTIC_PASSWORD}",
+    #       "-f",
+    #       "http://localhost:9200/_cluster/health",
+    #     ]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 6
+    networks:
+      - jobsearch_network
 
-  # kibana:
-  #   image: docker.elastic.co/kibana/kibana:8.18.0
-  #   container_name: kibana
-  #   ports:
-  #     - "5601:5601"
-  #   restart: always
-  #   env_file: .env
-  #   depends_on:
-  #     elasticsearch:
-  #       condition: service_healthy
-  #   environment:
-  #     - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-  #     - ELASTICSEARCH_USERNAME=kibana_system
-  #     - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
-  #   healthcheck:
-  #     test: ["CMD", "curl", "-f", "http://localhost:5601"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 6
-  #   networks:
-  #     - jobsearch_network
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.18.0
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    restart: always
+    env_file: .env
+    # depends_on:
+    #   elasticsearch:
+    # condition: service_healthy
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5601"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+    networks:
+      - jobsearch_network
 
 # ---------- VOLUMES ----------
-# volumes:
-#   elasticsearch_data:
-#   kibana_data:
+volumes:
+  elasticsearch_data:
+# kibana_data:
 
 networks:
   jobsearch_network:

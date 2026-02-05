@@ -1,6 +1,8 @@
 import requests
 import logging
 
+from core.config import settings
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
@@ -8,8 +10,8 @@ logger.setLevel(logging.INFO)
 def fetch_jobs(params: dict, limit: int = 4):
 
     try:
-        postgres_jobs_url = "http://localhost:8003/jobs"
-        elastic_jobs_url = "http://localhost:8002/jobs/ids"
+        postgres_jobs_url = f"{settings.API_POSTGRES_URL}/jobs"
+        elastic_jobs_url = f"{settings.API_ELASTIC_URL}/jobs/ids"
         postgres_jobs_response = requests.get(postgres_jobs_url, params=params)
         postgres_jobs_response.raise_for_status()
         postgres_jobs = postgres_jobs_response.json()
@@ -41,7 +43,7 @@ def fetch_jobs(params: dict, limit: int = 4):
 
 def fetch_skills(ville_id: int):
     try:
-        skills_url = "http://localhost:8003/competences/ville"
+        skills_url = f"{settings.API_POSTGRES_URL}/competences/ville"
         response = requests.get(skills_url, params={"ville_id": ville_id})
         response.raise_for_status()
         skills = response.json()
@@ -54,7 +56,7 @@ def fetch_skills(ville_id: int):
 def fetch_timeline_data():
     # À adapter selon l'URL réelle de l'API
     try:
-        url = "http://localhost:8003/competences/daily?from_date=2025-04-01&to_date=2025-05-25"
+        url = f"{settings.API_POSTGRES_URL}/competences/daily?from_date=2025-04-01&to_date=2025-05-25"
         response = requests.get(url)
         response.raise_for_status()
         data = response.json()

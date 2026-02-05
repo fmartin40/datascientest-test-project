@@ -10,8 +10,8 @@ services:
     ports:
       - "${API_POST_PORT}:${API_POST_PORT}"
     restart: always
-    # depends_on:
-    #   - pgdatabase
+    depends_on:
+      - pgdatabase
     env_file: .env
     # En Prod
     #  volumes:
@@ -20,7 +20,7 @@ services:
     # En Dev
     volumes:
       - ./api_postgres/app:/app/app
-      # - ./logs/api_postgres_logs:/app/logs
+    # - ./logs/api_postgres_logs:/app/logs
     command:
       [
         "uvicorn",
@@ -36,41 +36,41 @@ services:
     networks:
       - jobsearch_network
 
-  # pgdatabase:
-  #   image: postgres:13
-  #   container_name: pgdatabase
-  #   environment:
-  #     - POSTGRES_USER=root
-  #     - POSTGRES_PASSWORD=root
-  #     - POSTGRES_DB=job_market
-  #   volumes:
-  #     - postgres_data:/var/lib/postgresql/data
-  #     - ./init/postgres/initdb:/docker-entrypoint-initdb.d
-  #   ports:
-  #     - "5432:5432"
-  #   networks:
-  #     - jobsearch_network
+  pgdatabase:
+    image: postgres:13
+    container_name: pgdatabase
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=job_market
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init/postgres/initdb:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    networks:
+      - jobsearch_network
 
-  # pgadmin:
-  #   image: dpage/pgadmin4
-  #   container_name: pgadmin
-  #   # depends_on:
-  #   #   pgdatabase:
-  #   #     condition: service_started
-  #   volumes:
-  #     - pgadmin_data:/var/lib/pgadmin
-  #   environment:
-  #     - PGADMIN_DEFAULT_EMAIL=admin@admin.com
-  #     - PGADMIN_DEFAULT_PASSWORD=root
-  #   ports:
-  #     - "8081:80"
-  # networks:
-  #   - jobsearch_network
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    # depends_on:
+    #   pgdatabase:
+    #     condition: service_started
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=root
+    ports:
+      - "8081:80"
+    networks:
+      - jobsearch_network
 
-# ---------- VOLUMES ----------
-# volumes:
-# postgres_data:
-# pgadmin_data:
+#---------- VOLUMES ----------
+volumes:
+  postgres_data:
+  pgadmin_data:
 # logs:
 
 networks:
